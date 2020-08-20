@@ -1,0 +1,28 @@
+{
+  "name": "journal-manager",
+  "version": "1.0.0",
+  "description": "Application for Assessment 2 for the Software Development Methods paper at AUT.\r Team Members: Patricia, Naveen, Zaw, Nikhil",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patsalcedo/journal-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patsalcedo/journal-manager/issues"
+  },
+  "homepage": "https://github.com/patsalcedo/journal-manager#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "concurrently": "^5.3.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.0",
+    "morgan": "^1.10.0"
+  }
+}
