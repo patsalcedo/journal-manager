@@ -4,8 +4,8 @@ node_js:
   - "12"
 
 before_script:
-    - cd my-app
-    - npm install
+  - cd client
+  - npm install
 
 script:
-    - npm run build
+  - npm run build
