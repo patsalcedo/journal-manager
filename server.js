@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080; // Step 1
 
-app.use(express.static("cd ../client/build"))
+app.use(express.static('cd client/build'));
 // HTTP request logger
 app.use(morgan('tiny'));
 
