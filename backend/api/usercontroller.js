@@ -43,15 +43,17 @@ router.get('/usercontroller/test', (req,res) =>{
     });
 
 router.post('/usercontroller/newregistereduser', (req, res) => {
-    const data = req.body;
-    
+    const data = req.body;    
     const newUserData = new UserData(data);
+    //Checks whether there is an existing email address in the database before adding.
     UserData.find({email : data.email}, function (err, docs){
         if(docs.length){
             res.json({
                 msg:"Email already exists"
             });
-        }else{
+        }
+        else{
+            //Saves userdata if there is no existing email address in the database.
             newUserData.save((error) => {
                 if(error){
                     res.status(500).json({
@@ -59,25 +61,12 @@ router.post('/usercontroller/newregistereduser', (req, res) => {
                     })
                     return;
                 }
-
                 return res.json({
                     msg:"User Added."
                 });
             })
         }
     })
-    
-
-    // newUserData.save((error) => {
-    //     if (error) {
-    //         res.status(500).json({ msg: 'Sorry, internal server errors' });
-    //         return;
-    //     }
-    //     // BlogPost
-    //     return res.json({
-    //         msg: 'Your data has been saved!!!!!!'
-    //     });
-    // });
 });
 
 
