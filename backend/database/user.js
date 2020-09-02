@@ -8,7 +8,10 @@ const UserSchema = new Schema({
   email: String,
   dob: String,
   userrole: String,
-  date: Date.now(),
+  date: {
+    type: String,
+    default: Date.now(),
+  },
 });
 
 // Model
