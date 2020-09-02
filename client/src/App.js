@@ -36,15 +36,15 @@ class App extends React.Component{
     event.preventDefault();
 
     const payload = {
-      name: this.state.title,
-      dob: this.state.body,
+      name: this.state.name,
+      dob: this.state.dob,
       email:this.state.email,
       userrole :this.state.userrole,
     };
 
 
     axios({
-      url: '/api/usercontroller/save',
+      url: '/api/usercontroller/newregistereduser',
       method: 'POST',
       data: payload
     })

@@ -1,18 +1,50 @@
 const mongoose = require('mongoose');
-
-
+var moment  = require('moment');
+var fomatted_date = moment().format('DD/MM/YYYY');
 // Schema
+//Bob 
 const Schema = mongoose.Schema;
 const UserSchema = new Schema({
-    userid: String,
-    name: String,
-    email: String,
-    dob: String,
-    userrole: String,
+    user_name: {
+        type:String,
+        lowercase: true,
+        trim:true
+    },
+    first_name: {
+        type:String,
+        lowercase: true,
+        trim:true
+    },
+    last_name: {
+        type:String,
+        lowercase: true,
+        trim:true
+    },
+    email: {
+        type:String,
+        lowercase: false,
+        trim:true
+    },
+    dob: {
+        type:String,
+        lowercase: true
+    },
+    user_role: {
+        type:String,
+        default: 'user',
+        lowercase: true,
+        trim:true
+        
+    },
+    password:{
+        type:String,
+        lowercase:false
+    },
     date: {
         type: String,
-        default: Date.now()
+        default: fomatted_date
     }
+
 });
 
 // Model
