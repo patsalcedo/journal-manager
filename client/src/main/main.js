@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Register from "./pages/register";
-import Home from "./pages/home";
-import "./index.css";
+import Register from "./pages/register/register.js";
+import Home from "./pages/home/home.js";
+import "./main.css";
 
 class Main extends Component {
   render() {
