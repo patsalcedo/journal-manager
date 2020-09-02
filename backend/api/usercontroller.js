@@ -16,7 +16,7 @@ const query = req.query
             res.json(data);
         })
         .catch((error) => {
-            console.log('error: ', daerrorta);
+            console.log('error: ', error);
         });
 });
 
