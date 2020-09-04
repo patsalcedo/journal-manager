@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
 
-const mongo_db_connectionstring='mongodb+srv://seer_db:itsmedio@seer.mwxsn.mongodb.net/<dbname>?retryWrites=true&w=majority';
+const mongo_db_connectionstring='mongodb+srv://seer_db:itsmedio@seer.mwxsn.mongodb.net/SeerDatabase?retryWrites=true&w=majority';
 const app = express();
 const PORT = process.env.PORT || 8080; 
 
@@ -27,9 +27,5 @@ app.use(morgan('tiny'));
 
 //controller uses
 app.use('/api',usercontroller)
-    
+
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
-    
-
-
-
