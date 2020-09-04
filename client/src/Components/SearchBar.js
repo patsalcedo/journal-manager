@@ -1,11 +1,11 @@
-import React from "react";
+// import React from "react";
 import "../main/main.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 function SearchBar() {
-  const navStyle = {
-    color: "white",
-  };
+  //   const navStyle = {
+  //     color: "white",
+  //   };
 
   return (
     <div className="search-box">
