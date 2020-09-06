@@ -166,5 +166,4 @@ router.get('/usercontroller/default', (req, res) => {
 });
 
 
-
 module.exports = router;
