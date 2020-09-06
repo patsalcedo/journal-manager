@@ -20,8 +20,11 @@ function Nav() {
         <Link style={navStyle} to="/about">
           <li>About</li>
         </Link>
-        <Link style={navStyle} to="/">
+        <Link style={navStyle} to="/register">
           <li>Register</li>
+        </Link>
+        <Link style={navStyle} to="/login">
+          <li>Login</li>
         </Link>
         <Link style={navStyle} to="/">
           Sign In
