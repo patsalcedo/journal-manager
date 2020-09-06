@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 8080;
 
 //Controllers
 const usercontroller = require('./backend/api/usercontroller');
+const authcontroller = require('./backend/api/authcontroller');
 
 //Mongoose Connection
 mongoose.connect(mongo_db_connectionstring || process.env.MONGODB_URI,{

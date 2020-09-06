@@ -1,16 +1,5 @@
 import React from "react";
 import axios from "axios";
-<<<<<<< HEAD
-// import "./App.css";
-
-class App extends React.Component {
-  state = {
-    name: "",
-    dob: "",
-    email: "",
-    userrole: "",
-    token:"",
-=======
 import { Redirect } from "react-router-dom";
 import "./register.css";
 
@@ -53,7 +42,6 @@ class Register extends React.Component {
     },
     message: "",
     redirect: false,
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502
     userdata: [],
   };
 
@@ -61,11 +49,6 @@ class Register extends React.Component {
     //this.getBlogPost();
   };
 
-<<<<<<< HEAD
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({ [name]: value });
-=======
   //When user putting inputs in register form,
   //checking invalid inputs or not.
   handleChange = (e) => {
@@ -105,30 +88,14 @@ class Register extends React.Component {
     }
     // this.setState({ formErrors, [id]: value }, () => console.log(this.state));
     this.setState({ formErrors, [id]: value });
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502
   };
 
   getUserData = () => {
     axios
-<<<<<<< HEAD
-      .get("/api/usercontroller/getuserdata",{
-        body:{
-          role:'admin'
-        },
-        headers:{
-          'Authorization': `Bearer ${this.state.token}`
-        },
-      })
-      .then((response) => {
-        const data = response.data;
-        this.setState({ userdata: data });
-        console.log(data);
-=======
       .get("/api/usercontroller/getuser")
       .then((response) => {
         const data = response.data;
         this.setState({ userdata: data });
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502
         console.log("Data has been retrieved");
       })
       .catch(() => {
@@ -138,30 +105,7 @@ class Register extends React.Component {
 
   addUser = (event) => {
     event.preventDefault();
-<<<<<<< HEAD
     var sessionToken = localStorage.getItem('Token');
-    const payload = {
-      name: this.state.title,
-      dob: this.state.body,
-      email: this.state.email,
-      userrole: this.state.userrole,
-    };
-
-    //axios.defaults.headers.common['Authorization'] = sessionToken;
-    axios({
-      url: "/api/usercontroller/newregistereduser",
-      method: "POST",
-      data: payload,     
-    })
-      .then(resp => {
-        console.log(resp.data);
-        //this.resetUserInputs();
-        //this.getBlogPost();
-      });
-  };
-  render() {
-    //console.log("State: ", this.state);
-=======
     this.setState({ message: "" });
 
     if (formValid(this.state)) {
@@ -180,8 +124,8 @@ class Register extends React.Component {
         method: "POST",
         data: payload,
       })
-        .then(() => {
-          console.log("Data has been sent to the server");
+        .then(resp => {
+          console.log(resp.data);
           this.resetUserInputs();
           //this.getBlogPost();
         })
@@ -195,53 +139,18 @@ class Register extends React.Component {
   };
 
   render() {
-    // console.log("State: ", this.state);
+    //console.log("State: ", this.state);
     const { formErrors } = this.state;
-
     if (this.state.redirect) {
       return <Redirect push to="/home" />;
     }
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502
-
     //JSX
     return (
       <div className="app">
         <h2>Seer User Registration</h2>
         <form onSubmit={this.addUser}>
           <div className="form-input">
-<<<<<<< HEAD
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <input
-              type="text"
-              name="userrole"
-              placeholder="User Role"
-              value={this.state.userrole}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <input
-              type="text"
-              name="dob"
-=======
-            <label for="userName">User Name</label>
+            <label htmlFor="userName">User Name</label>
             <input
               type="text"
               id="userName"
@@ -254,7 +163,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="firstName">First Name</label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
               id="firstName"
@@ -267,7 +176,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="lastName">Last Name</label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               type="text"
               id="lastName"
@@ -280,7 +189,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="text"
               id="email"
@@ -293,36 +202,20 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="dob">Date of Birth</label>
+            <label htmlFor="dob">Date of Birth</label>
             <input
               type="text"
               id="dob"
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502
               placeholder="Date of Birth"
               value={this.state.dob}
               onChange={this.handleChange}
             />
-<<<<<<< HEAD
-          </div>
-          <div className="form-input">
-            <input
-              type="text"
-              name="token"
-              placeholder="token"
-              value={this.state.token}
-              onChange={this.handleChange}
-            />
-          </div>
-          <button>Submit</button>
-        </form>
-        <button onClick={this.getUserData}>Submit Token</button>
-=======
             {formErrors.dob.length > 0 && (
               <span className="errorMessage">{formErrors.dob}</span>
             )}
           </div>
           <div className="form-input">
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -337,30 +230,9 @@ class Register extends React.Component {
           <button>submit</button>
           <span>{this.state.message}</span>
         </form>
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502
       </div>
     );
   }
 }
 
-<<<<<<< HEAD
-// import logo from './logo.svg';
-// import './App.css';
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//           Click to view Database
-//       </header>
-//     </div>
-//   );
-// }
-
-export default App;
-=======
 export default Register;
->>>>>>> 0cc3fb347ff230770f1bf1e765856a4f7f6d7502

@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import axios from "axios";
 
 class Login extends React.Component {
   state = {
@@ -33,7 +34,59 @@ class Login extends React.Component {
     this.setState({ formErrors, [id]: value });
   };
 
-  onLogin = () => {};
+  onLogin = (event) => {
+    event.preventDefault();
+    const payload = {
+      username: this.state.userName,
+      password: this.state.password,
+    };
+
+    axios({
+      url: "/api/usercontroller/login",
+      method: "POST",
+      data: payload,
+    })
+      .then(resp => {
+        console.log(resp.data);
+        this.resetUserInputs();
+      })
+      .catch(() => {
+        console.log("Internal server error");
+      });
+
+    // axios
+    // .post("/api/usercontroller/login", {
+    //   body:{
+    //     username: this.state.userName,
+    //     password: this.state.password
+    //   }
+    // })
+    // .then((response) => {
+    //   const data = response.data;
+    //   //this.setState({ userdata: data });
+    //   console.log("Data has been retrieved");
+    // })
+    // .catch(() => {
+    //   alert("Error from Server");
+    // });
+};   
+
+
+
+    // axios({
+    //   url: "/api/usercontroller/login",
+    //   method: "POST",
+    //   data: payload,
+    // })
+    //   .then(resp => {
+    //     console.log(resp.data);
+    //     this.resetUserInputs();
+    //     //this.getBlogPost();
+    //   })
+    //   .catch(() => {
+    //     console.log("Internal server error");
+    //   });
+
 
   render() {
     const { formErrors } = this.state;
@@ -48,7 +101,7 @@ class Login extends React.Component {
         <h2>Seer User Login</h2>
         <form onSubmit={this.onLogin}>
           <div className="form-input">
-            <label for="userName">User Name</label>
+            <label htmlFor="userName">User Name</label>
             <input
               type="text"
               id="userName"
@@ -61,7 +114,7 @@ class Login extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"

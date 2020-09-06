@@ -56,12 +56,12 @@ router.get('/usercontroller/getuser/:userrole',authenticate, (req, res) => {
             });
     });
 
-router.get('/usercontroller/login', (req,res,next) =>{
+router.post('/usercontroller/login', (req,res,next) =>{
     //Takes in the email and the password of the user for the login process
    const username = req.body.username;
    const password = req.body.password
 //    const currentUserData = new UserData(data);
-   UserData.findOne({$or: [{username:username}, {email:username}]})
+   UserData.findOne({$or: [{user_name:username}, {email:username}]})
    .then(user =>{
        if(user){
             bcrypt.compare(password, user.password, function(err,result){
