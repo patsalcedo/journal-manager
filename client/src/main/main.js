@@ -6,12 +6,12 @@ import "./main.css";
 import Nav from "../Components/Nav";
 import Footer from "../Components/Footer";
 import About from "./pages/About";
-import SearchPage from "./pages/SearchPage";
+import SearchPage from "./pages/SearchPage.js";
 
 class Main extends Component {
   render() {
     return (
-      <div className="container">
+      <div className="main">
         <Router>
           <Nav />
           <Switch>

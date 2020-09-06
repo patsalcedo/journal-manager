@@ -2,9 +2,12 @@ import React from "react";
 
 export default function Banner({ children, title, subtitle }) {
   return (
-    <div className="feature">
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
+    <div className="banner">
+      <h1>
+        {title} <br />
+        {subtitle}
+      </h1>
+      <div></div>
       {children}
     </div>
   );
