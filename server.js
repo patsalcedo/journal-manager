@@ -29,7 +29,3 @@ app.use(morgan('tiny'));
 app.use('/api',usercontroller)
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
-    
-
-
-
