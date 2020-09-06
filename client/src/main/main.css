@@ -2,8 +2,8 @@ nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  min-height: 10vh;
-  background: rgb(73, 79, 82);
+  min-height: 5vh;
+  background: #062945;
   color: white;
 }
 
@@ -15,12 +15,22 @@ nav {
   list-style-type: none;
 }
 
-.footer {
-  position: fixed;
+/* .footer {
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;
   background-color: #fccfa6;
+  color: white;
+  text-align: center;
+} */
+
+.footer {
+  position: relative;
+  background-color: #fccfa6;
+  width: 100%;
+  margin-top: auto;
+  height: 155px;
   color: white;
   text-align: center;
 }
@@ -99,5 +109,51 @@ p3 {
   min-height: calc(100vh - 66px);
   align-items: center;
   justify-content: center;
-  background-color: #fffacd;
+  background-color: #c4ccdb;
+}
+
+.feature {
+  background: url("../Images/swbanner.jpg");
+  background-size: 100%;
+  padding: 5rem 5rem;
+  text-align: center;
+  text-transform: capitalize;
+  letter-spacing: var(--mainSpacing);
+  z-index: auto;
+  background-repeat: no-repeat;
+}
+
+.feature h1 {
+  font-size: 50px;
+  height: 90px;
+  color: #e9aa65;
+  text-shadow: 2px 2px var(--mainBlack);
+}
+
+.feature div {
+  width: 10rem;
+  height: 80px;
+  margin: 1.7rem auto;
+}
+
+.feature p {
+  font-size: 33px;
+  color: var(--mainBlack);
+  background: #8c73e7;
+  margin-bottom: 30px;
+}
+
+.btnBanner {
+  display: inline-block;
+  text-decoration: none;
+  letter-spacing: var(--mainSpacing);
+  padding: 0.4rem 0.9rem;
+  color: var(--mainWhite);
+  border: 3px solid var(--mainBlack);
+  border-color: initial;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 10px;
+  background: #7b47bd;
+  font-size: 20px;
 }

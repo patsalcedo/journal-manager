@@ -10,21 +10,21 @@ function Nav() {
 
   return (
     <nav>
-      <h3>
+      <h1>
         <a style={navStyle} href="/">
           SEER
         </a>
-      </h3>
+      </h1>
       <SearchBar />
       <ul className="nav-links">
         <Link style={navStyle} to="/about">
           <li>About</li>
         </Link>
         <Link style={navStyle} to="/">
-          <li>Login</li>
+          <li>Register</li>
         </Link>
         <Link style={navStyle} to="/">
-          Create Account
+          Sign In
         </Link>
       </ul>
     </nav>
