@@ -105,7 +105,7 @@ class Register extends React.Component {
 
   addUser = (event) => {
     event.preventDefault();
-    var sessionToken = localStorage.getItem('Token');
+    //var sessionToken = localStorage.getItem('Token');
     this.setState({ message: "" });
 
     if (formValid(this.state)) {
