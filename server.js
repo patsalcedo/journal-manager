@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 8080;
 
 //Controllers
 const usercontroller = require('./backend/api/usercontroller');
+const papercontroller = require('./backend/api/papercontroller');
 
 //Mongoose Connection
 mongoose.connect(mongo_db_connectionstring || process.env.MONGODB_URI,{
@@ -27,5 +28,6 @@ app.use(morgan('tiny'));
 
 //controller uses
 app.use('/api',usercontroller)
+app.use('/api', papercontroller)
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
