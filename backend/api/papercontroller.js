@@ -5,7 +5,7 @@ const router = express.Router();
 const AcceptedPaperData = require('../database/acceptedpaper');
 
 // Routes
-router.get('/acceptedpapercontroller/getsearch', (req, res) => {
+router.get('/papercontroller/getsearch', (req, res) => {
 //http://localhost:8080/api/acceptedpapercontroller/getsearch?searchterm
 const search = req.query.search
 console.log("Search Term :" + search )
