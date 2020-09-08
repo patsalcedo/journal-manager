@@ -105,6 +105,7 @@ class Register extends React.Component {
 
   addUser = (event) => {
     event.preventDefault();
+    //var sessionToken = localStorage.getItem('Token');
     this.setState({ message: "" });
 
     if (formValid(this.state)) {
@@ -123,8 +124,8 @@ class Register extends React.Component {
         method: "POST",
         data: payload,
       })
-        .then(() => {
-          console.log("Data has been sent to the server");
+        .then(resp => {
+          console.log(resp.data);
           this.resetUserInputs();
           //this.getBlogPost();
         })
@@ -138,20 +139,18 @@ class Register extends React.Component {
   };
 
   render() {
-    // console.log("State: ", this.state);
+    //console.log("State: ", this.state);
     const { formErrors } = this.state;
-
     if (this.state.redirect) {
       return <Redirect push to="/home" />;
     }
-
     //JSX
     return (
       <div className="app">
         <h2>Seer User Registration</h2>
         <form onSubmit={this.addUser}>
           <div className="form-input">
-            <label for="userName">User Name</label>
+            <label htmlFor="userName">User Name</label>
             <input
               type="text"
               id="userName"
@@ -164,7 +163,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="firstName">First Name</label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
               id="firstName"
@@ -177,7 +176,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="lastName">Last Name</label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               type="text"
               id="lastName"
@@ -190,7 +189,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="text"
               id="email"
@@ -203,7 +202,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="dob">Date of Birth</label>
+            <label htmlFor="dob">Date of Birth</label>
             <input
               type="text"
               id="dob"
@@ -216,7 +215,7 @@ class Register extends React.Component {
             )}
           </div>
           <div className="form-input">
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
