@@ -21,7 +21,7 @@ class Main extends Component {
             <Route path="/about" component={About} />
             <Route path="/searchpage" component={SearchPage} />
           </Switch>
-          <Footer />
+          {/* <Footer /> */}
         </Router>
       </div>
     );

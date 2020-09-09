@@ -31,6 +31,20 @@ function Nav() {
         <Link to="/">
           <li className="nav-links">Login</li>
         </Link>
+        <div className="dropdown">
+          <Link to="/">
+            <li className="nav-links">
+              Account<i class="fa fa-caret-down"></i>
+            </li>
+          </Link>
+          <div className="dropdown-content">
+            <Link to="/">
+              <li className="dropdown-nav-links">Saved Searches</li>
+              <li className="dropdown-nav-links">Account Settings</li>
+              <li className="dropdown-nav-links">Logout</li>
+            </Link>
+          </div>
+        </div>
       </ul>
     </nav>
   );

@@ -5,7 +5,7 @@ import SeerLogo from "../../Images/seerlogov2black.png";
 function About() {
   return (
     <div className="pagelayout">
-      <div className="About">
+      <div className="container">
         <h1>About Us</h1>
         <img src={SeerLogo} alg="logo"></img>
         <p>

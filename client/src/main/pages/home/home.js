@@ -22,6 +22,38 @@ class Home extends Component {
               Search [temp]
             </Link>
           </Banner>
+          <h1>Welcome to SEER</h1>
+          <h2>Featured Papers</h2>
+          <div className="column">
+            <div className="container">
+              <h1>Paper 1</h1>
+            </div>
+          </div>
+          <div className="column">
+            <div className="container">
+              <h1>Paper 2</h1>
+            </div>
+          </div>
+          <div className="column">
+            <div className="container">
+              <h1>Paper 3</h1>
+            </div>
+          </div>
+          <div className="column">
+            <div className="container">
+              <h1>Paper 1</h1>
+            </div>
+          </div>
+          <div className="column">
+            <div className="container">
+              <h1>Paper 2</h1>
+            </div>
+          </div>
+          <div className="column">
+            <div className="container">
+              <h1>Paper 3</h1>
+            </div>
+          </div>
         </div>
       </div>
     );

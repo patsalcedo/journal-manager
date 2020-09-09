@@ -17,7 +17,38 @@
 }
 
 .banner div {
-  width: 10rem;
+  width: 70%;
   height: 80px;
   margin: 1.7rem auto;
+}
+
+.btn {
+  flex-wrap: wrap;
+}
+
+.column {
+  width: 300px;
+  height: auto;
+  float: left;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 0px 20px 20px 20px;
+  text-align: center;
+}
+
+.column h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+  line-height: 17px;
+  padding: 20px 0px 5px 0px;
+  color: var(--mainDarkGreen);
+  margin-top: 15px;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
