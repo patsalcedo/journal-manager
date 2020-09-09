@@ -3,15 +3,23 @@ import axios from "axios";
 //import "./search.css";
 
 class Search extends React.Component {
-  state = {
-    searchTerm: '',
-    message: '',
-    redirect: false,
-    paperdata: [],
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      searchTerm: '',
+      message: '',
+      redirect: false,
+      paperdata: [],
+    };
+  } 
 
   componentDidMount = () => {
 //    this.getAcceptedPaperData();
+    console.log("calling from searchpage.js:", this.props.isLoggedIn);
+    if(this.props.isLoggedIn==="false"){
+      this.props.history.push("/login");
+      console.log("navigating to login since isLoggedin is false");
+    }
   };
 
   getAcceptedPaperData = (event) => {
@@ -47,6 +55,7 @@ class Search extends React.Component {
     return (
       <div className="app">
         <h2>Seer Paper Search</h2>
+    <h3>Login Status: {this.props.isLoggedIn}</h3>
         <form onSubmit={this.getAcceptedPaperData}>
           <div className="form-input">
             <input
