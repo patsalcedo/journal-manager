@@ -6,7 +6,14 @@ import Banner from "../../../Components/Banner.js";
 import { Link } from "react-router-dom";
 
 class Home extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  handleLogOutClick() {
+    this.props.handleLogOut();
+    this.props.history.push("/login");
+  }
   render() {
     return (
       <div className="home">
@@ -21,6 +28,7 @@ class Home extends Component {
             <Link to="/searchpage" className="btn">
               Search [temp]
             </Link>
+            <button onClick={() => this.handleLogOutClick()}>Log Out</button>
           </Banner>
           <h1>Welcome to SEER</h1>
           <h2>Featured Papers</h2>

@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import "./register.css";
-import "../../../main/main.css";
 
 //define sample email to check the email input valid or not
 const emailRegex = RegExp(
@@ -106,6 +105,7 @@ class Register extends React.Component {
 
   addUser = (event) => {
     event.preventDefault();
+    //var sessionToken = localStorage.getItem('Token');
     this.setState({ message: "" });
 
     if (formValid(this.state)) {
@@ -124,8 +124,8 @@ class Register extends React.Component {
         method: "POST",
         data: payload,
       })
-        .then(() => {
-          console.log("Data has been sent to the server");
+        .then((resp) => {
+          console.log(resp.data);
           this.resetUserInputs();
           //this.getBlogPost();
         })
@@ -139,101 +139,97 @@ class Register extends React.Component {
   };
 
   render() {
-    // console.log("State: ", this.state);
+    //console.log("State: ", this.state);
     const { formErrors } = this.state;
-
     if (this.state.redirect) {
       return <Redirect push to="/home" />;
     }
-
     //JSX
     return (
-      <div className="pagelayout">
-        <div className="container">
-          <h2>Seer User Registration</h2>
-          <form onSubmit={this.addUser}>
-            <div className="form-input">
-              <label for="userName">User Name</label>
-              <input
-                type="text"
-                id="userName"
-                placeholder="User Name"
-                value={this.state.userName}
-                onChange={this.handleChange}
-              />
-              {formErrors.userName.length > 0 && (
-                <span className="errorMessage">{formErrors.userName}</span>
-              )}
-            </div>
-            <div className="form-input">
-              <label for="firstName">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                placeholder="First Name"
-                value={this.state.firstName}
-                onChange={this.handleChange}
-              />
-              {formErrors.firstName.length > 0 && (
-                <span className="errorMessage">{formErrors.firstName}</span>
-              )}
-            </div>
-            <div className="form-input">
-              <label for="lastName">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                placeholder="Last Name"
-                value={this.state.lastName}
-                onChange={this.handleChange}
-              />
-              {formErrors.lastName.length > 0 && (
-                <span className="errorMessage">{formErrors.lastName}</span>
-              )}
-            </div>
-            <div className="form-input">
-              <label for="email">Email</label>
-              <input
-                type="text"
-                id="email"
-                placeholder="Email"
-                value={this.state.email}
-                onChange={this.handleChange}
-              />
-              {formErrors.email.length > 0 && (
-                <span className="errorMessage">{formErrors.email}</span>
-              )}
-            </div>
-            <div className="form-input">
-              <label for="dob">Date of Birth</label>
-              <input
-                type="text"
-                id="dob"
-                placeholder="Date of Birth"
-                value={this.state.dob}
-                onChange={this.handleChange}
-              />
-              {formErrors.dob.length > 0 && (
-                <span className="errorMessage">{formErrors.dob}</span>
-              )}
-            </div>
-            <div className="form-input">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-              {formErrors.password.length > 0 && (
-                <span className="errorMessage">{formErrors.password}</span>
-              )}
-            </div>
-            <button type="submit">Submit</button>
-            <span>{this.state.message}</span>
-          </form>
-        </div>
+      <div className="app">
+        <h2>Seer User Registration</h2>
+        <form onSubmit={this.addUser}>
+          <div className="form-input">
+            <label htmlFor="userName">User Name</label>
+            <input
+              type="text"
+              id="userName"
+              placeholder="User Name"
+              value={this.state.userName}
+              onChange={this.handleChange}
+            />
+            {formErrors.userName.length > 0 && (
+              <span className="errorMessage">{formErrors.userName}</span>
+            )}
+          </div>
+          <div className="form-input">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              placeholder="First Name"
+              value={this.state.firstName}
+              onChange={this.handleChange}
+            />
+            {formErrors.firstName.length > 0 && (
+              <span className="errorMessage">{formErrors.firstName}</span>
+            )}
+          </div>
+          <div className="form-input">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              placeholder="Last Name"
+              value={this.state.lastName}
+              onChange={this.handleChange}
+            />
+            {formErrors.lastName.length > 0 && (
+              <span className="errorMessage">{formErrors.lastName}</span>
+            )}
+          </div>
+          <div className="form-input">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              placeholder="Email"
+              value={this.state.email}
+              onChange={this.handleChange}
+            />
+            {formErrors.email.length > 0 && (
+              <span className="errorMessage">{formErrors.email}</span>
+            )}
+          </div>
+          <div className="form-input">
+            <label htmlFor="dob">Date of Birth</label>
+            <input
+              type="text"
+              id="dob"
+              placeholder="Date of Birth"
+              value={this.state.dob}
+              onChange={this.handleChange}
+            />
+            {formErrors.dob.length > 0 && (
+              <span className="errorMessage">{formErrors.dob}</span>
+            )}
+          </div>
+          <div className="form-input">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handleChange}
+            />
+            {formErrors.password.length > 0 && (
+              <span className="errorMessage">{formErrors.password}</span>
+            )}
+          </div>
+          <button>submit</button>
+          <span>{this.state.message}</span>
+        </form>
       </div>
     );
   }

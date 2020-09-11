@@ -2,7 +2,7 @@ import React from "react";
 import "../../main/main.css";
 import SeerLogo from "../../Images/seerlogov2black.png";
 
-function About() {
+function About(props) {
   return (
     <div className="pagelayout">
       <div className="container">
