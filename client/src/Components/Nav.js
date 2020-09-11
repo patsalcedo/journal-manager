@@ -11,9 +11,9 @@ function Nav() {
   return (
     <nav>
       <h1>
-        <a style={navStyle} href="/">
+        <Link style={navStyle} to="/">
           SEER
-        </a>
+        </Link>
       </h1>
       <SearchBar />
       <ul className="nav-links">
