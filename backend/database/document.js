@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-
 // Schema
 //Bob
 const Schema = mongoose.Schema;
 
-const AcceptedPaperSchema = new Schema({
+const DocumentSchema = new Schema({
   document_type: {
     type: String,
   },
@@ -53,9 +52,6 @@ const AcceptedPaperSchema = new Schema({
 });
 
 // Model
-const AcceptedPaperInfo = mongoose.model(
-  "Accepted Papers",
-  AcceptedPaperSchema
-);
+const DocumentInfo = mongoose.model("Documents", DocumentSchema);
 
-module.exports = AcceptedPaperInfo;
+module.exports = DocumentInfo;
