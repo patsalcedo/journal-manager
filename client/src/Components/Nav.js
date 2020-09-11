@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import SeerLogo from "../Images/seerlogov2.png";
 
 function Nav() {
-  const navStyle = {
-    color: "white",
-    fontSize: "20px",
-    textDecoration: "none",
-  };
+  // const navStyle = {
+  //   color: "white",
+  //   fontSize: "20px",
+  //   textDecoration: "none",
+  // };
 
   return (
     <nav>

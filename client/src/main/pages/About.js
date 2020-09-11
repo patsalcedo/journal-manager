@@ -1,13 +1,13 @@
 import React from "react";
 import "../../main/main.css";
-import SeerLogo from "../../Images/seerlogov2black.png";
+// import SeerLogo from "../../Images/seerlogov2black.png";
 
 function About(props) {
   return (
     <div className="pagelayout">
       <div className="container">
         <h1>About Us</h1>
-        <img src={SeerLogo} alg="logo"></img>
+        {/* <img src={SeerLogo} alg="logo"></img> */}
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
