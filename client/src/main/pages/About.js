@@ -1,10 +1,11 @@
 import React from "react";
 import "../../main/main.css";
 
-function About() {
+function About(props) {
   return (
     <div className="pagelayout">
       <div className="About">
+  <h3>Login Status: {props.isLoggedIn}</h3>
         <h1>About Us - TreeCo</h1>
         <p>
           TreeCo is a tree company. We sell trees, hedges, fertilisers and

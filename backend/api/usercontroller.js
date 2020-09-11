@@ -28,17 +28,21 @@ const jwt = require('jsonwebtoken');
 //         });
 // });
 
-router.get('/usercontroller/getuserdata',authenticate, (req, res) => {
+router.post('/usercontroller/getuserdata',authenticate, (req, res) => {
     //http://localhost:8080/api/usercontroller/getuser/Admin or User
-    const role = req.body.role;
-        
-        UserData.find({userrole: role})
+    const reqemail = req.body.email;
+    //const reqemail = req.body.email;
+        console.log("/usercontroller/getuserdata", reqemail);
+        UserData.findOne({email: reqemail})
             .then((data) => {
                 console.log('Data: ', data);
-                res.json(data);
+                res.json({
+                    message:"User Data retrieved",
+                    userdata:data
+                });
             })
             .catch((error) => {
-                console.log('error: ', daerrorta);
+                console.log('error: ', error);
             });
     });
 
@@ -49,7 +53,7 @@ router.get('/usercontroller/getuser/:userrole',authenticate, (req, res) => {
         UserData.find({userrole: role})
             .then((data) => {
                 console.log('Data: ', data);
-                res.json(data);
+                res.json({data});
             })
             .catch((error) => {
                 console.log('error: ', daerrorta);
@@ -68,20 +72,25 @@ router.post('/usercontroller/login', (req,res,next) =>{
                 if (err) {
                     res.json({
                         //error:err
-                        message:'Internal Server Error'
+                        message:'Internal Server Error',
+                        loginStatus:"false"
                     });                    
                 }
                 if(result){
                       let token = jwt.sign({name:user.email}, 'verySecretValue', {expiresIn:'1h'});
                       res.json({
                           message:'Login Successful!',
-                          token //is the same as token:token
+                          token, //is the same as token:token
+                          loginStatus:"true",
+                          userdata: user,
                       });  
                 }
                 else{
                     res.json({
-                        message:'Password does not match!'
+                        message:'Password does not match!',
+                        loginStatus:"false"
                     });
+
                 }
             })
        }
@@ -91,28 +100,28 @@ router.post('/usercontroller/login', (req,res,next) =>{
             });
        }
    })
-//    UserData.find({email:data.email , password:data.password}, function(err,docs){
-//        if(docs.length){
-//         res.json({
-//             msg:"Login Successful"
-//         });
-//         return;           
-//        }
-//        else{
-//             if(error){
-//                 res.status(500).json({
-//                     msg:"Internal Server Error"
-//                 });
-//                 return;
-//             }
-            
-//             res.json({
-//                 msg:"Email or Password is invalid."
-//             });
-//             }
-//     })
+   
 });
     
+
+router.post('/usercontroller/validatetoken', (req,res,next) =>{
+    const token = req.body.token;
+    console.log("validatetoken: ",token);
+    let jwtresponse = jwt.verify(token, "verySecretValue", (err, verifiedJwt)=>{
+        if(err){
+            res.json({
+                message:err.message,
+                loginStatus:"false"
+            });
+        }else{
+            res.json({
+                message:"Token Verified",
+                loginStatus:"true",
+                verifiedresponse:verifiedJwt
+            })
+        }
+    });
+});
 
 router.post('/usercontroller/newregistereduser', (req, res) => {
     const data = req.body;    

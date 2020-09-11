@@ -3,7 +3,10 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 
 class Login extends React.Component {
-  state = {
+constructor(props){
+  super(props);
+
+  this.state = {
     formErrors: {
       userName: "",
       password: "",
@@ -11,6 +14,9 @@ class Login extends React.Component {
     message: "",
     redirect: false,
   };
+
+
+} 
 
   //When user putting inputs in login form,
   //checking invalid inputs or not.
@@ -48,27 +54,21 @@ class Login extends React.Component {
     })
       .then(resp => {
         console.log(resp.data);
-        this.resetUserInputs();
+        if(resp.data.loginStatus==="true"){
+          this.props.handleLogIn(resp.data);
+          this.props.history.push("/home");
+        }
+        if(resp.data.loginStatus==="false"){
+          console.log("Login Failed", resp.data.message);
+        }
+
+        //this.resetUserInputs();
       })
-      .catch(() => {
-        console.log("Internal server error");
+      .catch((err) => {
+        console.log("Internal server error"+err);
       });
 
-    // axios
-    // .post("/api/usercontroller/login", {
-    //   body:{
-    //     username: this.state.userName,
-    //     password: this.state.password
-    //   }
-    // })
-    // .then((response) => {
-    //   const data = response.data;
-    //   //this.setState({ userdata: data });
-    //   console.log("Data has been retrieved");
-    // })
-    // .catch(() => {
-    //   alert("Error from Server");
-    // });
+
 };   
 
 
