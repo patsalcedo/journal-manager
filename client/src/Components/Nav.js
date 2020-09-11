@@ -21,31 +21,31 @@ function Nav() {
           alt="Plant a Tree"
         />
       </Link>
-      <ul className="nav-links">
-        <Link to="/about">
-          <li className="nav-links">About</li>
-        </Link>
-        <Link className="nav-links" to="/register">
-          <li className="nav-links">Register</li>
-        </Link>
+      <Link className="nav-links" to="/about">
+        <button className="nav-btn">About</button>
+      </Link>
+      <Link className="nav-links" to="/register">
+        <button className="nav-btn">Register</button>
+      </Link>
+      <Link to="/">
+        <button className="nav-btn">Login</button>
+      </Link>
+      <div className="dropdown">
         <Link to="/">
-          <li className="nav-links">Login</li>
+          <button className="nav-btn">
+            Account<i class="fa fa-caret-down"></i>
+          </button>
         </Link>
-        <div className="dropdown">
-          <Link to="/">
-            <li className="nav-links">
-              Account<i class="fa fa-caret-down"></i>
-            </li>
-          </Link>
-          <div className="dropdown-content">
+        <div className="dropdown-content">
+          <ul>
             <Link to="/">
               <li className="dropdown-nav-links">Saved Searches</li>
               <li className="dropdown-nav-links">Account Settings</li>
               <li className="dropdown-nav-links">Logout</li>
             </Link>
-          </div>
+          </ul>
         </div>
-      </ul>
+      </div>
     </nav>
   );
 }
