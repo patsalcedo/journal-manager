@@ -124,7 +124,7 @@ class Register extends React.Component {
         method: "POST",
         data: payload,
       })
-        .then(resp => {
+        .then((resp) => {
           console.log(resp.data);
           this.resetUserInputs();
           //this.getBlogPost();
