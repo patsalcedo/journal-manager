@@ -18,25 +18,32 @@ console.log("Search Term :" + search )
         .catch((error) => {
             console.log('error: ', error);
         });
-// var data = {
-//         paper_name: "Cloud Computing Test",
-//         author_name: "Moneky",
-//         date: "07/09/2020",
-//         doi: "1010101010101",
-//         link: "xxx"
-//     }
-    // const newAcceptedPaperData = new AcceptedPaperData(data2);
-    //         newAcceptedPaperData.save((error) => {
-    //             if(error){
-    //                 res.status(500).json({
-    //                     msg:"Internal Server Error."
-    //                 })
-    //                 return;
-    //             }
-    //             return res.json({
-    //                 msg:"Paper Added."
-    //             });
-    //         })
 });
+
+
+router.post('/papercontroller/addarticle', (req, res) => {
+    //http://localhost:8080/api/acceptedpapercontroller/addarticle
+    console.log("Trying to add a paper")   
+    var data = {
+        document_type: "Article",
+        key: "123",
+        title: "Something Not Right",
+        author: "Naveen",
+        publisher: "1010101010101",
+        link: "xxx"
+    }
+    const newAcceptedPaperData = new AcceptedPaperData(data);
+            newAcceptedPaperData.save((error) => {
+                if(error){
+                    res.status(500).json({
+                        msg:"Internal Server Error."
+                    })
+                    return;
+                }
+                return res.json({
+                    msg:"Paper Added."
+                });
+            })
+    });
 
 module.exports = router;

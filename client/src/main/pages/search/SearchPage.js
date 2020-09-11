@@ -24,8 +24,7 @@ class Search extends React.Component {
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
-    axios
-      .get("/api/papercontroller/getsearch", {
+    axios.get("/api/papercontroller/getSearch", {
         params: {
           search: this.state.searchTerm
         }
@@ -35,6 +34,30 @@ class Search extends React.Component {
         this.setState({ paperdata: data });
         console.log("Data has been retrieved");
         console.log(this.state.paperdata)
+      })
+      .catch(() => {
+        alert("Error from Server");
+      });
+  };
+
+  
+  sendAcceptedPaperData = (event) => {
+    event.preventDefault();
+    var payload = {
+      document_type: "Article",
+      key: "123",
+      title: "Something Not Right",
+      author: "Naveen",
+      publisher: "1010101010101",
+      link: "xxx"
+  }
+    axios({
+      url: "/api/papercontroller/addArticle" ,
+      method: "POST",
+      data: payload
+    })
+      .then((response) => {
+        console.log("Paper has been added successfully");
       })
       .catch(() => {
         alert("Error from Server");

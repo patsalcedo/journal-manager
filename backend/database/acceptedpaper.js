@@ -5,22 +5,51 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const AcceptedPaperSchema = new Schema({
-    paper_name: {
-        type:String
-    },
-    author_name: {
-        type:String
-    },
-    date: {
-        type:String
-    },
-    doi: {
-        type:String
-    },
-    link:{
-        type:String,
-        lowercase:false
-    }
+    document_type: {
+        type: String,
+      },
+      key: {
+        type: String,
+      },
+      title: {
+        type: String,
+      },
+      author: {
+        type: String,
+      },
+      publisher: {
+        type: String,
+      },
+      journal: {
+        type: String,
+      },
+      year: {
+        type: String,
+      },
+      month: {
+        type: String,
+      },
+      volume: {
+        type: String,
+      },
+      number: {
+        type: String,
+      },
+      pages: {
+        type: String,
+      },
+      eprint: {
+        type: String,
+      },
+      eprinttype: {
+        type: String,
+      },
+      eprintclass: {
+        type: String,
+      },
+      annote: {
+        type: String,
+      }
 });
 
 // Model
