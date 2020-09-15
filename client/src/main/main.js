@@ -8,6 +8,7 @@ import Footer from "../Components/Footer";
 import About from "./pages/About";
 import SearchPage from "./pages//search/SearchPage";
 import Login from "./pages/login/login.js";
+import Add from "./pages/add-document/add-document";
 import axios from "axios";
 
 class Main extends Component {
@@ -158,6 +159,12 @@ class Main extends Component {
               path="/searchpage"
               render={(props) => (
                 <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
+              )}
+            />
+            <Route
+              path="/add-document"
+              render={(props) => (
+                <Add {...props} isLoggedIn={this.state.isLoggedIn} />
               )}
             />
             <Route

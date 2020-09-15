@@ -30,6 +30,9 @@ function Nav(props) {
       <Link to="/searchpage">
         <button className="nav-btn">Search</button>
       </Link>
+      <Link to="/add-document">
+        <button className="nav-btn">Add document</button>
+      </Link>
       <button className="nav-btn" onClick={() => handleLogOutClick()}>
         Log Out
       </button>
