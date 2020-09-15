@@ -18,7 +18,7 @@ function Nav() {
           src={SeerLogo}
           width="130"
           height="120"
-          alt="Plant a Tree"
+          alt="SEER Repository"
         />
       </Link>
       <Link className="nav-links" to="/about">
@@ -27,8 +27,11 @@ function Nav() {
       <Link className="nav-links" to="/register">
         <button className="nav-btn">Register</button>
       </Link>
-      <Link to="/">
+      <Link to="/login">
         <button className="nav-btn">Login</button>
+      </Link>
+      <Link to="/add-document">
+        <button className="nav-btn">Add document</button>
       </Link>
       <div className="dropdown">
         <Link to="/">
