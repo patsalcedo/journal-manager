@@ -77,6 +77,7 @@ p3 {
 
 .btn {
   display: inline-block;
+  align-content: center;
   text-decoration: none;
   letter-spacing: var(--mainSpacing);
   padding: 0.4rem 0.9rem;
@@ -90,10 +91,16 @@ p3 {
   font-size: 20px;
 }
 
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
 /*Navigation bar*/
 nav {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   min-height: 5vh;
   background: #062945;
@@ -151,17 +158,18 @@ nav {
   position: absolute;
   background-color: var(--mainPurple);
   min-width: 160px;
-  /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  right: 0;
 }
 
 .dropdown-nav-links {
   float: none;
-  color: black;
+  color: var(--mainWhite);
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  text-align: left;
+  text-align: right;
 }
 
 .dropdown-nav-links li {
