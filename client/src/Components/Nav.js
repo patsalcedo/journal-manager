@@ -18,7 +18,7 @@ function Nav() {
           src={SeerLogo}
           width="130"
           height="120"
-          alt="Plant a Tree"
+          alt="SEER Repository"
         />
       </Link>
       <Link className="nav-links" to="/about">
