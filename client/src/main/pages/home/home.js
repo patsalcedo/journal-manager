@@ -15,22 +15,6 @@ class Home extends Component {
     this.props.history.push("/home");
   }
 
-  handleBannerText() {
-    let txt;
-    if (this.props.isLoggedIn === "true")
-      txt = (
-        <h2>
-          Log in to search through peer-reviewed software engineering papers.
-        </h2>
-      );
-    else
-      txt = (
-        <h2>
-          Log in to search through peer-reviewed software engineering papers.
-        </h2>
-      );
-  }
-
   render() {
     let bannerContent;
     if (this.props.isLoggedIn === "true")
@@ -57,7 +41,6 @@ class Home extends Component {
     return (
       <div className="home">
         <div className="pagelayout">
-          <h1></h1>
           <Banner title="Software Engineering Evidence Repository">
             {bannerContent}
           </Banner>
