@@ -18,50 +18,24 @@ router.get("/papercontroller/getsearch", (req, res) => {
     .catch((error) => {
       console.log("error: ", error);
     });
-  // var data = {
-  //         paper_name: "Cloud Computing Test",
-  //         author_name: "Moneky",
-  //         date: "07/09/2020",
-  //         doi: "1010101010101",
-  //         link: "xxx"
-  //     }
-  // const newAcceptedPaperData = new AcceptedPaperData(data2);
-  //         newAcceptedPaperData.save((error) => {
-  //             if(error){
-  //                 res.status(500).json({
-  //                     msg:"Internal Server Error."
-  //                 })
-  //                 return;
-  //             }
-  //             return res.json({
-  //                 msg:"Paper Added."
-  //             });
-  //         })
 });
 
-router.post("/papercontroller/addarticle"),
-  (req, res) => {
-    // // const data = req.body;
-    // // console.log("new document", data);
-    // const newAcceptedPaperData = new AcceptedPaperData(data);
-    // //saves the new user to the database
-    // newAcceptedPaperData.save((error) => {
-    //   if (error) {
-    //     res.status(500).json({
-    //       msg: "Error.",
-    //     });
-    //     return;
-    //   }
-
-    //   return res.json({
-    //     msg: "Document Added.",
-    //   });
-    // });
-    const data = {
-      username: "testing",
-      age: 5,
-    };
-    res.json(data);
-  };
+router.post("/papercontroller/addarticle", (req, res) => {
+  //http://localhost:8080/api/acceptedpapercontroller/addarticle
+  console.log("Trying to add a paper")   
+  const data = req.body;
+  const newAcceptedPaperData = new AcceptedPaperData(data);
+          newAcceptedPaperData.save((error) => {
+              if(error){
+                  res.status(500).json({
+                      msg:"Internal Server Error."
+                  })
+                  return;
+              }
+              return res.json({
+                  msg:"Paper Added."
+              });
+          })
+  });
 
 module.exports = router;

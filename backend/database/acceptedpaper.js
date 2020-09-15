@@ -53,9 +53,6 @@ const AcceptedPaperSchema = new Schema({
 });
 
 // Model
-const AcceptedPaperInfo = mongoose.model(
-  "Accepted Papers",
-  AcceptedPaperSchema
-);
+const AcceptedPaperInfo = mongoose.model("Accepted Papers",AcceptedPaperSchema);
 
 module.exports = AcceptedPaperInfo;

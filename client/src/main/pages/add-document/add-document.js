@@ -20,6 +20,7 @@ const formValid = ({ formErrors, ...rest }) => {
   return valid;
 };
 
+
 class Add extends React.Component {
   state = {
     formErrors: {
@@ -42,6 +43,14 @@ class Add extends React.Component {
     message: "",
   };
 
+  componentDidMount = () => {
+    console.log("calling from add-document.js:", this.props.isLoggedIn);
+    if(this.props.isLoggedIn==="false"){
+      this.props.history.push("/login");
+      console.log("navigating to login since isLoggedin is false");
+    }
+  };
+  
   handleChange = (e) => {
     e.preventDefault();
     const { id, value } = e.target;
@@ -65,6 +74,7 @@ class Add extends React.Component {
   };
 
   addDocument = (event) => {
+    console.log("IM BEING CALLED")
     event.preventDefault();
     this.setState({ message: "" });
     // console.log(formValid);
@@ -87,11 +97,11 @@ class Add extends React.Component {
         annote: this.state.annote,
       };
       //   console.log(payload);
-
+      console.log("Payload: ", payload)
       axios({
-        url: "/api/papercontroller/newdocument",
+        url: "/api/papercontroller/addarticle",
         method: "POST",
-        data: payload,
+        data: payload
       })
         .then((resp) => {
           console.log(resp.data);
