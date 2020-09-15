@@ -229,7 +229,7 @@ class Register extends React.Component {
                 <span className="errorMessage">{formErrors.password}</span>
               )}
             </div>
-            <button>Submit</button>
+            <button className="submitBtn">Submit</button>
             <span>{this.state.message}</span>
           </form>
         </div>

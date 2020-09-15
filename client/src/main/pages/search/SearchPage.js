@@ -66,7 +66,7 @@ class Search extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <button>submit</button>
+            <button className="submitBtn">Search</button>
             <span>{this.state.message}</span>
           </form>
         </div>

@@ -91,6 +91,20 @@ p3 {
   font-size: 20px;
 }
 
+.submitBtn {
+  display: inline-block;
+  align-content: center;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  color: var(--mainWhite);
+  border: 3px solid var(--mainBlack);
+  border-color: initial;
+  cursor: pointer;
+  border-radius: 10px;
+  background: var(--mainPurple);
+  font-size: 15px;
+}
+
 .container {
   border-radius: 5px;
   background-color: #f2f2f2;
