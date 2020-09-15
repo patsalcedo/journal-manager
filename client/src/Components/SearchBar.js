@@ -8,15 +8,20 @@ function SearchBar() {
   //   };
 
   return (
-    <div className="search-box">
-      <input
-        type="text"
-        className="search-bar"
-        placeholder="Search..."
-        // onChange={(e) => setQuery(e.target.value)}
-        // value={query}
-        // onKeyPress={search}
-      />
+    <div className="search-bar">
+      <form className="search-form">
+        <input
+          type="text"
+          className="search-bar"
+          placeholder="Search..."
+          // onChange={(e) => setQuery(e.target.value)}
+          // value={query}
+          // onKeyPress={search}
+        />
+        <button className="btn" type="submit">
+          Search
+        </button>
+      </form>
     </div>
   );
 }

@@ -1,76 +1,54 @@
-:root {
-  --mainBlack: #042a2b;
-  --mainGreen: #5cb548;
-  --darkBrown: #813103;
-  --mainCream: #b15805;
-  --secondCream: #f8efb4;
-  --mainBlue: #659dbd;
-  --mainDarkGreen: #19bd19;
-  --mainPinky: #daad86;
-  --mainWhite: #ffffffe3;
-  --mainTransition: all 0.3s linear;
-  --mainSpacing: 3px;
-  --lightShadow: 2px 5px 3px 0px rgba(221, 218, 218, 0.651);
-  --darkShadow: 4px 10px 5px 0px rgba(0, 0, 0, 0.5);
+.banner {
+  background: url("../../../Images/swbanner.jpg");
+  background-size: 100%;
+  padding: 5rem 5rem;
+  text-align: center;
+  text-transform: capitalize;
+  letter-spacing: var(--mainSpacing);
+  z-index: auto;
+  background-repeat: no-repeat;
 }
 
-/*Globals*/
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.4;
-  height: 100%;
+.banner h1 {
+  font-size: 50px;
+  height: 50px;
+  color: #5effe4;
+  text-shadow: 2px 2px var(--mainBlack);
 }
 
-body a {
-  color: var(--mainBlack);
-  font-size: 17px;
+.banner div {
+  width: 70%;
+  height: 80px;
+  margin: 1.7rem auto;
 }
 
-h1 {
-  font-size: 27px;
-  margin-top: 50px;
-  color: var(--mainBlack);
-  padding-top: 10px;
+.btn {
+  flex-wrap: wrap;
 }
 
-h3 {
-  font-size: 20px;
-  margin-top: 50px;
-  color: var(--mainBlack);
-  padding-top: 10px;
+.column {
+  width: 300px;
+  height: auto;
+  float: left;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 0px 20px 20px 20px;
+  text-align: center;
 }
 
-p {
-  font-size: 17px;
-  margin-top: 50px;
-  color: var(--mainBlack);
+.column h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+  line-height: 17px;
+  padding: 20px 0px 5px 0px;
+  color: var(--mainDarkGreen);
+  margin-top: 15px;
 }
 
-p1 {
-  font-size: 18px;
-  margin: 10px 0px;
-  font-style: italic;
-}
-
-p2 {
-  font-size: 15px;
-  margin: 10px 0px;
-}
-
-p3 {
-  font-size: 14px;
-  color: green;
-}
-
-.pagelayout {
-  background-color: var(--mainPinky);
-  padding-left: 243px;
-  padding-right: 243px;
-  padding-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  min-height: calc(100vh - 66px);
-  align-items: center;
-  justify-content: center;
-  background-color: #fffacd;
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
