@@ -1,22 +1,21 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+import "../../../main/main.css";
 
 class Login extends React.Component {
-constructor(props){
-  super(props);
+  constructor(props) {
+    super(props);
 
-  this.state = {
-    formErrors: {
-      userName: "",
-      password: "",
-    },
-    message: "",
-    redirect: false,
-  };
-
-
-} 
+    this.state = {
+      formErrors: {
+        userName: "",
+        password: "",
+      },
+      message: "",
+      redirect: false,
+    };
+  }
 
   //When user putting inputs in login form,
   //checking invalid inputs or not.
@@ -52,41 +51,36 @@ constructor(props){
       method: "POST",
       data: payload,
     })
-      .then(resp => {
+      .then((resp) => {
         console.log(resp.data);
-        if(resp.data.loginStatus==="true"){
+        if (resp.data.loginStatus === "true") {
           this.props.handleLogIn(resp.data);
           this.props.history.push("/home");
         }
-        if(resp.data.loginStatus==="false"){
+        if (resp.data.loginStatus === "false") {
           console.log("Login Failed", resp.data.message);
         }
 
         //this.resetUserInputs();
       })
       .catch((err) => {
-        console.log("Internal server error"+err);
+        console.log("Internal server error" + err);
       });
+  };
 
-
-};   
-
-
-
-    // axios({
-    //   url: "/api/usercontroller/login",
-    //   method: "POST",
-    //   data: payload,
-    // })
-    //   .then(resp => {
-    //     console.log(resp.data);
-    //     this.resetUserInputs();
-    //     //this.getBlogPost();
-    //   })
-    //   .catch(() => {
-    //     console.log("Internal server error");
-    //   });
-
+  // axios({
+  //   url: "/api/usercontroller/login",
+  //   method: "POST",
+  //   data: payload,
+  // })
+  //   .then(resp => {
+  //     console.log(resp.data);
+  //     this.resetUserInputs();
+  //     //this.getBlogPost();
+  //   })
+  //   .catch(() => {
+  //     console.log("Internal server error");
+  //   });
 
   render() {
     const { formErrors } = this.state;
@@ -97,38 +91,40 @@ constructor(props){
 
     //JSX
     return (
-      <div className="app">
-        <h2>Seer User Login</h2>
-        <form onSubmit={this.onLogin}>
-          <div className="form-input">
-            <label htmlFor="userName">User Name</label>
-            <input
-              type="text"
-              id="userName"
-              placeholder="User Name"
-              value={this.state.userName}
-              onChange={this.handleChange}
-            />
-            {formErrors.userName.length > 0 && (
-              <span className="errorMessage">{formErrors.userName}</span>
-            )}
-          </div>
-          <div className="form-input">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-            {formErrors.password.length > 0 && (
-              <span className="errorMessage">{formErrors.password}</span>
-            )}
-          </div>
-          <button>submit</button>
-          <span>{this.state.message}</span>
-        </form>
+      <div className="pagelayout">
+        <div className="container">
+          <h2>Seer User Login</h2>
+          <form onSubmit={this.onLogin}>
+            <div className="form-input">
+              <label htmlFor="userName">User Name</label>
+              <input
+                type="text"
+                id="userName"
+                placeholder="User Name"
+                value={this.state.userName}
+                onChange={this.handleChange}
+              />
+              {formErrors.userName.length > 0 && (
+                <span className="errorMessage">{formErrors.userName}</span>
+              )}
+            </div>
+            <div className="form-input">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+              {formErrors.password.length > 0 && (
+                <span className="errorMessage">{formErrors.password}</span>
+              )}
+            </div>
+            <button className="submitBtn">Submit</button>
+            <span>{this.state.message}</span>
+          </form>
+        </div>
       </div>
     );
   }
