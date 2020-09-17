@@ -15,6 +15,7 @@ class Search extends React.Component {
       nameOfField: "",
       operator: "",
       filterValue: "",
+      usedFilter: false,
     };
   }
 
@@ -118,6 +119,13 @@ class Search extends React.Component {
       filterValue: data,
     });
   };
+  handleUseFilterChange = (event) => {
+    var data = event.target.checked;
+    console.log(event.target.value);
+    this.setState({
+      usedFilter: data,
+    });
+  };
   render() {
     //JSX
     return (
@@ -134,6 +142,14 @@ class Search extends React.Component {
                 placeholder="Enter Search Term"
                 value={this.state.searchTerm}
                 onChange={this.handleInputChange}
+              />
+            </div>
+            <div className="userFilter">
+              <label>Using Filter</label>
+              <input
+                type="checkbox"
+                id="useFilterCheckBox"
+                onChange={this.handleUseFilterChange}
               />
             </div>
             <div className="date-from">
@@ -163,7 +179,7 @@ class Search extends React.Component {
                 <option value="last 15 years">Last 15 years</option>
               </select>
             </div>
-            <div className="opton-selection">
+            <div className="option-selection">
               <label>If</label>
               <select
                 name="nameOfField"
