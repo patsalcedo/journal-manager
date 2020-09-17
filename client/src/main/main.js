@@ -152,15 +152,11 @@ class Main extends Component {
                 <About {...props} isLoggedIn={this.state.isLoggedIn} />
               )}
             />
-            {/* <Route
+            <Route
               path="/searchpage"
               render={(props) => (
                 <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
               )}
-            /> */}
-            <Route
-              path="/searchpage"
-              render={(props) => <SearchPage {...props} />}
             />
             <Route
               path="/add-document"
