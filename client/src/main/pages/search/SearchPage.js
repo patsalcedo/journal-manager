@@ -16,6 +16,8 @@ class Search extends React.Component {
       operator: "",
       filterValue: "",
       usedFilter: false,
+      secondBlock: false,
+      thirdBlock: false,
     };
   }
 
@@ -126,6 +128,27 @@ class Search extends React.Component {
       usedFilter: data,
     });
   };
+  handlePlusForSecondBlock = () => {
+    this.setState({
+      secondBlock: true,
+    });
+  };
+  handleMinusForSecondBlock = () => {
+    this.setState({
+      secondBlock: false,
+      thirdBlock: false,
+    });
+  };
+  handlePlusForThirdBlock = () => {
+    this.setState({
+      thirdBlock: true,
+    });
+  };
+  handleMinusForThirdBlock = () => {
+    this.setState({
+      thirdBlock: false,
+    });
+  };
   render() {
     //JSX
     return (
@@ -152,60 +175,138 @@ class Search extends React.Component {
                 onChange={this.handleUseFilterChange}
               />
             </div>
-            <div className="date-from">
-              <label>Date Range</label>
-              <label>From</label>
-              <select
-                name="date-from-option"
-                id="date-from-option"
-                onChange={this.handleDateFromChange}
-              >
-                <option value="last 5 years">Last 5 years</option>
-                <option value="last 10 years">Last 10 years</option>
-                <option value="last 15 years">Last 15 years</option>
-                <option value="more than 15 years">More than 15 years</option>
-              </select>
-            </div>
-            <div className="date-to">
-              <label>To</label>
-              <select
-                name="date-to-option"
-                id="date-to-option"
-                onChange={this.handleDateToChange}
-              >
-                <option value="today">Today</option>
-                <option value="last 5 years">Last 5 years</option>
-                <option value="last 10 years">Last 10 years</option>
-                <option value="last 15 years">Last 15 years</option>
-              </select>
-            </div>
-            <div className="option-selection">
-              <label>If</label>
-              <select
-                name="nameOfField"
-                id="nameOfField"
-                onChange={this.handleNameFieldChange}
-              >
-                <option value="method">Method</option>
-                <option value="Author">Author</option>
-              </select>
-              <select
-                name="operator"
-                id="operator"
-                onChange={this.handleOperatorChange}
-              >
-                <option value="equal">=</option>
-                <option value="not equal">!=</option>
-              </select>
-              <select
-                name="filterValue"
-                id="filterValue"
-                onChange={this.handleFilterValueChange}
-              >
-                <option value="tdd">TDD</option>
-                <option value="not tdd">No TDD</option>
-              </select>
-            </div>
+            {this.state.usedFilter && (
+              <>
+                <div className="date-from">
+                  <label>Date Range</label>
+                  <label>From</label>
+                  <select
+                    name="date-from-option"
+                    id="date-from-option"
+                    onChange={this.handleDateFromChange}
+                  >
+                    <option value="last 5 years">Last 5 years</option>
+                    <option value="last 10 years">Last 10 years</option>
+                    <option value="last 15 years">Last 15 years</option>
+                    <option value="more than 15 years">
+                      More than 15 years
+                    </option>
+                  </select>
+                </div>
+                <div className="date-to">
+                  <label>To</label>
+                  <select
+                    name="date-to-option"
+                    id="date-to-option"
+                    onChange={this.handleDateToChange}
+                  >
+                    <option value="today">Today</option>
+                    <option value="last 5 years">Last 5 years</option>
+                    <option value="last 10 years">Last 10 years</option>
+                    <option value="last 15 years">Last 15 years</option>
+                  </select>
+                </div>
+                <div className="option-selection">
+                  <label>If</label>
+                  <select
+                    name="nameOfField"
+                    id="nameOfField"
+                    onChange={this.handleNameFieldChange}
+                  >
+                    <option value="method">Method</option>
+                    <option value="Author">Author</option>
+                  </select>
+                  <select
+                    name="operator"
+                    id="operator"
+                    onChange={this.handleOperatorChange}
+                  >
+                    <option value="equal">=</option>
+                    <option value="not equal">!=</option>
+                  </select>
+                  <select
+                    name="filterValue"
+                    id="filterValue"
+                    onChange={this.handleFilterValueChange}
+                  >
+                    <option value="tdd">TDD</option>
+                    <option value="not tdd">No TDD</option>
+                  </select>
+                  <button onClick={this.handlePlusForSecondBlock}>+</button>
+                  <button onClick={this.handleMinusForSecondBlock}>-</button>
+                </div>
+              </>
+            )}
+            {this.state.secondBlock && (
+              <>
+                <div className="option-selection">
+                  <label>If</label>
+                  <select
+                    name="nameOfField"
+                    id="nameOfField"
+                    onChange={this.handleNameFieldChange}
+                  >
+                    <option value="method">Method</option>
+                    <option value="Author">Author</option>
+                  </select>
+                  <select
+                    name="operator"
+                    id="operator"
+                    onChange={this.handleOperatorChange}
+                  >
+                    <option value="equal">=</option>
+                    <option value="not equal">!=</option>
+                  </select>
+                  <select
+                    name="filterValue"
+                    id="filterValue"
+                    onChange={this.handleFilterValueChange}
+                  >
+                    <option value="tdd">TDD</option>
+                    <option value="not tdd">No TDD</option>
+                  </select>
+                  <button onClick={this.handlePlusForThirdBlock}>+</button>
+                  <button onClick={this.handleMinusForThirdBlock}>-</button>
+                </div>
+              </>
+            )}
+            {this.state.thirdBlock && (
+              <>
+                <div className="option-selection">
+                  <label>If</label>
+                  <select
+                    name="nameOfField"
+                    id="nameOfField"
+                    onChange={this.handleNameFieldChange}
+                  >
+                    <option value="method">Method</option>
+                    <option value="Author">Author</option>
+                  </select>
+                  <select
+                    name="operator"
+                    id="operator"
+                    onChange={this.handleOperatorChange}
+                  >
+                    <option value="equal">=</option>
+                    <option value="not equal">!=</option>
+                  </select>
+                  <select
+                    name="filterValue"
+                    id="filterValue"
+                    onChange={this.handleFilterValueChange}
+                  >
+                    <option value="tdd">TDD</option>
+                    <option value="not tdd">No TDD</option>
+                  </select>
+                  {/* <button onClick={this.clickedPlusButtonForSecondBlock}>
+                    +
+                  </button>
+                  <button onClick={this.clickedMinusButtonForSecondBlock}>
+                    -
+                  </button> */}
+                </div>
+              </>
+            )}
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
