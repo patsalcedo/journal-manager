@@ -317,63 +317,6 @@ class Search extends React.Component {
                 </div>
               </>
             )}
-            <div className="date-from">
-              <label>Date Range</label>
-              <br />
-              <label>From</label>
-              <select
-                name="date-from-option"
-                id="date-from-option"
-                onChange={this.handleDateFromChange}
-              >
-                <option value="2020">This Year</option>
-                <option value="2015">Last 5 Years</option>
-                <option value="2010">Last 10 Years</option>
-                <option value="1665">More than 15 years</option>
-              </select>
-            </div>
-            <div className="date-to">
-              <label>To</label>
-              <select
-                name="date-to-option"
-                id="date-to-option"
-                onChange={this.handleDateToChange}
-              >
-                <option value="2020">This Year</option>
-                <option value="2015">Last 5 Years</option>
-                <option value="2010">Last 10 Years</option>
-                <option value="1665">More than 15 years</option>
-              </select>
-            </div>
-            <div className="option-selection">
-              <label>If</label>
-              <select
-                name="nameOfField"
-                id="nameOfField"
-                onChange={this.handleNameFieldChange}
-              >
-                <option value="method">Method</option>
-                {/* <option value="author">Author</option> */}
-              </select>
-              <select
-                name="operator"
-                id="operator"
-                onChange={this.handleOperatorChange}
-              >
-                <option value="equal">EQUALS</option>
-                {/* <option value="not equal">NOT EQUALS</option>
-                <option value="and">AND</option>
-                <option value="or">OR</option> */}
-              </select>
-              <select
-                name="filterValue"
-                id="filterValue"
-                onChange={this.handleFilterValueChange}
-              >
-                <option value="tdd">TDD</option>
-                {/* <option value="not tdd">Not TDD</option> */}
-              </select>
-            </div>
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
