@@ -32,7 +32,7 @@ class Home extends Component {
           <Link className="nav-links" to="/login">
             <button className="btn">Login</button>
           </Link>
-          <Link className="nav-links" to="/login">
+          <Link className="nav-links" to="/register">
             <button className="btn">Register</button>
           </Link>
         </>

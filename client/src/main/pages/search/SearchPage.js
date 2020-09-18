@@ -6,10 +6,10 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: '',
-      fromDate: '',
-      toDate: '',
-      message: '',
+      searchTerm: "",
+      fromDate: "",
+      toDate: "",
+      message: "",
       redirect: false,
       paperdata: [],
       dateFrom: "1665",
@@ -30,8 +30,40 @@ class Search extends React.Component {
     }
   };
 
+  // onFilterToggle = (event) => {
+  //   event.preventDefault();
+  //   axios
+  //   .get("/api/filtercontroller/getfilteredsearch", {
+  //     params
+  //   })
+  // }
+
   getAcceptedPaperData = (event) => {
     event.preventDefault();
+
+    if(this.state.usedFilter){
+      console.log("using filter..", this.state.usedFilter);
+      axios
+      .get("/api/papercontroller/getSearch", {
+        params: {
+          search: this.state.searchTerm,
+          usedFilter:this.state.usedFilter,
+          startDate:this.state.dateFrom,
+          endDate:this.state.dateTo
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        this.setState({ paperdata: data });
+        console.log("Data has been retrieved");
+        console.log(this.state.paperdata);
+      })
+      .catch(() => {
+        alert("Error from Server");
+      });
+    }
+    else{ 
+      console.log("not using filter..");
     axios
       .get("/api/papercontroller/getSearch", {
         params: {
@@ -47,6 +79,7 @@ class Search extends React.Component {
       .catch(() => {
         alert("Error from Server");
       });
+    }
   };
 
   handleInputChange = (event) => {
@@ -91,15 +124,14 @@ class Search extends React.Component {
   };
   handleFilterValueChange = (event) => {
     event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
+    var data = event.target.value;    
     this.setState({
       filterValue: data,
     });
   };
   handleUseFilterChange = (event) => {
     var data = event.target.checked;
-    console.log(event.target.value);
+    console.log("ticked value: ", data);
     this.setState({
       usedFilter: data,
     });
@@ -107,8 +139,8 @@ class Search extends React.Component {
   render() {
     //JSX
     return (
-      <div>
-        <div className="app">
+      <div className="pagelayout">
+        <div className="container">
           <h2>Seer Paper Search</h2>
           <h3>Login Status: {this.props.isLoggedIn}</h3>
           <form onSubmit={this.getAcceptedPaperData}>
@@ -131,7 +163,8 @@ class Search extends React.Component {
               />
             </div>
             <div className="date-from">
-              <label>Date Range</label><br/>
+              <label>Date Range</label>
+              <br />
               <label>From</label>
               <select
                 name="date-from-option"
@@ -189,18 +222,53 @@ class Search extends React.Component {
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
+          {/* <h2>Filtering</h2>
+          <form onSubmit={this.onFilterToggle}>
+            <input
+              type="checkbox"
+              id="content1"
+              name="filterOptions"
+              value="article"
+            />
+            <label for="content1">Article</label>
+            <br />
+            <input
+              type="checkbox"
+              id="content2"
+              name="filterOptions"
+              value="proceeding"
+            />
+            <label for="content2">Proceeding</label>
+            <br />
+            <input
+              type="checkbox"
+              id="content3"
+              name="filterOptions"
+              value="book"
+            />
+            <label for="content3">Book</label>
+            <br />
+            <br />
+            <input type="submit" value="Submit" />
+          </form> */}
         </div>
-    <div>
-        {this.state.paperdata.map((paperdetail, index) => {
-          return <div>
-            <b>{paperdetail.title}</b><br/>
-            {paperdetail.author}<br/>
-            {paperdetail.year}<br/>
-            {paperdetail.publisher}
-            <br/><br/>
-          </div>
-        })}
-    </div>
+        <div>
+          {this.state.paperdata.map((paperdetail, index) => {
+            return (
+              <div>
+                <b>{paperdetail.title}</b>
+                <br />
+                {paperdetail.author}
+                <br />
+                {paperdetail.year}
+                <br />
+                {paperdetail.publisher}
+                <br />
+                <br />
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
