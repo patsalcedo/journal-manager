@@ -40,6 +40,30 @@ class Search extends React.Component {
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
+
+    if(this.state.usedFilter){
+      console.log("using filter..", this.state.usedFilter);
+      axios
+      .get("/api/papercontroller/getSearch", {
+        params: {
+          search: this.state.searchTerm,
+          usedFilter:this.state.usedFilter,
+          startDate:this.state.dateFrom,
+          endDate:this.state.dateTo
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        this.setState({ paperdata: data });
+        console.log("Data has been retrieved");
+        console.log(this.state.paperdata);
+      })
+      .catch(() => {
+        alert("Error from Server");
+      });
+    }
+    else{ 
+      console.log("not using filter..");
     axios
       .get("/api/papercontroller/getSearch", {
         params: {
@@ -55,6 +79,7 @@ class Search extends React.Component {
       .catch(() => {
         alert("Error from Server");
       });
+    }
   };
 
   handleInputChange = (event) => {
@@ -99,15 +124,14 @@ class Search extends React.Component {
   };
   handleFilterValueChange = (event) => {
     event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
+    var data = event.target.value;    
     this.setState({
       filterValue: data,
     });
   };
   handleUseFilterChange = (event) => {
     var data = event.target.checked;
-    console.log(event.target.value);
+    console.log("ticked value: ", data);
     this.setState({
       usedFilter: data,
     });
@@ -115,8 +139,8 @@ class Search extends React.Component {
   render() {
     //JSX
     return (
-      <div>
-        <div className="app">
+      <div className="pagelayout">
+        <div className="container">
           <h2>Seer Paper Search</h2>
           <h3>Login Status: {this.props.isLoggedIn}</h3>
           <form onSubmit={this.getAcceptedPaperData}>
