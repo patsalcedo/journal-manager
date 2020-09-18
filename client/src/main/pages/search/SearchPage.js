@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-//import "./search.css";
+import "../../../main/main.css";
 
 class Search extends React.Component {
   constructor(props) {
@@ -57,7 +57,6 @@ class Search extends React.Component {
       searchTerm: data,
     });
   };
-
   handleDateFromChange = (event) => {
     event.preventDefault();
     var data = event.target.value;

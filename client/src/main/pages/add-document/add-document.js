@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import "../../../main/main.css";
 // import { Redirect } from "react-router-dom";
 // import "./add-document.css";
 
@@ -19,7 +20,6 @@ const formValid = ({ formErrors, ...rest }) => {
 
   return valid;
 };
-
 
 class Add extends React.Component {
   state = {
@@ -45,12 +45,12 @@ class Add extends React.Component {
 
   componentDidMount = () => {
     console.log("calling from add-document.js:", this.props.isLoggedIn);
-    if(this.props.isLoggedIn==="false"){
+    if (this.props.isLoggedIn === "false") {
       this.props.history.push("/login");
       console.log("navigating to login since isLoggedin is false");
     }
   };
-  
+
   handleChange = (e) => {
     e.preventDefault();
     const { id, value } = e.target;
@@ -74,7 +74,7 @@ class Add extends React.Component {
   };
 
   addDocument = (event) => {
-    console.log("IM BEING CALLED")
+    console.log("IM BEING CALLED");
     event.preventDefault();
     this.setState({ message: "" });
     // console.log(formValid);
@@ -97,11 +97,11 @@ class Add extends React.Component {
         annote: this.state.annote,
       };
       //   console.log(payload);
-      console.log("Payload: ", payload)
+      console.log("Payload: ", payload);
       axios({
         url: "/api/papercontroller/addarticle",
         method: "POST",
-        data: payload
+        data: payload,
       })
         .then((resp) => {
           console.log(resp.data);
@@ -121,161 +121,163 @@ class Add extends React.Component {
     const { formErrors } = this.state;
     //JSX
     return (
-      <div className="app">
-        <h2>Add Document Page</h2>
-        <form onSubmit={this.addDocument}>
-          <div className="form-input">
-            <label htmlFor="document_type">Document Type</label>
-            <input
-              type="text"
-              id="document_type"
-              placeholder="Document Type"
-              value={this.state.document_type}
-              onChange={this.handleChange}
-            />
-            {formErrors.document_type.length > 0 && (
-              <span className="errorMessage">{formErrors.document_type}</span>
-            )}
-          </div>
-          <div className="form-input">
-            <label htmlFor="key">Key</label>
-            <input
-              type="text"
-              id="key"
-              placeholder="Key"
-              value={this.state.key}
-              onChange={this.handleChange}
-            />
-            {formErrors.key.length > 0 && (
-              <span className="errorMessage">{formErrors.key}</span>
-            )}
-          </div>
-          <div className="form-input">
-            <label htmlFor="title">Title</label>
-            <input
-              type="text"
-              id="title"
-              placeholder="Title"
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-            {formErrors.title.length > 0 && (
-              <span className="errorMessage">{formErrors.title}</span>
-            )}
-          </div>
-          <div className="form-input">
-            <label htmlFor="author">Author</label>
-            <input
-              type="text"
-              id="author"
-              placeholder="Author"
-              value={this.state.author}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="publisher">Publisher</label>
-            <input
-              type="text"
-              id="publisher"
-              placeholder="Publisher"
-              value={this.state.publisher}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="journal">Journal</label>
-            <input
-              type="text"
-              id="journal"
-              placeholder="Journal"
-              value={this.state.journal}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="year">Year</label>
-            <input
-              type="text"
-              id="year"
-              placeholder="Year"
-              value={this.state.year}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="month">Month</label>
-            <input
-              type="text"
-              id="month"
-              placeholder="Month"
-              value={this.state.month}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="volume">Volume</label>
-            <input
-              type="text"
-              id="volume"
-              placeholder="Volume"
-              value={this.state.volume}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="pages">Pages</label>
-            <input
-              type="text"
-              id="pages"
-              placeholder="Pages"
-              value={this.state.pages}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="eprint">Eprint</label>
-            <input
-              type="text"
-              id="eprint"
-              placeholder="Eprint"
-              value={this.state.eprint}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="eprinttype">Eprint Type</label>
-            <input
-              type="text"
-              id="eprinttype"
-              placeholder="Eprint Type"
-              value={this.state.eprinttype}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="eprintclass">Eprint Class</label>
-            <input
-              type="text"
-              id="eprintclass"
-              placeholder="Eprint Class"
-              value={this.state.eprintclass}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="annote">Annote</label>
-            <input
-              type="text"
-              id="annote"
-              placeholder="Annote"
-              value={this.state.annote}
-              onChange={this.handleChange}
-            />
-          </div>
-          <button>Add Document</button>
-          <span>{this.state.message}</span>
-        </form>
+      <div className="pagelayout">
+        <div className="container">
+          <h2>Add Document Page</h2>
+          <form onSubmit={this.addDocument}>
+            <div className="form-input">
+              <label htmlFor="document_type">Document Type</label>
+              <input
+                type="text"
+                id="document_type"
+                placeholder="Document Type"
+                value={this.state.document_type}
+                onChange={this.handleChange}
+              />
+              {formErrors.document_type.length > 0 && (
+                <span className="errorMessage">{formErrors.document_type}</span>
+              )}
+            </div>
+            <div className="form-input">
+              <label htmlFor="key">Key</label>
+              <input
+                type="text"
+                id="key"
+                placeholder="Key"
+                value={this.state.key}
+                onChange={this.handleChange}
+              />
+              {formErrors.key.length > 0 && (
+                <span className="errorMessage">{formErrors.key}</span>
+              )}
+            </div>
+            <div className="form-input">
+              <label htmlFor="title">Title</label>
+              <input
+                type="text"
+                id="title"
+                placeholder="Title"
+                value={this.state.title}
+                onChange={this.handleChange}
+              />
+              {formErrors.title.length > 0 && (
+                <span className="errorMessage">{formErrors.title}</span>
+              )}
+            </div>
+            <div className="form-input">
+              <label htmlFor="author">Author</label>
+              <input
+                type="text"
+                id="author"
+                placeholder="Author"
+                value={this.state.author}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="publisher">Publisher</label>
+              <input
+                type="text"
+                id="publisher"
+                placeholder="Publisher"
+                value={this.state.publisher}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="journal">Journal</label>
+              <input
+                type="text"
+                id="journal"
+                placeholder="Journal"
+                value={this.state.journal}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="year">Year</label>
+              <input
+                type="text"
+                id="year"
+                placeholder="Year"
+                value={this.state.year}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="month">Month</label>
+              <input
+                type="text"
+                id="month"
+                placeholder="Month"
+                value={this.state.month}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="volume">Volume</label>
+              <input
+                type="text"
+                id="volume"
+                placeholder="Volume"
+                value={this.state.volume}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="pages">Pages</label>
+              <input
+                type="text"
+                id="pages"
+                placeholder="Pages"
+                value={this.state.pages}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="eprint">Eprint</label>
+              <input
+                type="text"
+                id="eprint"
+                placeholder="Eprint"
+                value={this.state.eprint}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="eprinttype">Eprint Type</label>
+              <input
+                type="text"
+                id="eprinttype"
+                placeholder="Eprint Type"
+                value={this.state.eprinttype}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="eprintclass">Eprint Class</label>
+              <input
+                type="text"
+                id="eprintclass"
+                placeholder="Eprint Class"
+                value={this.state.eprintclass}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="annote">Annote</label>
+              <input
+                type="text"
+                id="annote"
+                placeholder="Annote"
+                value={this.state.annote}
+                onChange={this.handleChange}
+              />
+            </div>
+            <button className="submitBtn">Add Document</button>
+            <span>{this.state.message}</span>
+          </form>
+        </div>
       </div>
     );
   }
