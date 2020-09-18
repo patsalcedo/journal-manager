@@ -12,23 +12,37 @@ class Home extends Component {
   }
   handleLogOutClick() {
     this.props.handleLogOut();
-    this.props.history.push("/login");
+    this.props.history.push("/home");
   }
+
   render() {
+    let bannerContent;
+    if (this.props.isLoggedIn === "true")
+      bannerContent = (
+        <>
+          <h2>Find papers now!</h2>
+          <Link className="nav-links" to="/searchpage">
+            <button className="btn">Search</button>
+          </Link>
+        </>
+      );
+    else
+      bannerContent = (
+        <>
+          <Link className="nav-links" to="/login">
+            <button className="btn">Login</button>
+          </Link>
+          <Link className="nav-links" to="/login">
+            <button className="btn">Register</button>
+          </Link>
+        </>
+      );
+
     return (
       <div className="home">
         <div className="pagelayout">
           <Banner title="Software Engineering Evidence Repository">
-            <Link to="/" className="btn">
-              Sign In
-            </Link>
-            <Link to="/register" className="btn">
-              Register
-            </Link>
-            <Link to="/searchpage" className="btn">
-              Search [temp]
-            </Link>
-            <button onClick={() => this.handleLogOutClick()}>Log Out</button>
+            {bannerContent}
           </Banner>
           <h1>Welcome to SEER</h1>
           <h2>Featured Papers</h2>
