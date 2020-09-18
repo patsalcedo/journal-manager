@@ -10,7 +10,7 @@ router.get("/papercontroller/getsearch", (req, res) => {
   const search = req.query.search;
   console.log("Search Term :" + search);
 
-  AcceptedPaperData.find({ paper_name: { $regex: search, $options: "i" } })
+  AcceptedPaperData.find({ title: { $regex: search, $options: "i" } })
     .then((data) => {
       console.log("Data: ", data);
       res.json(data);
@@ -22,20 +22,20 @@ router.get("/papercontroller/getsearch", (req, res) => {
 
 router.post("/papercontroller/addarticle", (req, res) => {
   //http://localhost:8080/api/acceptedpapercontroller/addarticle
-  console.log("Trying to add a paper")   
+  console.log("Trying to add a paper");
   const data = req.body;
   const newAcceptedPaperData = new AcceptedPaperData(data);
-          newAcceptedPaperData.save((error) => {
-              if(error){
-                  res.status(500).json({
-                      msg:"Internal Server Error."
-                  })
-                  return;
-              }
-              return res.json({
-                  msg:"Paper Added."
-              });
-          })
+  newAcceptedPaperData.save((error) => {
+    if (error) {
+      res.status(500).json({
+        msg: "Internal Server Error.",
+      });
+      return;
+    }
+    return res.json({
+      msg: "Paper Added.",
+    });
   });
+});
 
 module.exports = router;
