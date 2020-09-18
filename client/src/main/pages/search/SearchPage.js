@@ -18,6 +18,8 @@ class Search extends React.Component {
       operator: "",
       filterValue: "",
       usedFilter: false,
+      dateFilter: false,
+      operatorFilter: false,
       secondBlock: false,
       thirdBlock: false,
     };
@@ -137,6 +139,20 @@ class Search extends React.Component {
       usedFilter: data,
     });
   };
+  handleDateFilterChange = (event) => {
+    var data = event.target.checked;
+    console.log("ticked value: ", data);
+    this.setState({
+      dateFilter: data,
+    });
+  };
+  handleOperatorFilterChange = (event) => {
+    var data = event.target.checked;
+    console.log("ticked value: ", data);
+    this.setState({
+      operatorFilter: data,
+    });
+  };
   handlePlusForSecondBlock = () => {
     this.setState({
       secondBlock: true,
@@ -186,6 +202,14 @@ class Search extends React.Component {
             </div>
             {this.state.usedFilter && (
               <>
+                <div className="dateFilter">
+                  <label>Using Date Filter</label>
+                  <input
+                    type="checkbox"
+                    id="dateFilterCheckBox"
+                    onChange={this.handleDateFilterChange}
+                  />
+                </div>
                 <div className="date-from">
                   <label>Date Range</label>
                   <br />
@@ -213,6 +237,14 @@ class Search extends React.Component {
                     <option value="2010">Last 10 Years</option>
                     <option value="1665">More than 15 years</option>
                   </select>
+                </div>
+                <div className="operatorFilter">
+                  <label>Using Operator Filter</label>
+                  <input
+                    type="checkbox"
+                    id="operatorFilterCheckBox"
+                    onChange={this.handleOperatorFilterChange}
+                  />
                 </div>
                 <div className="option-selection">
                   <label>If</label>
