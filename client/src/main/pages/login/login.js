@@ -68,6 +68,14 @@ class Login extends React.Component {
       });
   };
 
+  // componentDidMount = () => {
+  //   console.log("calling from Login.js:", this.props.isLoggedIn);
+  //   if (this.props.isLoggedIn === "true") {
+  //     this.props.history.push("/home");
+  //     console.log("navigating to homepage since isLoggedin is true");
+  //   }
+  // };
+
   // axios({
   //   url: "/api/usercontroller/login",
   //   method: "POST",
