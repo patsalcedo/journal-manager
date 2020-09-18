@@ -14,7 +14,7 @@ class Search extends React.Component {
       redirect: false,
       paperdata: [],
       dateFrom: "last 5 years",
-      dateTo: "Today",
+      dateTo: "today",
       nameOfField: "",
       operator: "",
       filterValue: "",
@@ -44,29 +44,6 @@ class Search extends React.Component {
         this.setState({ paperdata: data });
         console.log("Data has been retrieved");
         console.log(this.state.paperdata);
-      })
-      .catch(() => {
-        alert("Error from Server");
-      });
-  };
-
-  sendAcceptedPaperData = (event) => {
-    event.preventDefault();
-    var payload = {
-      document_type: "Article",
-      key: "123",
-      title: "Something Not Right",
-      author: "Naveen",
-      publisher: "1010101010101",
-      link: "xxx",
-    };
-    axios({
-      url: "/api/papercontroller/addArticle",
-      method: "POST",
-      data: payload,
-    })
-      .then((response) => {
-        console.log("Paper has been added successfully");
       })
       .catch(() => {
         alert("Error from Server");
@@ -190,15 +167,17 @@ class Search extends React.Component {
                 onChange={this.handleNameFieldChange}
               >
                 <option value="method">Method</option>
-                <option value="Author">Author</option>
+                <option value="author">Author</option>
               </select>
               <select
                 name="operator"
                 id="operator"
                 onChange={this.handleOperatorChange}
               >
-                <option value="equal">=</option>
-                <option value="not equal">!=</option>
+                <option value="equal">EQUALS</option>
+                <option value="not equal">NOT EQUALS</option>
+                <option value="and">AND</option>
+                <option value="or">OR</option>
               </select>
               <select
                 name="filterValue"
@@ -206,14 +185,24 @@ class Search extends React.Component {
                 onChange={this.handleFilterValueChange}
               >
                 <option value="tdd">TDD</option>
-                <option value="not tdd">No TDD</option>
+                <option value="not tdd">Not TDD</option>
               </select>
             </div>
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
         </div>
-        <div>To display paper data</div>
+    <div>
+        {this.state.paperdata.map((paperdetail, index) => {
+          return <div>
+            <b>{paperdetail.title}</b><br/>
+            {paperdetail.author}<br/>
+            {paperdetail.key}<br/>
+            {paperdetail.publisher}
+            <br/><br/>
+          </div>
+        })}
+    </div>
       </div>
     );
   }

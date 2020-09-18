@@ -10,7 +10,7 @@ router.get("/papercontroller/getsearch", (req, res) => {
   const search = req.query.search;
   console.log("Search Term :" + search);
 
-  AcceptedPaperData.find({ paper_name: { $regex: search, $options: "i" } })
+  AcceptedPaperData.find({ title: { $regex: search, $options: "i" } })
     .then((data) => {
       console.log("Data: ", data);
       res.json(data);
