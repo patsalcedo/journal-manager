@@ -6,10 +6,10 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: '',
-      fromDate: '',
-      toDate: '',
-      message: '',
+      searchTerm: "",
+      fromDate: "",
+      toDate: "",
+      message: "",
       redirect: false,
       paperdata: [],
       dateFrom: "1665",
@@ -139,7 +139,8 @@ class Search extends React.Component {
               />
             </div>
             <div className="date-from">
-              <label>Date Range</label><br/>
+              <label>Date Range</label>
+              <br />
               <label>From</label>
               <select
                 name="date-from-option"
@@ -197,7 +198,7 @@ class Search extends React.Component {
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
-          <h2>Filtering</h2>
+          {/* <h2>Filtering</h2>
           <form onSubmit={this.onFilterToggle}>
             <input
               type="checkbox"
@@ -225,19 +226,25 @@ class Search extends React.Component {
             <br />
             <br />
             <input type="submit" value="Submit" />
-          </form>
+          </form> */}
         </div>
-    <div>
-        {this.state.paperdata.map((paperdetail, index) => {
-          return <div>
-            <b>{paperdetail.title}</b><br/>
-            {paperdetail.author}<br/>
-            {paperdetail.year}<br/>
-            {paperdetail.publisher}
-            <br/><br/>
-          </div>
-        })}
-    </div>
+        <div>
+          {this.state.paperdata.map((paperdetail, index) => {
+            return (
+              <div>
+                <b>{paperdetail.title}</b>
+                <br />
+                {paperdetail.author}
+                <br />
+                {paperdetail.year}
+                <br />
+                {paperdetail.publisher}
+                <br />
+                <br />
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
