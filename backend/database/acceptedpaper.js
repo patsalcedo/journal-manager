@@ -11,6 +11,9 @@ const AcceptedPaperSchema = new Schema({
   key: {
     type: String,
   },
+  method : {
+    type: String,
+  },
   title: {
     type: String,
   },
