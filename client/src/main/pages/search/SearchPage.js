@@ -22,6 +22,14 @@ class Search extends React.Component {
     }
   };
 
+  // onFilterToggle = (event) => {
+  //   event.preventDefault();
+  //   axios
+  //   .get("/api/filtercontroller/getfilteredsearch", {
+  //     params
+  //   })
+  // }
+
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     axios
@@ -68,6 +76,35 @@ class Search extends React.Component {
             </div>
             <button className="submitBtn">Search</button>
             <span>{this.state.message}</span>
+          </form>
+          <h2>Filtering</h2>
+          <form onSubmit={this.onFilterToggle}>
+            <input
+              type="checkbox"
+              id="content1"
+              name="filterOptions"
+              value="article"
+            />
+            <label for="content1">Article</label>
+            <br />
+            <input
+              type="checkbox"
+              id="content2"
+              name="filterOptions"
+              value="proceeding"
+            />
+            <label for="content2">Proceeding</label>
+            <br />
+            <input
+              type="checkbox"
+              id="content3"
+              name="filterOptions"
+              value="book"
+            />
+            <label for="content3">Book</label>
+            <br />
+            <br />
+            <input type="submit" value="Submit" />
           </form>
         </div>
       </div>
