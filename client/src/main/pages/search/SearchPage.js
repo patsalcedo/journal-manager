@@ -13,8 +13,8 @@ class Search extends React.Component {
       nameOfField: '',
       redirect: false,
       paperdata: [],
-      dateFrom: "last 5 years",
-      dateTo: "today",
+      dateFrom: "1665",
+      dateTo: "2020",
       nameOfField: "",
       operator: "",
       filterValue: "",
@@ -133,17 +133,17 @@ class Search extends React.Component {
               />
             </div>
             <div className="date-from">
-              <label>Date Range</label>
+              <label>Date Range</label><br/>
               <label>From</label>
               <select
                 name="date-from-option"
                 id="date-from-option"
                 onChange={this.handleDateFromChange}
               >
-                <option value="last 5 years">Last 5 years</option>
-                <option value="last 10 years">Last 10 years</option>
-                <option value="last 15 years">Last 15 years</option>
-                <option value="more than 15 years">More than 15 years</option>
+                <option value="2020">This Year</option>
+                <option value="2015">Last 5 Years</option>
+                <option value="2010">Last 10 Years</option>
+                <option value="1665">More than 15 years</option>
               </select>
             </div>
             <div className="date-to">
@@ -153,10 +153,10 @@ class Search extends React.Component {
                 id="date-to-option"
                 onChange={this.handleDateToChange}
               >
-                <option value="today">Today</option>
-                <option value="last 5 years">Last 5 years</option>
-                <option value="last 10 years">Last 10 years</option>
-                <option value="last 15 years">Last 15 years</option>
+                <option value="2020">This Year</option>
+                <option value="2015">Last 5 Years</option>
+                <option value="2010">Last 10 Years</option>
+                <option value="1665">More than 15 years</option>
               </select>
             </div>
             <div className="option-selection">
@@ -167,7 +167,7 @@ class Search extends React.Component {
                 onChange={this.handleNameFieldChange}
               >
                 <option value="method">Method</option>
-                <option value="author">Author</option>
+                {/* <option value="author">Author</option> */}
               </select>
               <select
                 name="operator"
@@ -175,9 +175,9 @@ class Search extends React.Component {
                 onChange={this.handleOperatorChange}
               >
                 <option value="equal">EQUALS</option>
-                <option value="not equal">NOT EQUALS</option>
+                {/* <option value="not equal">NOT EQUALS</option>
                 <option value="and">AND</option>
-                <option value="or">OR</option>
+                <option value="or">OR</option> */}
               </select>
               <select
                 name="filterValue"
@@ -185,7 +185,7 @@ class Search extends React.Component {
                 onChange={this.handleFilterValueChange}
               >
                 <option value="tdd">TDD</option>
-                <option value="not tdd">Not TDD</option>
+                {/* <option value="not tdd">Not TDD</option> */}
               </select>
             </div>
             <button>submit</button>
@@ -197,7 +197,7 @@ class Search extends React.Component {
           return <div>
             <b>{paperdetail.title}</b><br/>
             {paperdetail.author}<br/>
-            {paperdetail.key}<br/>
+            {paperdetail.year}<br/>
             {paperdetail.publisher}
             <br/><br/>
           </div>
