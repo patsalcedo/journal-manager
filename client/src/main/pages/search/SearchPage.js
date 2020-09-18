@@ -10,7 +10,6 @@ class Search extends React.Component {
       fromDate: '',
       toDate: '',
       message: '',
-      nameOfField: '',
       redirect: false,
       paperdata: [],
       dateFrom: "1665",
