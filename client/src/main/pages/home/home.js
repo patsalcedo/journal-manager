@@ -39,13 +39,13 @@ class Home extends Component {
       );
 
     return (
-      <div className="home">
+      <div>
         <div className="pagelayout">
+          <h1>Welcome to SEER</h1>
           <Banner title="Software Engineering Evidence Repository">
             {bannerContent}
           </Banner>
-          <h1>Welcome to SEER</h1>
-          <h2>Featured Papers</h2>
+          {/* <h2>Featured Papers</h2>
           <div className="column">
             <div className="container">
               <h1>Paper 1</h1>
@@ -75,7 +75,7 @@ class Home extends Component {
             <div className="container">
               <h1>Paper 3</h1>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
