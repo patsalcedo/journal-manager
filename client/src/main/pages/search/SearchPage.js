@@ -17,7 +17,6 @@ class Search extends React.Component {
       nameOfField: "Method",
       operator: "=",
       filterValue: "TDD",
-      usedFilter: false,
       dateFilter: false,
       operatorFilter: false,
       secondBlock: false,
@@ -68,7 +67,7 @@ class Search extends React.Component {
         });
     }
     else if (this.state.dateFilter) {
-      console.log("using date filter..", this.state.usedFilter);
+      console.log("using date filter..");
       axios
         .get("/api/papercontroller/getSearch", {
           params: {
@@ -89,7 +88,7 @@ class Search extends React.Component {
         });
     }
     else if(this.state.operatorFilter) {
-      console.log("using operator filter..", this.state.usedFilter);
+      console.log("using operator filter..");
       axios
         .get("/api/papercontroller/getSearch", {
           params: {
@@ -180,7 +179,6 @@ class Search extends React.Component {
     console.log("date ticked value: ", data);
     this.setState({
       dateFilter: data,
-      usedFilter: data,
     });
   };
   handleOperatorFilterChange = (event) => {
@@ -188,7 +186,6 @@ class Search extends React.Component {
     console.log("operator ticked value: ", data);
     this.setState({
       operatorFilter: data,
-      usedFilter: data
     });
   };
   // handlePlusForSecondBlock = () => {
