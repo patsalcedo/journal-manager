@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import "../../../main/main.css";
+import "../search/SearchPage.css";
 
 class Search extends React.Component {
   constructor(props) {
@@ -65,8 +65,7 @@ class Search extends React.Component {
         .catch(() => {
           alert("Error from Server");
         });
-    }
-    else if (this.state.dateFilter) {
+    } else if (this.state.dateFilter) {
       console.log("using date filter..");
       axios
         .get("/api/papercontroller/getSearch", {
@@ -86,8 +85,7 @@ class Search extends React.Component {
         .catch(() => {
           alert("Error from Server");
         });
-    }
-    else if(this.state.operatorFilter) {
+    } else if (this.state.operatorFilter) {
       console.log("using operator filter..");
       axios
         .get("/api/papercontroller/getSearch", {
@@ -106,8 +104,7 @@ class Search extends React.Component {
         .catch(() => {
           alert("Error from Server");
         });
-    }
-    else {
+    } else {
       console.log("not using filter..");
       axios
         .get("/api/papercontroller/getSearch", {
@@ -212,10 +209,9 @@ class Search extends React.Component {
   render() {
     //JSX
     return (
-      <div className="pagelayout">
-        <div className="container">
+      <div className="pagelayout-for-search">
+        <div className="container-filter">
           <h2>Seer Paper Search</h2>
-          <h3>Login Status: {this.props.isLoggedIn}</h3>
           <form onSubmit={this.getAcceptedPaperData}>
             <div className="form-input">
               <label>Enter Description</label>
@@ -228,20 +224,20 @@ class Search extends React.Component {
               />
             </div>
             <div className="dateFilter">
-                  <label>Using Date Filter</label>
-                  <input
-                    type="checkbox"
-                    id="dateFilterCheckBox"
-                    onChange={this.handleDateFilterChange}
-                  />
-              </div>
+              <label>Using Date Filter</label>
+              <input
+                type="checkbox"
+                id="dateFilterCheckBox"
+                onChange={this.handleDateFilterChange}
+              />
+            </div>
             <div className="operatorFilter">
-                  <label>Using Operator Filter</label>
-                  <input
-                    type="checkbox"
-                    id="operatorFilterCheckBox"
-                    onChange={this.handleOperatorFilterChange}
-                  />
+              <label>Using Operator Filter</label>
+              <input
+                type="checkbox"
+                id="operatorFilterCheckBox"
+                onChange={this.handleOperatorFilterChange}
+              />
             </div>
             {this.state.dateFilter && (
               <>
@@ -272,10 +268,10 @@ class Search extends React.Component {
                     <option value="2010">Last 10 Years</option>
                   </select>
                 </div>
-                </>
+              </>
             )}
-             {this.state.operatorFilter && (
-            <>
+            {this.state.operatorFilter && (
+              <>
                 <div className="option-selection">
                   <label>If</label>
                   <select
@@ -308,7 +304,7 @@ class Search extends React.Component {
                   <button onClick={this.handleMinusForSecondBlock}>-</button> */}
                 </div>
               </>
-             )}
+            )}
             {/* {this.state.secondBlock && (
               <>
                 <div className="option-selection">
@@ -412,7 +408,8 @@ class Search extends React.Component {
             <input type="submit" value="Submit" />
           </form> */}
         </div>
-        <div>
+        <div className="container-paperdata">
+          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
           {this.state.paperdata.map((paperdetail, index) => {
             return (
               <div>
