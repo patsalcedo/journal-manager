@@ -191,27 +191,27 @@ class Search extends React.Component {
       usedFilter: data
     });
   };
-  handlePlusForSecondBlock = () => {
-    this.setState({
-      secondBlock: true,
-    });
-  };
-  handleMinusForSecondBlock = () => {
-    this.setState({
-      secondBlock: false,
-      thirdBlock: false,
-    });
-  };
-  handlePlusForThirdBlock = () => {
-    this.setState({
-      thirdBlock: true,
-    });
-  };
-  handleMinusForThirdBlock = () => {
-    this.setState({
-      thirdBlock: false,
-    });
-  };
+  // handlePlusForSecondBlock = () => {
+  //   this.setState({
+  //     secondBlock: true,
+  //   });
+  // };
+  // handleMinusForSecondBlock = () => {
+  //   this.setState({
+  //     secondBlock: false,
+  //     thirdBlock: false,
+  //   });
+  // };
+  // handlePlusForThirdBlock = () => {
+  //   this.setState({
+  //     thirdBlock: true,
+  //   });
+  // };
+  // handleMinusForThirdBlock = () => {
+  //   this.setState({
+  //     thirdBlock: false,
+  //   });
+  // };
   render() {
     //JSX
     return (
@@ -307,12 +307,12 @@ class Search extends React.Component {
                     <option value="tdd">TDD</option>
                     {/* <option value="not tdd">Not TDD</option> */}
                   </select>
-                  <button onClick={this.handlePlusForSecondBlock}>+</button>
-                  <button onClick={this.handleMinusForSecondBlock}>-</button>
+                  {/* <button onClick={this.handlePlusForSecondBlock}>+</button>
+                  <button onClick={this.handleMinusForSecondBlock}>-</button> */}
                 </div>
               </>
              )}
-            {this.state.secondBlock && (
+            {/* {this.state.secondBlock && (
               <>
                 <div className="option-selection">
                   <label>If</label>
@@ -373,15 +373,15 @@ class Search extends React.Component {
                     <option value="tdd">TDD</option>
                     <option value="not tdd">No TDD</option>
                   </select>
-                  {/* <button onClick={this.clickedPlusButtonForSecondBlock}>
+                  <button onClick={this.clickedPlusButtonForSecondBlock}>
                     +
                   </button>
                   <button onClick={this.clickedMinusButtonForSecondBlock}>
                     -
-                  </button> */}
+                  </button>
                 </div>
               </>
-            )}
+            )} */}
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
