@@ -79,7 +79,6 @@ class Add extends React.Component {
     console.log("IM BEING CALLED");
     event.preventDefault();
     this.setState({ message: "" });
-    // console.log(formValid);
     if (formValid(this.state)) {
       const payload = {
         document_type: this.state.document_type,
