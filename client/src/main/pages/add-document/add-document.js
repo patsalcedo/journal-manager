@@ -23,6 +23,7 @@ const formValid = ({ formErrors, ...rest }) => {
 
 class Add extends React.Component {
   state = {
+    response_message:"",
     formErrors: {
       document_type: "",
       key: "",
@@ -107,6 +108,7 @@ class Add extends React.Component {
       })
         .then((resp) => {
           console.log(resp.data);
+          this.setState({response_message:resp.data.message});
           //this.getBlogPost();
         })
         .catch((err) => {
@@ -289,6 +291,7 @@ class Add extends React.Component {
             <button className="submitBtn">Add Document</button>
             <span>{this.state.message}</span>
           </form>
+              <h3>{this.state.response_message}</h3>
         </div>
       </div>
     );
