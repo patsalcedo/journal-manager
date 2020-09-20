@@ -247,6 +247,16 @@ class Add extends React.Component {
               />
             </div>
             <div className="form-input">
+              <label htmlFor="number">Number</label>
+              <input
+                type="text"
+                id="number"
+                placeholder="Number"
+                value={this.state.number}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
               <label htmlFor="eprint">Eprint</label>
               <input
                 type="text"
