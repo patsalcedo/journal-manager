@@ -375,7 +375,7 @@ class Search extends React.Component {
                 </div>
               </>
             )} */}
-            <button>submit</button>
+            <button className="submitBtn">submit</button>
             <span>{this.state.message}</span>
           </form>
           {/* <h2>Filtering</h2>
