@@ -14,10 +14,9 @@ class Search extends React.Component {
       paperdata: [],
       dateFrom: "1665",
       dateTo: "2020",
-      nameOfField: "",
-      operator: "",
-      filterValue: "",
-      usedFilter: false,
+      nameOfField: "Method",
+      operator: "=",
+      filterValue: "TDD",
       dateFilter: false,
       operatorFilter: false,
       secondBlock: false,
@@ -44,14 +43,36 @@ class Search extends React.Component {
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
-
-    if (this.state.usedFilter) {
-      console.log("using filter..", this.state.usedFilter);
+    if (this.state.dateFilter && this.state.operatorFilter) {
+      console.log("using both filters..");
       axios
         .get("/api/papercontroller/getSearch", {
           params: {
             search: this.state.searchTerm,
-            usedFilter: this.state.usedFilter,
+            dateFilter: this.state.dateFilter,
+            startDate: this.state.dateFrom,
+            endDate: this.state.dateTo,
+            operatorFilter: this.state.operatorFilter,
+            filterValue: this.state.filterValue,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
+    }
+    else if (this.state.dateFilter) {
+      console.log("using date filter..");
+      axios
+        .get("/api/papercontroller/getSearch", {
+          params: {
+            search: this.state.searchTerm,
+            dateFilter: this.state.dateFilter,
             startDate: this.state.dateFrom,
             endDate: this.state.dateTo,
           },
@@ -65,7 +86,28 @@ class Search extends React.Component {
         .catch(() => {
           alert("Error from Server");
         });
-    } else {
+    }
+    else if(this.state.operatorFilter) {
+      console.log("using operator filter..");
+      axios
+        .get("/api/papercontroller/getSearch", {
+          params: {
+            search: this.state.searchTerm,
+            operatorFilter: this.state.operatorFilter,
+            filterValue: this.state.filterValue,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
+    }
+    else {
       console.log("not using filter..");
       axios
         .get("/api/papercontroller/getSearch", {
@@ -132,48 +174,41 @@ class Search extends React.Component {
       filterValue: data,
     });
   };
-  handleUseFilterChange = (event) => {
-    var data = event.target.checked;
-    console.log("ticked value: ", data);
-    this.setState({
-      usedFilter: data,
-    });
-  };
   handleDateFilterChange = (event) => {
     var data = event.target.checked;
-    console.log("ticked value: ", data);
+    console.log("date ticked value: ", data);
     this.setState({
       dateFilter: data,
     });
   };
   handleOperatorFilterChange = (event) => {
     var data = event.target.checked;
-    console.log("ticked value: ", data);
+    console.log("operator ticked value: ", data);
     this.setState({
       operatorFilter: data,
     });
   };
-  handlePlusForSecondBlock = () => {
-    this.setState({
-      secondBlock: true,
-    });
-  };
-  handleMinusForSecondBlock = () => {
-    this.setState({
-      secondBlock: false,
-      thirdBlock: false,
-    });
-  };
-  handlePlusForThirdBlock = () => {
-    this.setState({
-      thirdBlock: true,
-    });
-  };
-  handleMinusForThirdBlock = () => {
-    this.setState({
-      thirdBlock: false,
-    });
-  };
+  // handlePlusForSecondBlock = () => {
+  //   this.setState({
+  //     secondBlock: true,
+  //   });
+  // };
+  // handleMinusForSecondBlock = () => {
+  //   this.setState({
+  //     secondBlock: false,
+  //     thirdBlock: false,
+  //   });
+  // };
+  // handlePlusForThirdBlock = () => {
+  //   this.setState({
+  //     thirdBlock: true,
+  //   });
+  // };
+  // handleMinusForThirdBlock = () => {
+  //   this.setState({
+  //     thirdBlock: false,
+  //   });
+  // };
   render() {
     //JSX
     return (
@@ -192,24 +227,24 @@ class Search extends React.Component {
                 onChange={this.handleInputChange}
               />
             </div>
-            <div className="userFilter">
-              <label>Using Filter</label>
-              <input
-                type="checkbox"
-                id="useFilterCheckBox"
-                onChange={this.handleUseFilterChange}
-              />
-            </div>
-            {this.state.usedFilter && (
-              <>
-                <div className="dateFilter">
+            <div className="dateFilter">
                   <label>Using Date Filter</label>
                   <input
                     type="checkbox"
                     id="dateFilterCheckBox"
                     onChange={this.handleDateFilterChange}
                   />
-                </div>
+              </div>
+            <div className="operatorFilter">
+                  <label>Using Operator Filter</label>
+                  <input
+                    type="checkbox"
+                    id="operatorFilterCheckBox"
+                    onChange={this.handleOperatorFilterChange}
+                  />
+            </div>
+            {this.state.dateFilter && (
+              <>
                 <div className="date-from">
                   <label>Date Range</label>
                   <br />
@@ -219,10 +254,10 @@ class Search extends React.Component {
                     id="date-from-option"
                     onChange={this.handleDateFromChange}
                   >
-                    <option value="2020">This Year</option>
-                    <option value="2015">Last 5 Years</option>
-                    <option value="2010">Last 10 Years</option>
                     <option value="1665">More than 15 years</option>
+                    <option value="2010">Last 10 Years</option>
+                    <option value="2015">Last 5 Years</option>
+                    <option value="2020">This Year</option>
                   </select>
                 </div>
                 <div className="date-to">
@@ -235,17 +270,12 @@ class Search extends React.Component {
                     <option value="2020">This Year</option>
                     <option value="2015">Last 5 Years</option>
                     <option value="2010">Last 10 Years</option>
-                    <option value="1665">More than 15 years</option>
                   </select>
                 </div>
-                <div className="operatorFilter">
-                  <label>Using Operator Filter</label>
-                  <input
-                    type="checkbox"
-                    id="operatorFilterCheckBox"
-                    onChange={this.handleOperatorFilterChange}
-                  />
-                </div>
+                </>
+            )}
+             {this.state.operatorFilter && (
+            <>
                 <div className="option-selection">
                   <label>If</label>
                   <select
@@ -274,12 +304,12 @@ class Search extends React.Component {
                     <option value="tdd">TDD</option>
                     {/* <option value="not tdd">Not TDD</option> */}
                   </select>
-                  <button onClick={this.handlePlusForSecondBlock}>+</button>
-                  <button onClick={this.handleMinusForSecondBlock}>-</button>
+                  {/* <button onClick={this.handlePlusForSecondBlock}>+</button>
+                  <button onClick={this.handleMinusForSecondBlock}>-</button> */}
                 </div>
               </>
-            )}
-            {this.state.secondBlock && (
+             )}
+            {/* {this.state.secondBlock && (
               <>
                 <div className="option-selection">
                   <label>If</label>
@@ -340,15 +370,15 @@ class Search extends React.Component {
                     <option value="tdd">TDD</option>
                     <option value="not tdd">No TDD</option>
                   </select>
-                  {/* <button onClick={this.clickedPlusButtonForSecondBlock}>
+                  <button onClick={this.clickedPlusButtonForSecondBlock}>
                     +
                   </button>
                   <button onClick={this.clickedMinusButtonForSecondBlock}>
                     -
-                  </button> */}
+                  </button>
                 </div>
               </>
-            )}
+            )} */}
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>

@@ -8,10 +8,38 @@ const AcceptedPaperData = require("../database/acceptedpaper");
 router.get("/papercontroller/getsearch", (req, res) => {
   //http://localhost:8080/api/acceptedpapercontroller/getsearch?searchterm
   const search = req.query.search;
-  const isFilterTicked = req.query.usedFilter;
+  const isDateFilterTicked = req.query.dateFilter;
+  const isOperatorFilterTicked = req.query.operatorFilter;
 
-  console.log("Search Term :" + search+ "is ticked: "+ isFilterTicked);
-  if(isFilterTicked){
+  console.log("Search Term :" + search+ " is date ticked: "+ isDateFilterTicked+" is operator ticked: "+ isOperatorFilterTicked);
+  if(isOperatorFilterTicked && isDateFilterTicked){
+    const filterValue = req.query.filterValue;
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    console.log("filter is ticked: method to filter is :", filterValue);
+    console.log("filter is ticked: start date and end date:", startDate, endDate);
+    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }, method: "TDD", year :{$gte: startDate , $lte: endDate}  })
+    .then((data) => {
+      console.log("Data: ", data);
+      res.json(data);
+    })
+    .catch((error) => {
+      console.log("error: ", error);
+    });
+  }
+  else if(isOperatorFilterTicked){
+    const filterValue = req.query.filterValue;
+    console.log("filter is ticked: method to filter is :", filterValue);
+    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }, method: "TDD" })
+    .then((data) => {
+      console.log("Data: ", data);
+      res.json(data);
+    })
+    .catch((error) => {
+      console.log("error: ", error);
+    });
+  }
+  else if(isDateFilterTicked){
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
     console.log("filter is ticked: start date and end date:", startDate, endDate);
@@ -23,8 +51,8 @@ router.get("/papercontroller/getsearch", (req, res) => {
     .catch((error) => {
       console.log("error: ", error);
     });
-  
-  }else{
+  }
+  else{
     console.log("filter is not clicked doing regular searching.");
     AcceptedPaperData.find({ title: { $regex: search, $options: "i" }})
     .then((data) => {

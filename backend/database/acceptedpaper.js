@@ -11,13 +11,13 @@ const AcceptedPaperSchema = new Schema({
   key: {
     type: String,
   },
-  method : {
-    type: String,
-  },
   title: {
     type: String,
   },
   author: {
+    type: String,
+  },
+  method : {
     type: String,
   },
   publisher: {

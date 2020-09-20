@@ -29,6 +29,7 @@ class Add extends React.Component {
       title: "",
     },
     author: "",
+    method: "",
     publisher: "",
     journal: "",
     year: "",
@@ -84,6 +85,7 @@ class Add extends React.Component {
         key: this.state.key,
         title: this.state.title,
         author: this.state.author,
+        method: this.state.method,
         publisher: this.state.publisher,
         journal: this.state.journal,
         year: this.state.year,
@@ -171,6 +173,16 @@ class Add extends React.Component {
                 id="author"
                 placeholder="Author"
                 value={this.state.author}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
+              <label htmlFor="method">Method</label>
+              <input
+                type="text"
+                id="method"
+                placeholder="Method"
+                value={this.state.method}
                 onChange={this.handleChange}
               />
             </div>
