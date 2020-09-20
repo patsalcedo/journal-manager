@@ -23,6 +23,7 @@ const formValid = ({ formErrors, ...rest }) => {
 
 class Add extends React.Component {
   state = {
+    response_message:"",
     formErrors: {
       document_type: "",
       key: "",
@@ -78,7 +79,6 @@ class Add extends React.Component {
     console.log("IM BEING CALLED");
     event.preventDefault();
     this.setState({ message: "" });
-    // console.log(formValid);
     if (formValid(this.state)) {
       const payload = {
         document_type: this.state.document_type,
@@ -107,6 +107,7 @@ class Add extends React.Component {
       })
         .then((resp) => {
           console.log(resp.data);
+          this.setState({response_message:resp.data.message});
           //this.getBlogPost();
         })
         .catch((err) => {
@@ -247,6 +248,16 @@ class Add extends React.Component {
               />
             </div>
             <div className="form-input">
+              <label htmlFor="number">Number</label>
+              <input
+                type="text"
+                id="number"
+                placeholder="Number"
+                value={this.state.number}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-input">
               <label htmlFor="eprint">Eprint</label>
               <input
                 type="text"
@@ -289,6 +300,7 @@ class Add extends React.Component {
             <button className="submitBtn">Add Document</button>
             <span>{this.state.message}</span>
           </form>
+              <h3>{this.state.response_message}</h3>
         </div>
       </div>
     );
