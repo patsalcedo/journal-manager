@@ -304,7 +304,77 @@ class Search extends React.Component {
                 </div>
               </>
             )}
-            <button>submit</button>
+            {/* {this.state.secondBlock && (
+              <>
+                <div className="option-selection">
+                  <label>If</label>
+                  <select
+                    name="nameOfField"
+                    id="nameOfField"
+                    onChange={this.handleNameFieldChange}
+                  >
+                    <option value="method">Method</option>
+                    <option value="Author">Author</option>
+                  </select>
+                  <select
+                    name="operator"
+                    id="operator"
+                    onChange={this.handleOperatorChange}
+                  >
+                    <option value="equal">=</option>
+                    <option value="not equal">!=</option>
+                  </select>
+                  <select
+                    name="filterValue"
+                    id="filterValue"
+                    onChange={this.handleFilterValueChange}
+                  >
+                    <option value="tdd">TDD</option>
+                    <option value="not tdd">No TDD</option>
+                  </select>
+                  <button onClick={this.handlePlusForThirdBlock}>+</button>
+                  <button onClick={this.handleMinusForThirdBlock}>-</button>
+                </div>
+              </>
+            )}
+            {this.state.thirdBlock && (
+              <>
+                <div className="option-selection">
+                  <label>If</label>
+                  <select
+                    name="nameOfField"
+                    id="nameOfField"
+                    onChange={this.handleNameFieldChange}
+                  >
+                    <option value="method">Method</option>
+                    <option value="Author">Author</option>
+                  </select>
+                  <select
+                    name="operator"
+                    id="operator"
+                    onChange={this.handleOperatorChange}
+                  >
+                    <option value="equal">=</option>
+                    <option value="not equal">!=</option>
+                  </select>
+                  <select
+                    name="filterValue"
+                    id="filterValue"
+                    onChange={this.handleFilterValueChange}
+                  >
+                    <option value="tdd">TDD</option>
+                    <option value="not tdd">No TDD</option>
+                  </select>
+                  <button onClick={this.clickedPlusButtonForSecondBlock}>
+                    +
+                  </button>
+                  <button onClick={this.clickedMinusButtonForSecondBlock}>
+                    -
+                  </button>
+                </div>
+              </>
+            )} */}
+            <button className="submitBtn">submit</button>
             <span>{this.state.message}</span>
           </form>
         </div>
