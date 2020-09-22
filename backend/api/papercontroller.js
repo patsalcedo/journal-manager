@@ -30,7 +30,7 @@ router.get("/papercontroller/getsearch", (req, res) => {
   else if(isOperatorFilterTicked){
     const filterValue = req.query.filterValue;
     console.log("filter is ticked: method to filter is :", filterValue);
-    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }, method: "TDD" })
+    AcceptedPaperData.find({ method: { $title: search, $options: "i" }, method: "TDD" })
     .then((data) => {
       console.log("Data: ", data);
       res.json(data);

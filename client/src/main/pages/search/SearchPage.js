@@ -12,6 +12,7 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
+      tableHeaders: ["Title", "Author", "Year"],
       dateFrom: "1665",
       dateTo: "2020",
       nameOfField: "Method",
@@ -19,8 +20,6 @@ class Search extends React.Component {
       filterValue: "TDD",
       dateFilter: false,
       operatorFilter: false,
-      secondBlock: false,
-      thirdBlock: false,
     };
   }
 
@@ -116,7 +115,7 @@ class Search extends React.Component {
           const data = response.data;
           this.setState({ paperdata: data });
           console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
+          console.log(this.state.paperdata[0])
         })
         .catch(() => {
           alert("Error from Server");
@@ -185,27 +184,27 @@ class Search extends React.Component {
       operatorFilter: data,
     });
   };
-  // handlePlusForSecondBlock = () => {
-  //   this.setState({
-  //     secondBlock: true,
-  //   });
-  // };
-  // handleMinusForSecondBlock = () => {
-  //   this.setState({
-  //     secondBlock: false,
-  //     thirdBlock: false,
-  //   });
-  // };
-  // handlePlusForThirdBlock = () => {
-  //   this.setState({
-  //     thirdBlock: true,
-  //   });
-  // };
-  // handleMinusForThirdBlock = () => {
-  //   this.setState({
-  //     thirdBlock: false,
-  //   });
-  // };
+
+  buildTable = (data) => {
+      var tabledata = document.getElementById("myBody")
+      for(var i =0; i<data.length;i++) {
+        if(i===0) {
+          var row = `<tr>`
+          for(var j =0; j<this.state.tableHeaders.length; j++) {
+            row = row + `<th>${this.state.tableHeaders[j]}</th>`
+          }
+          row = row + `</tr>`
+          tabledata.innerHTML+=row
+        }
+        var row = `<tr>
+          <td>${data[i].title}</td>
+          <td>${data[i].author}</td>
+          <td>${data[i].year}</td>
+        </tr>`
+         tabledata.innerHTML += row
+      }
+  }
+
   render() {
     //JSX
     return (
@@ -305,126 +304,21 @@ class Search extends React.Component {
                 </div>
               </>
             )}
-            {/* {this.state.secondBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.handlePlusForThirdBlock}>+</button>
-                  <button onClick={this.handleMinusForThirdBlock}>-</button>
-                </div>
-              </>
-            )}
-            {this.state.thirdBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.clickedPlusButtonForSecondBlock}>
-                    +
-                  </button>
-                  <button onClick={this.clickedMinusButtonForSecondBlock}>
-                    -
-                  </button>
-                </div>
-              </>
-            )} */}
             <button>submit</button>
             <span>{this.state.message}</span>
           </form>
-          {/* <h2>Filtering</h2>
-          <form onSubmit={this.onFilterToggle}>
-            <input
-              type="checkbox"
-              id="content1"
-              name="filterOptions"
-              value="article"
-            />
-            <label for="content1">Article</label>
-            <br />
-            <input
-              type="checkbox"
-              id="content2"
-              name="filterOptions"
-              value="proceeding"
-            />
-            <label for="content2">Proceeding</label>
-            <br />
-            <input
-              type="checkbox"
-              id="content3"
-              name="filterOptions"
-              value="book"
-            />
-            <label for="content3">Book</label>
-            <br />
-            <br />
-            <input type="submit" value="Submit" />
-          </form> */}
         </div>
-        <div className="container-paperdata">
+        <div className="container-paperdata">       
           {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
-          {this.state.paperdata.map((paperdetail, index) => {
-            return (
-              <div>
-                <b>{paperdetail.title}</b>
-                <br />
-                {paperdetail.author}
-                <br />
-                {paperdetail.year}
-                <br />
-                {paperdetail.publisher}
-                <br />
-                <br />
-              </div>
-            );
-          })}
+          <table id = "myTable">
+            <tr>
+              
+            </tr>
+            <tbody id="myBody">
+
+            </tbody>
+          </table>
+          {this.buildTable(this.state.paperdata)}
         </div>
       </div>
     );
