@@ -20,6 +20,7 @@ class Search extends React.Component {
       filterValue: "TDD",
       dateFilter: false,
       operatorFilter: false,
+      tableRendered: false
     };
   }
 
@@ -64,45 +65,46 @@ class Search extends React.Component {
         .catch(() => {
           alert("Error from Server");
         });
-    } else if (this.state.dateFilter) {
-      console.log("using date filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-            dateFilter: this.state.dateFilter,
-            startDate: this.state.dateFrom,
-            endDate: this.state.dateTo,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
-    } else if (this.state.operatorFilter) {
-      console.log("using operator filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-            operatorFilter: this.state.operatorFilter,
-            filterValue: this.state.filterValue,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
+    // } else if (this.state.dateFilter) {
+    //   console.log("using date filter..");
+    //   axios
+    //     .get("/api/papercontroller/getSearch", {
+    //       params: {
+    //         search: this.state.searchTerm,
+    //         dateFilter: this.state.dateFilter,
+    //         startDate: this.state.dateFrom,
+    //         endDate: this.state.dateTo,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       const data = response.data;
+    //       this.setState({ paperdata: data });
+    //       console.log("Data has been retrieved");
+    //       console.log(this.state.paperdata);
+    //     })
+    //     .catch(() => {
+    //       alert("Error from Server");
+    //     });
+    // } else if (this.state.operatorFilter) {
+    //   console.log("using operator filter..");
+    //   axios
+    //     .get("/api/papercontroller/getSearch", {
+    //       params: {
+    //         search: this.state.searchTerm,
+    //         operatorFilter: this.state.operatorFilter,
+    //         filterValue: this.state.filterValue,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       const data = response.data;
+    //       this.setState({ paperdata: data,
+    //       tableRendered: false });
+    //       console.log("Data has been retrieved");
+    //       console.log(this.state.paperdata);
+    //     })
+    //     .catch(() => {
+    //       alert("Error from Server");
+    //     });
     } else {
       console.log("not using filter..");
       axios
@@ -113,7 +115,8 @@ class Search extends React.Component {
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data });
+          this.setState({ paperdata: data,
+            tableRendered: false });
           console.log("Data has been retrieved");
           console.log(this.state.paperdata[0])
         })
@@ -186,9 +189,12 @@ class Search extends React.Component {
   };
 
   buildTable = (data) => {
-      var tabledata = document.getElementById("myBody")
+    if(this.state.tableRendered===false){
+      var tabledata = document.getElementById("myTable")
+      console.log("I CALLED")
       for(var i =0; i<data.length;i++) {
         if(i===0) {
+          tabledata.innerHTML = ""
           var row = `<tr>`
           for(var j =0; j<this.state.tableHeaders.length; j++) {
             row = row + `<th>${this.state.tableHeaders[j]}</th>`
@@ -196,13 +202,17 @@ class Search extends React.Component {
           row = row + `</tr>`
           tabledata.innerHTML+=row
         }
-        var row = `<tr>
-          <td>${data[i].title}</td>
-          <td>${data[i].author}</td>
-          <td>${data[i].year}</td>
-        </tr>`
-         tabledata.innerHTML += row
+        var header = `<tr>`
+        if(this.state.tableHeaders.includes("Title")){
+          header = header + `<td>${data[i].title}</td>`
+        }
+          header = header +  `<td>${data[i].author}</td>`
+          header = header + `<td>${data[i].year}</td>`
+       header = header + `</tr>`
+         tabledata.innerHTML += header
       }
+    }
+         this.state.tableRendered = true
   }
 
   render() {
@@ -304,76 +314,6 @@ class Search extends React.Component {
                 </div>
               </>
             )}
-            {/* {this.state.secondBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.handlePlusForThirdBlock}>+</button>
-                  <button onClick={this.handleMinusForThirdBlock}>-</button>
-                </div>
-              </>
-            )}
-            {this.state.thirdBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.clickedPlusButtonForSecondBlock}>
-                    +
-                  </button>
-                  <button onClick={this.clickedMinusButtonForSecondBlock}>
-                    -
-                  </button>
-                </div>
-              </>
-            )} */}
             <button className="submitBtn">submit</button>
             <span>{this.state.message}</span>
           </form>
@@ -384,7 +324,7 @@ class Search extends React.Component {
             <tr>
               
             </tr>
-            <tbody id="myBody">
+            <tbody>
 
             </tbody>
           </table>
