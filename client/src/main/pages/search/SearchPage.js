@@ -18,10 +18,8 @@ class Search extends React.Component {
       nameOfField: "Method",
       operator: "=",
       filterValue: "TDD",
-      dateFilter: true,
-      operatorFilter: true,
       columnSelectDrop: false,
-      tableRendered: false
+      tableRendered: false,
     };
   }
 
@@ -44,30 +42,25 @@ class Search extends React.Component {
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
-    if (this.state.dateFilter && this.state.operatorFilter) {
-      console.log("using both filters..");
+    console.log("not using filter..");
       axios
         .get("/api/papercontroller/getSearch", {
           params: {
             search: this.state.searchTerm,
-            dateFilter: this.state.dateFilter,
-            startDate: this.state.dateFrom,
-            endDate: this.state.dateTo,
-            operatorFilter: this.state.operatorFilter,
-            filterValue: this.state.filterValue,
           },
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data });
+          this.setState({ paperdata: data, tableRendered: false });
           console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
+          console.log(this.state.paperdata[0]);
         })
         .catch(() => {
           alert("Error from Server");
         });
-    // } else if (this.state.dateFilter) {
-    //   console.log("using date filter..");
+    }
+    // if (this.state.dateFilter && this.state.operatorFilter) {
+    //   console.log("using both filters..");
     //   axios
     //     .get("/api/papercontroller/getSearch", {
     //       params: {
@@ -75,6 +68,8 @@ class Search extends React.Component {
     //         dateFilter: this.state.dateFilter,
     //         startDate: this.state.dateFrom,
     //         endDate: this.state.dateTo,
+    //         operatorFilter: this.state.operatorFilter,
+    //         filterValue: this.state.filterValue,
     //       },
     //     })
     //     .then((response) => {
@@ -86,46 +81,65 @@ class Search extends React.Component {
     //     .catch(() => {
     //       alert("Error from Server");
     //     });
-    // } else if (this.state.operatorFilter) {
-    //   console.log("using operator filter..");
-    //   axios
-    //     .get("/api/papercontroller/getSearch", {
-    //       params: {
-    //         search: this.state.searchTerm,
-    //         operatorFilter: this.state.operatorFilter,
-    //         filterValue: this.state.filterValue,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       const data = response.data;
-    //       this.setState({ paperdata: data,
-    //       tableRendered: false });
-    //       console.log("Data has been retrieved");
-    //       console.log(this.state.paperdata);
-    //     })
-    //     .catch(() => {
-    //       alert("Error from Server");
-    //     });
-    } else {
-      console.log("not using filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data,
-            tableRendered: false });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata[0])
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
-    }
-  };
+      // } else if (this.state.dateFilter) {
+      //   console.log("using date filter..");
+      //   axios
+      //     .get("/api/papercontroller/getSearch", {
+      //       params: {
+      //         search: this.state.searchTerm,
+      //         dateFilter: this.state.dateFilter,
+      //         startDate: this.state.dateFrom,
+      //         endDate: this.state.dateTo,
+      //       },
+      //     })
+      //     .then((response) => {
+      //       const data = response.data;
+      //       this.setState({ paperdata: data });
+      //       console.log("Data has been retrieved");
+      //       console.log(this.state.paperdata);
+      //     })
+      //     .catch(() => {
+      //       alert("Error from Server");
+      //     });
+      // } else if (this.state.operatorFilter) {
+      //   console.log("using operator filter..");
+      //   axios
+      //     .get("/api/papercontroller/getSearch", {
+      //       params: {
+      //         search: this.state.searchTerm,
+      //         operatorFilter: this.state.operatorFilter,
+      //         filterValue: this.state.filterValue,
+      //       },
+      //     })
+      //     .then((response) => {
+      //       const data = response.data;
+      //       this.setState({ paperdata: data,
+      //       tableRendered: false });
+      //       console.log("Data has been retrieved");
+      //       console.log(this.state.paperdata);
+      //     })
+      //     .catch(() => {
+      //       alert("Error from Server");
+      //     });
+  //   } else {
+  //     console.log("not using filter..");
+  //     axios
+  //       .get("/api/papercontroller/getSearch", {
+  //         params: {
+  //           search: this.state.searchTerm,
+  //         },
+  //       })
+  //       .then((response) => {
+  //         const data = response.data;
+  //         this.setState({ paperdata: data, tableRendered: false });
+  //         console.log("Data has been retrieved");
+  //         console.log(this.state.paperdata[0]);
+  //       })
+  //       .catch(() => {
+  //         alert("Error from Server");
+  //       });
+  //   }
+  // };
 
   handleInputChange = (event) => {
     event.preventDefault();
@@ -185,6 +199,33 @@ class Search extends React.Component {
       });
   };
 
+  buildTable = (data) => {
+    if (this.state.tableRendered === false) {
+      var tabledata = document.getElementById("myTable");
+      console.log("I CALLED");
+      for (var i = 0; i < data.length; i++) {
+        if (i === 0) {
+          tabledata.innerHTML = "";
+          var row = `<tr>`;
+          for (var j = 0; j < this.state.tableHeaders.length; j++) {
+            row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+          }
+          row = row + `</tr>`;
+          tabledata.innerHTML += row;
+        }
+        var header = `<tr>`;
+        if (this.state.tableHeaders.includes("Title")) {
+          header = header + `<td>${data[i].title}</td>`;
+        }
+        header = header + `<td>${data[i].author}</td>`;
+        header = header + `<td>${data[i].year}</td>`;
+        header = header + `</tr>`;
+        tabledata.innerHTML += header;
+      }
+    }
+    this.state.tableRendered = true;
+  };
+
   render() {
     //JSX
     return (
@@ -192,8 +233,6 @@ class Search extends React.Component {
         <div className="container-filter">
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
-            {this.state.dateFilter && (
-              <>
                 <div className="date-from">
                   <p>Date Range</p>
                   <br />
@@ -248,10 +287,6 @@ class Search extends React.Component {
                   <label for="allYear">All Years</label>
                   <br />
                 </div>
-              </>
-            )}
-            {this.state.operatorFilter && (
-              <>
                 <div className="option-selection">
                   <label>If</label>
                   <select
@@ -281,8 +316,6 @@ class Search extends React.Component {
                     {/* <option value="not tdd">Not TDD</option> */}
                   </select>
                 </div>
-              </>
-            )}
             <div className="columnCheckBox">
               <button onClick={this.handleColumnSelectDrop}>
                 Select Column to Display
@@ -351,14 +384,11 @@ class Search extends React.Component {
               </div>
             </div>
           )}      
-          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
-          <table id = "myTable">
-            <tr>
-              
-            </tr>
-            <tbody>
 
-            </tbody>
+          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
+          <table id="myTable">
+            <tr></tr>
+            <tbody></tbody>
           </table>
           {this.buildTable(this.state.paperdata)}
         </div>
