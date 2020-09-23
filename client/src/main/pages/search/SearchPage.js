@@ -12,6 +12,7 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
+      tableHeaders: ["Title", "Author", "Year"],
       dateFrom: "1665",
       dateTo: "2020",
       nameOfField: "Method",
@@ -20,6 +21,7 @@ class Search extends React.Component {
       dateFilter: true,
       operatorFilter: true,
       columnSelectDrop: false,
+      tableRendered: false
     };
   }
 
@@ -64,45 +66,46 @@ class Search extends React.Component {
         .catch(() => {
           alert("Error from Server");
         });
-    } else if (this.state.dateFilter) {
-      console.log("using date filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-            dateFilter: this.state.dateFilter,
-            startDate: this.state.dateFrom,
-            endDate: this.state.dateTo,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
-    } else if (this.state.operatorFilter) {
-      console.log("using operator filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-            operatorFilter: this.state.operatorFilter,
-            filterValue: this.state.filterValue,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
+    // } else if (this.state.dateFilter) {
+    //   console.log("using date filter..");
+    //   axios
+    //     .get("/api/papercontroller/getSearch", {
+    //       params: {
+    //         search: this.state.searchTerm,
+    //         dateFilter: this.state.dateFilter,
+    //         startDate: this.state.dateFrom,
+    //         endDate: this.state.dateTo,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       const data = response.data;
+    //       this.setState({ paperdata: data });
+    //       console.log("Data has been retrieved");
+    //       console.log(this.state.paperdata);
+    //     })
+    //     .catch(() => {
+    //       alert("Error from Server");
+    //     });
+    // } else if (this.state.operatorFilter) {
+    //   console.log("using operator filter..");
+    //   axios
+    //     .get("/api/papercontroller/getSearch", {
+    //       params: {
+    //         search: this.state.searchTerm,
+    //         operatorFilter: this.state.operatorFilter,
+    //         filterValue: this.state.filterValue,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       const data = response.data;
+    //       this.setState({ paperdata: data,
+    //       tableRendered: false });
+    //       console.log("Data has been retrieved");
+    //       console.log(this.state.paperdata);
+    //     })
+    //     .catch(() => {
+    //       alert("Error from Server");
+    //     });
     } else {
       console.log("not using filter..");
       axios
@@ -113,9 +116,10 @@ class Search extends React.Component {
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data });
+          this.setState({ paperdata: data,
+            tableRendered: false });
           console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
+          console.log(this.state.paperdata[0])
         })
         .catch(() => {
           alert("Error from Server");
@@ -328,35 +332,6 @@ class Search extends React.Component {
             <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
-          {/* <h2>Filtering</h2>
-          <form onSubmit={this.onFilterToggle}>
-            <input
-              type="checkbox"
-              id="content1"
-              name="filterOptions"
-              value="article"
-            />
-            <label for="content1">Article</label>
-            <br />
-            <input
-              type="checkbox"
-              id="content2"
-              name="filterOptions"
-              value="proceeding"
-            />
-            <label for="content2">Proceeding</label>
-            <br />
-            <input
-              type="checkbox"
-              id="content3"
-              name="filterOptions"
-              value="book"
-            />
-            <label for="content3">Book</label>
-            <br />
-            <br />
-            <input type="submit" value="Submit" />
-          </form> */}
         </div>
         <div className="container-paperdata">
           {this.state.paperdata.length > 0 && (
@@ -391,6 +366,17 @@ class Search extends React.Component {
               </div>
             );
           })}
+        <div className="container-paperdata">       
+          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
+          <table id = "myTable">
+            <tr>
+              
+            </tr>
+            <tbody>
+
+            </tbody>
+          </table>
+          {this.buildTable(this.state.paperdata)}
         </div>
       </div>
     );
