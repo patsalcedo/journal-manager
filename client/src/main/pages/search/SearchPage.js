@@ -350,23 +350,7 @@ class Search extends React.Component {
                 </select>
               </div>
             </div>
-          )}
-          {this.state.paperdata.map((paperdetail, index) => {
-            return (
-              <div>
-                <b>{paperdetail.title}</b>
-                <br />
-                {paperdetail.author}
-                <br />
-                {paperdetail.year}
-                <br />
-                {paperdetail.publisher}
-                <br />
-                <br />
-              </div>
-            );
-          })}
-        <div className="container-paperdata">       
+          )}      
           {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
           <table id = "myTable">
             <tr>
