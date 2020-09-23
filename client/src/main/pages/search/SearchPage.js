@@ -17,10 +17,9 @@ class Search extends React.Component {
       nameOfField: "Method",
       operator: "=",
       filterValue: "TDD",
-      dateFilter: false,
-      operatorFilter: false,
-      secondBlock: false,
-      thirdBlock: false,
+      dateFilter: true,
+      operatorFilter: true,
+      columnSelectDrop: false,
     };
   }
 
@@ -171,41 +170,17 @@ class Search extends React.Component {
       filterValue: data,
     });
   };
-  handleDateFilterChange = (event) => {
-    var data = event.target.checked;
-    console.log("date ticked value: ", data);
-    this.setState({
-      dateFilter: data,
-    });
+  handleColumnSelectDrop = () => {
+    this.state.columnSelectDrop &&
+      this.setState({
+        columnSelectDrop: false,
+      });
+    !this.state.columnSelectDrop &&
+      this.setState({
+        columnSelectDrop: true,
+      });
   };
-  handleOperatorFilterChange = (event) => {
-    var data = event.target.checked;
-    console.log("operator ticked value: ", data);
-    this.setState({
-      operatorFilter: data,
-    });
-  };
-  // handlePlusForSecondBlock = () => {
-  //   this.setState({
-  //     secondBlock: true,
-  //   });
-  // };
-  // handleMinusForSecondBlock = () => {
-  //   this.setState({
-  //     secondBlock: false,
-  //     thirdBlock: false,
-  //   });
-  // };
-  // handlePlusForThirdBlock = () => {
-  //   this.setState({
-  //     thirdBlock: true,
-  //   });
-  // };
-  // handleMinusForThirdBlock = () => {
-  //   this.setState({
-  //     thirdBlock: false,
-  //   });
-  // };
+
   render() {
     //JSX
     return (
@@ -213,36 +188,10 @@ class Search extends React.Component {
         <div className="container-filter">
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
-            <div className="form-input">
-              <label>Enter Description</label>
-              <input
-                type="text"
-                id="userName"
-                placeholder="Enter Search Term"
-                value={this.state.searchTerm}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="dateFilter">
-              <label>Using Date Filter</label>
-              <input
-                type="checkbox"
-                id="dateFilterCheckBox"
-                onChange={this.handleDateFilterChange}
-              />
-            </div>
-            <div className="operatorFilter">
-              <label>Using Operator Filter</label>
-              <input
-                type="checkbox"
-                id="operatorFilterCheckBox"
-                onChange={this.handleOperatorFilterChange}
-              />
-            </div>
             {this.state.dateFilter && (
               <>
                 <div className="date-from">
-                  <label>Date Range</label>
+                  <p>Date Range</p>
                   <br />
                   <label>From</label>
                   <select
@@ -250,23 +199,50 @@ class Search extends React.Component {
                     id="date-from-option"
                     onChange={this.handleDateFromChange}
                   >
-                    <option value="1665">More than 15 years</option>
-                    <option value="2010">Last 10 Years</option>
-                    <option value="2015">Last 5 Years</option>
-                    <option value="2020">This Year</option>
+                    <option value="1665">1665</option>
+                    <option value="2010">2010</option>
+                    <option value="2015">2015</option>
+                    <option value="2020">2020</option>
                   </select>
-                </div>
-                <div className="date-to">
-                  <label>To</label>
+                  <label> To </label>
                   <select
                     name="date-to-option"
                     id="date-to-option"
                     onChange={this.handleDateToChange}
                   >
-                    <option value="2020">This Year</option>
-                    <option value="2015">Last 5 Years</option>
-                    <option value="2010">Last 10 Years</option>
+                    <option value="2020">2020</option>
+                    <option value="2015">2015</option>
+                    <option value="2010">2010</option>
                   </select>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="lastFive"
+                    name="dateRadio"
+                    value="2015"
+                  />
+                  <label for="lastFive">Last 5 Years</label>
+                  <br />
+                  <input
+                    type="radio"
+                    id="lastTen"
+                    name="dateRadio"
+                    value="2010"
+                  />
+                  <label for="lastTen">Last 10 Years</label>
+                  <br />
+                  <input
+                    type="radio"
+                    id="thisYear"
+                    name="dateRadio"
+                    value="2020"
+                  />
+                  <label for="thisYear">This Year</label>
+                  <br />
+                  <input type="radio" id="allYear" name="dateRadio" value="0" />
+                  <label for="allYear">All Years</label>
+                  <br />
                 </div>
               </>
             )}
@@ -300,82 +276,56 @@ class Search extends React.Component {
                     <option value="tdd">TDD</option>
                     {/* <option value="not tdd">Not TDD</option> */}
                   </select>
-                  {/* <button onClick={this.handlePlusForSecondBlock}>+</button>
-                  <button onClick={this.handleMinusForSecondBlock}>-</button> */}
                 </div>
               </>
             )}
-            {/* {this.state.secondBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.handlePlusForThirdBlock}>+</button>
-                  <button onClick={this.handleMinusForThirdBlock}>-</button>
+            <div className="columnCheckBox">
+              <button onClick={this.handleColumnSelectDrop}>
+                Select Column to Display
+              </button>
+              {this.state.columnSelectDrop && (
+                <div>
+                  <input
+                    type="checkbox"
+                    id="titleColumnCheckBox"
+                    // onChange={this.handleDateFilterChange}
+                  />
+                  <label>Title</label> <br />
+                  <input
+                    type="checkbox"
+                    id="yearColumnCheckBox"
+                    // onChange={this.handleDateFilterChange}
+                  />
+                  <label>Year</label>
+                  <br />
+                  <input
+                    type="checkbox"
+                    id="authorColumnCheckBox"
+                    // onChange={this.handleDateFilterChange}
+                  />
+                  <label>Author</label> <br />
+                  <input
+                    type="checkbox"
+                    id="documentTypeColumnCheckBox"
+                    // onChange={this.handleDateFilterChange}
+                  />
+                  <label>Document Type</label> <br />
+                  <input
+                    type="checkbox"
+                    id="doiColumnCheckBox"
+                    // onChange={this.handleDateFilterChange}
+                  />
+                  <label>DOI</label> <br />
+                  <input
+                    type="checkbox"
+                    id="pageNumberColumnCheckBox"
+                    // onChange={this.handleDateFilterChange}
+                  />
+                  <label>Page Number</label> <br />
                 </div>
-              </>
-            )}
-            {this.state.thirdBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.clickedPlusButtonForSecondBlock}>
-                    +
-                  </button>
-                  <button onClick={this.clickedMinusButtonForSecondBlock}>
-                    -
-                  </button>
-                </div>
-              </>
-            )} */}
-            <button className="submitBtn">submit</button>
+              )}
+            </div>
+            <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
           {/* <h2>Filtering</h2>
@@ -409,7 +359,23 @@ class Search extends React.Component {
           </form> */}
         </div>
         <div className="container-paperdata">
-          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
+          {this.state.paperdata.length > 0 && (
+            <div>
+              <h2>Search Results</h2>
+              <div>
+                <label> Sort By: </label>
+                <select
+                  name="sortByOption"
+                  id="sortByOption"
+                  onChange={this.handleDateToChange}
+                >
+                  <option value="sortBySePractice">SE Practice</option>
+                  <option value="sortByEvidence">Evidence</option>
+                  <option value="sortTitle">Title</option>
+                </select>
+              </div>
+            </div>
+          )}
           {this.state.paperdata.map((paperdetail, index) => {
             return (
               <div>
