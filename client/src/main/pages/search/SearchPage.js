@@ -1,6 +1,11 @@
 import React from "react";
 import axios from "axios";
 import "../search/SearchPage.css";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+// import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+// import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 class Search extends React.Component {
   constructor(props) {
@@ -20,6 +25,14 @@ class Search extends React.Component {
       filterValue: "TDD",
       columnSelectDrop: false,
       tableRendered: false,
+      columnTOSelect: [
+        { title: "Title", value: "Title" },
+        { title: "Author", value: "Author" },
+        { title: "Year", value: "Year" },
+        { title: "Document Type", value: "DocumentType" },
+        { title: "DOI", value: "doi" },
+        { title: "Page Number", value: "pageNumber" },
+      ],
     };
   }
 
@@ -43,84 +56,84 @@ class Search extends React.Component {
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     console.log("not using filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data, tableRendered: false });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata[0]);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
-    }
-    // if (this.state.dateFilter && this.state.operatorFilter) {
-    //   console.log("using both filters..");
-    //   axios
-    //     .get("/api/papercontroller/getSearch", {
-    //       params: {
-    //         search: this.state.searchTerm,
-    //         dateFilter: this.state.dateFilter,
-    //         startDate: this.state.dateFrom,
-    //         endDate: this.state.dateTo,
-    //         operatorFilter: this.state.operatorFilter,
-    //         filterValue: this.state.filterValue,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       const data = response.data;
-    //       this.setState({ paperdata: data });
-    //       console.log("Data has been retrieved");
-    //       console.log(this.state.paperdata);
-    //     })
-    //     .catch(() => {
-    //       alert("Error from Server");
-    //     });
-      // } else if (this.state.dateFilter) {
-      //   console.log("using date filter..");
-      //   axios
-      //     .get("/api/papercontroller/getSearch", {
-      //       params: {
-      //         search: this.state.searchTerm,
-      //         dateFilter: this.state.dateFilter,
-      //         startDate: this.state.dateFrom,
-      //         endDate: this.state.dateTo,
-      //       },
-      //     })
-      //     .then((response) => {
-      //       const data = response.data;
-      //       this.setState({ paperdata: data });
-      //       console.log("Data has been retrieved");
-      //       console.log(this.state.paperdata);
-      //     })
-      //     .catch(() => {
-      //       alert("Error from Server");
-      //     });
-      // } else if (this.state.operatorFilter) {
-      //   console.log("using operator filter..");
-      //   axios
-      //     .get("/api/papercontroller/getSearch", {
-      //       params: {
-      //         search: this.state.searchTerm,
-      //         operatorFilter: this.state.operatorFilter,
-      //         filterValue: this.state.filterValue,
-      //       },
-      //     })
-      //     .then((response) => {
-      //       const data = response.data;
-      //       this.setState({ paperdata: data,
-      //       tableRendered: false });
-      //       console.log("Data has been retrieved");
-      //       console.log(this.state.paperdata);
-      //     })
-      //     .catch(() => {
-      //       alert("Error from Server");
-      //     });
+    axios
+      .get("/api/papercontroller/getSearch", {
+        params: {
+          search: this.state.searchTerm,
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        this.setState({ paperdata: data, tableRendered: false });
+        console.log("Data has been retrieved");
+        console.log(this.state.paperdata[0]);
+      })
+      .catch(() => {
+        alert("Error from Server");
+      });
+  };
+  // if (this.state.dateFilter && this.state.operatorFilter) {
+  //   console.log("using both filters..");
+  //   axios
+  //     .get("/api/papercontroller/getSearch", {
+  //       params: {
+  //         search: this.state.searchTerm,
+  //         dateFilter: this.state.dateFilter,
+  //         startDate: this.state.dateFrom,
+  //         endDate: this.state.dateTo,
+  //         operatorFilter: this.state.operatorFilter,
+  //         filterValue: this.state.filterValue,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const data = response.data;
+  //       this.setState({ paperdata: data });
+  //       console.log("Data has been retrieved");
+  //       console.log(this.state.paperdata);
+  //     })
+  //     .catch(() => {
+  //       alert("Error from Server");
+  //     });
+  // } else if (this.state.dateFilter) {
+  //   console.log("using date filter..");
+  //   axios
+  //     .get("/api/papercontroller/getSearch", {
+  //       params: {
+  //         search: this.state.searchTerm,
+  //         dateFilter: this.state.dateFilter,
+  //         startDate: this.state.dateFrom,
+  //         endDate: this.state.dateTo,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const data = response.data;
+  //       this.setState({ paperdata: data });
+  //       console.log("Data has been retrieved");
+  //       console.log(this.state.paperdata);
+  //     })
+  //     .catch(() => {
+  //       alert("Error from Server");
+  //     });
+  // } else if (this.state.operatorFilter) {
+  //   console.log("using operator filter..");
+  //   axios
+  //     .get("/api/papercontroller/getSearch", {
+  //       params: {
+  //         search: this.state.searchTerm,
+  //         operatorFilter: this.state.operatorFilter,
+  //         filterValue: this.state.filterValue,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const data = response.data;
+  //       this.setState({ paperdata: data,
+  //       tableRendered: false });
+  //       console.log("Data has been retrieved");
+  //       console.log(this.state.paperdata);
+  //     })
+  //     .catch(() => {
+  //       alert("Error from Server");
+  //     });
   //   } else {
   //     console.log("not using filter..");
   //     axios
@@ -223,7 +236,9 @@ class Search extends React.Component {
         tabledata.innerHTML += header;
       }
     }
-    this.state.tableRendered = true;
+    this.setState({
+      tableRendered: true,
+    });
   };
 
   render() {
@@ -233,135 +248,101 @@ class Search extends React.Component {
         <div className="container-filter">
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
-                <div className="date-from">
-                  <p>Date Range</p>
-                  <br />
-                  <label>From</label>
-                  <select
-                    name="date-from-option"
-                    id="date-from-option"
-                    onChange={this.handleDateFromChange}
-                  >
-                    <option value="1665">1665</option>
-                    <option value="2010">2010</option>
-                    <option value="2015">2015</option>
-                    <option value="2020">2020</option>
-                  </select>
-                  <label> To </label>
-                  <select
-                    name="date-to-option"
-                    id="date-to-option"
-                    onChange={this.handleDateToChange}
-                  >
-                    <option value="2020">2020</option>
-                    <option value="2015">2015</option>
-                    <option value="2010">2010</option>
-                  </select>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    id="lastFive"
-                    name="dateRadio"
-                    value="2015"
-                  />
-                  <label for="lastFive">Last 5 Years</label>
-                  <br />
-                  <input
-                    type="radio"
-                    id="lastTen"
-                    name="dateRadio"
-                    value="2010"
-                  />
-                  <label for="lastTen">Last 10 Years</label>
-                  <br />
-                  <input
-                    type="radio"
-                    id="thisYear"
-                    name="dateRadio"
-                    value="2020"
-                  />
-                  <label for="thisYear">This Year</label>
-                  <br />
-                  <input type="radio" id="allYear" name="dateRadio" value="0" />
-                  <label for="allYear">All Years</label>
-                  <br />
-                </div>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    {/* <option value="author">Author</option> */}
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">EQUALS</option>
-                    {/* <option value="not equal">NOT EQUALS</option>
+            <div className="date-from">
+              <p>Date Range</p>
+              <br />
+              <label>From</label>
+              <select
+                name="date-from-option"
+                id="date-from-option"
+                onChange={this.handleDateFromChange}
+              >
+                <option value="1665">1665</option>
+                <option value="2010">2010</option>
+                <option value="2015">2015</option>
+                <option value="2020">2020</option>
+              </select>
+              <label> To </label>
+              <select
+                name="date-to-option"
+                id="date-to-option"
+                onChange={this.handleDateToChange}
+              >
+                <option value="2020">2020</option>
+                <option value="2015">2015</option>
+                <option value="2010">2010</option>
+              </select>
+            </div>
+            <div>
+              <input type="radio" id="lastFive" name="dateRadio" value="2015" />
+              <label for="lastFive">Last 5 Years</label>
+              <br />
+              <input type="radio" id="lastTen" name="dateRadio" value="2010" />
+              <label for="lastTen">Last 10 Years</label>
+              <br />
+              <input type="radio" id="thisYear" name="dateRadio" value="2020" />
+              <label for="thisYear">This Year</label>
+              <br />
+              <input type="radio" id="allYear" name="dateRadio" value="0" />
+              <label for="allYear">All Years</label>
+              <br />
+            </div>
+            <div className="option-selection">
+              <label>If</label>
+              <select
+                name="nameOfField"
+                id="nameOfField"
+                onChange={this.handleNameFieldChange}
+              >
+                <option value="method">Method</option>
+                {/* <option value="author">Author</option> */}
+              </select>
+              <select
+                name="operator"
+                id="operator"
+                onChange={this.handleOperatorChange}
+              >
+                <option value="equal">EQUALS</option>
+                {/* <option value="not equal">NOT EQUALS</option>
                 <option value="and">AND</option>
                 <option value="or">OR</option> */}
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    {/* <option value="not tdd">Not TDD</option> */}
-                  </select>
-                </div>
-            <div className="columnCheckBox">
-              <button onClick={this.handleColumnSelectDrop}>
-                Select Column to Display
-              </button>
-              {this.state.columnSelectDrop && (
-                <div>
-                  <input
-                    type="checkbox"
-                    id="titleColumnCheckBox"
-                    // onChange={this.handleDateFilterChange}
-                  />
-                  <label>Title</label> <br />
-                  <input
-                    type="checkbox"
-                    id="yearColumnCheckBox"
-                    // onChange={this.handleDateFilterChange}
-                  />
-                  <label>Year</label>
-                  <br />
-                  <input
-                    type="checkbox"
-                    id="authorColumnCheckBox"
-                    // onChange={this.handleDateFilterChange}
-                  />
-                  <label>Author</label> <br />
-                  <input
-                    type="checkbox"
-                    id="documentTypeColumnCheckBox"
-                    // onChange={this.handleDateFilterChange}
-                  />
-                  <label>Document Type</label> <br />
-                  <input
-                    type="checkbox"
-                    id="doiColumnCheckBox"
-                    // onChange={this.handleDateFilterChange}
-                  />
-                  <label>DOI</label> <br />
-                  <input
-                    type="checkbox"
-                    id="pageNumberColumnCheckBox"
-                    // onChange={this.handleDateFilterChange}
-                  />
-                  <label>Page Number</label> <br />
-                </div>
-              )}
+              </select>
+              <select
+                name="filterValue"
+                id="filterValue"
+                onChange={this.handleFilterValueChange}
+              >
+                <option value="tdd">TDD</option>
+                {/* <option value="not tdd">Not TDD</option> */}
+              </select>
             </div>
+            <Autocomplete
+              multiple
+              id="checkboxes-tags-demo"
+              options={this.state.columnTOSelect}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.title}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    // icon={icon}
+                    // checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.title}
+                </React.Fragment>
+              )}
+              style={{ width: 200 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Choose columns"
+                  placeholder=""
+                />
+              )}
+            />
             <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
@@ -383,7 +364,7 @@ class Search extends React.Component {
                 </select>
               </div>
             </div>
-          )}      
+          )}
 
           {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
           <table id="myTable">
