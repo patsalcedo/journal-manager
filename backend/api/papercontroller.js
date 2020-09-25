@@ -11,60 +11,80 @@ router.get("/papercontroller/getsearch", (req, res) => {
   const isDateFilterTicked = req.query.dateFilter;
   const isOperatorFilterTicked = req.query.operatorFilter;
 
-  console.log("Search Term :" + search+ " is date ticked: "+ isDateFilterTicked+" is operator ticked: "+ isOperatorFilterTicked);
-  if(isOperatorFilterTicked && isDateFilterTicked){
+  console.log(
+    "Search Term :" +
+      search +
+      " is date ticked: " +
+      isDateFilterTicked +
+      " is operator ticked: " +
+      isOperatorFilterTicked
+  );
+  if (isOperatorFilterTicked && isDateFilterTicked) {
     const filterValue = req.query.filterValue;
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
     console.log("filter is ticked: method to filter is :", filterValue);
-    console.log("filter is ticked: start date and end date:", startDate, endDate);
-    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }, method: "TDD", year :{$gte: startDate , $lte: endDate}  })
-    .then((data) => {
-      console.log("Data: ", data);
-      res.json(data);
+    console.log(
+      "filter is ticked: start date and end date:",
+      startDate,
+      endDate
+    );
+    AcceptedPaperData.find({
+      title: { $regex: search, $options: "i" },
+      method: "TDD",
+      year: { $gte: startDate, $lte: endDate },
     })
-    .catch((error) => {
-      console.log("error: ", error);
-    });
-  }
-  else if(isOperatorFilterTicked){
+      .then((data) => {
+        console.log("Data: ", data);
+        res.json(data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
+  } else if (isOperatorFilterTicked) {
     const filterValue = req.query.filterValue;
     console.log("filter is ticked: method to filter is :", filterValue);
-    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }, method: "TDD" })
-    .then((data) => {
-      console.log("Data: ", data);
-      res.json(data);
+    AcceptedPaperData.find({
+      title: { $regex: search, $options: "i" },
+      method: "TDD",
     })
-    .catch((error) => {
-      console.log("error: ", error);
-    });
-  }
-  else if(isDateFilterTicked){
+      .then((data) => {
+        console.log("Data: ", data);
+        res.json(data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
+  } else if (isDateFilterTicked) {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-    console.log("filter is ticked: start date and end date:", startDate, endDate);
-    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }, year :{$gte: startDate , $lte: endDate}  })
-    .then((data) => {
-      console.log("Data: ", data);
-      res.json(data);
+    console.log(
+      "filter is ticked: start date and end date:",
+      startDate,
+      endDate
+    );
+    AcceptedPaperData.find({
+      title: { $regex: search, $options: "i" },
+      year: { $gte: startDate, $lte: endDate },
     })
-    .catch((error) => {
-      console.log("error: ", error);
-    });
-  }
-  else{
+      .then((data) => {
+        console.log("Data: ", data);
+        res.json(data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
+  } else {
     console.log("filter is not clicked doing regular searching.");
-    AcceptedPaperData.find({ title: { $regex: search, $options: "i" }})
-    .then((data) => {
-      console.log("Data: ", data);
-      res.json(data);
-    })
-    .catch((error) => {
-      console.log("error: ", error);
-    });
+    AcceptedPaperData.find({ title: { $regex: search, $options: "i" } })
+      .then((data) => {
+        console.log("Data: ", data);
+        res.json(data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
   }
-
- 
 });
 
 router.post("/papercontroller/addarticle", (req, res) => {
@@ -72,15 +92,13 @@ router.post("/papercontroller/addarticle", (req, res) => {
   console.log("Trying to add a paper");
   const data = req.body;
 
-
-  AcceptedPaperData.find({key: data.key}, function (err, docs){
-    if(docs.length){
+  AcceptedPaperData.find({ key: data.key }, function (err, docs) {
+    if (docs.length) {
       res.json({
-        message:"Paper with that id is already in the database."
+        message: "Paper with that id is already in the database.",
       });
       return;
-    }
-    else{
+    } else {
       const newAcceptedPaperData = new AcceptedPaperData(data);
       newAcceptedPaperData.save((error) => {
         if (error) {
@@ -94,21 +112,57 @@ router.post("/papercontroller/addarticle", (req, res) => {
         });
       });
     }
-  }) 
+  });
 });
 
-router.get("/filtercontroller/getfilteredsearch", (req, res) => {
-  const filters = req.body.filterOptions;
-  console.log("Filters check: " + filters);
+router.get("/papercontroller/getfilteredsearch", (req, res) => {
+  //http://localhost:8080/api/acceptedpapercontroller/getsearch?searchterm
 
-  PaperData.find({ document_type: { $elemMatch: { $in: filters } } })
-    .then((data) => {
-      console.log("Data: ", data);
-      res.json(data);
+  const seType = req.query.seType === undefined ? "" : req.query.seType;
+  // annote = claims
+  const annote =
+    req.query.annote === undefined ? "" : req.query.annote.split(",");
+  const startDate =
+    req.query.startDate === undefined ? "1990" : req.query.startDate;
+  const endDate = req.query.endDate === undefined ? "2020" : req.query.endDate;
+
+  if (seType === "" && annote === "") {
+    AcceptedPaperData.find({
+      method: { $regex: seType, $options: "i" },
+      year: { $gte: startDate, $lte: endDate },
     })
-    .catch((err) => {
-      console.log("error: ", error);
+      .then((data) => {
+        console.log("Data: ", data);
+        res.json(data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
+  } else if (annote === "") {
+    AcceptedPaperData.find({
+      method: { $regex: seType, $options: "i" },
+      year: { $gte: startDate, $lte: endDate },
+    })
+      .then((data) => {
+        console.log("Data: ", data);
+        res.json(data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
+  } else {
+    AcceptedPaperData.find({
+      $and: [
+        {
+          $or: [{ annote: { $in: annote } }],
+        },
+        { method: { $regex: seType, $options: "i" } },
+        { year: { $gte: startDate, $lte: endDate } },
+      ],
+    }).then((data) => {
+      return res.json(data);
     });
+  }
 });
 
 module.exports = router;
