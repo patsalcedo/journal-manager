@@ -18,12 +18,14 @@ class Search extends React.Component {
       startDate: "1665",
       endDate: "2020",
       seType: "TDD",
-      annote:[],
-      annoteOptions:[{ title: "great performance", value: "great performance" },
-              { title: "more productive", value: "more productive" },],
+      annote: [],
+      annoteOptions: [
+        { title: "great performance", value: "great performance" },
+        { title: "more productive", value: "more productive" },
+      ],
       // annote: ["great performance", "more productive"],
       tableRendered: false,
-      sortBy:"",
+      sortBy: "",
       columnToSelect: [
         { title: "Title", value: "Title" },
         { title: "Author", value: "Author" },
@@ -44,21 +46,20 @@ class Search extends React.Component {
     }
   };
 
-
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     console.log("not using filter..");
     var annoteData = "";
-    for(var i=0;i<this.state.annote.length;i++) {
-      annoteData+=this.state.annote[i]+",";
+    for (var i = 0; i < this.state.annote.length; i++) {
+      annoteData += this.state.annote[i] + ",";
     }
-    console.log(annoteData.substring(0, annoteData.length-1))
+    console.log(annoteData.substring(0, annoteData.length - 1));
     axios
       .get("/api/papercontroller/getfilteredsearch", {
         params: {
           seType: this.state.seType,
-          annote: annoteData.substring(0, annoteData.length-1),
-          startDate:this.state.dateFrom,
+          annote: annoteData.substring(0, annoteData.length - 1),
+          startDate: this.state.dateFrom,
           endDate: this.state.dateTo,
         },
       })
@@ -101,39 +102,87 @@ class Search extends React.Component {
     event.preventDefault();
     var data = event.target.value;
     var newAnnote = this.state.annote;
-    newAnnote[this.state.annote.length] = data
+    newAnnote[this.state.annote.length] = data;
     this.setState({
       annote: newAnnote,
     });
   };
   handleChangeForAnnoteInput = (input) => {
-    console.log(input);
     var newArray = [];
+    var same = true;
     if (input) {
       for (var x in input) {
         newArray.push(input[x].props.label);
       }
     }
-    console.log(newArray)
-    this.state.annote = newArray;
-    console.log(this.state.annote)
+    if (newArray.length >= this.state.annote.length) {
+      for (var j in newArray) {
+        if (this.state.annote[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.annote) {
+        if (this.state.annote[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        annote: null,
+      });
+      this.setState({
+        annote: newArray,
+      });
+    }
   };
   handleChangeForColumnSelectInput = (input) => {
-    console.log(input);
-    var newArray = [];
-    if (input) {
-      for (var x in input) {
-        newArray.push(input[x].props.label);
-      }
-    }
     const sortOrder = ["SE Type", "Claim", "DOI", "Title", "Author", "Year"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    newArray.sort(sorter);
-    this.state.tableHeaders = newArray;
-    console.log(newArray);
-    console.log(this.state.tableHeaders);
+    var newArray = [];
+    var same = true;
+    if (input) {
+      for (var x in input) {
+        newArray.push(input[x].props.label);
+      }
+      newArray.sort(sorter);
+    }
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
   };
   handleSortByChange = (event) => {
     event.preventDefault();
@@ -142,7 +191,7 @@ class Search extends React.Component {
     this.setState({
       sortBy: data,
     });
-    this.sortTable(data)
+    this.sortTable(data);
   };
 
   sortTable = (column) => {
@@ -155,10 +204,10 @@ class Search extends React.Component {
       // Start by saying: no switching is done:
       switching = false;
       rows = table.rows;
-      colNum = this.state.tableHeaders.indexOf(column)
+      colNum = this.state.tableHeaders.indexOf(column);
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -179,7 +228,7 @@ class Search extends React.Component {
         switching = true;
       }
     }
-  }
+  };
 
   buildTable = (data) => {
     if (this.state.tableRendered === false) {
@@ -217,8 +266,8 @@ class Search extends React.Component {
         header = header + `</tr>`;
         tabledata.innerHTML += header;
       }
+      this.setState({ tableRendered: true });
     }
-    this.state.tableRendered = true;
   };
 
   render() {
@@ -278,35 +327,35 @@ class Search extends React.Component {
                 <option value="BDD">BDD</option>
               </select>
               <Autocomplete
-              multiple
-              id="checkboxes-tags-demo"
-              options={this.state.annoteOptions}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.title}
-              renderOption={(option, { selected }) => (
-                <React.Fragment>
-                  <Checkbox
-                    // icon={icon}
-                    // checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
+                multiple
+                id="checkboxes-tags-demo"
+                options={this.state.annoteOptions}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.title}
+                renderOption={(option, { selected }) => (
+                  <React.Fragment>
+                    <Checkbox
+                      // icon={icon}
+                      // checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.title}
+                  </React.Fragment>
+                )}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Choose claims"
+                    placeholder=""
+                    onChange={this.handleChangeForAnnoteInput(
+                      params.InputProps.startAdornment
+                    )}
                   />
-                  {option.title}
-                </React.Fragment>
-              )}
-              style={{ width: 200 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Choose columns"
-                  placeholder=""
-                  onChange={this.handleChangeForAnnoteInput(
-                    params.InputProps.startAdornment
-                  )}
-                />
-              )}
-            />
+                )}
+              />
               {/* <select
                 name="annote"
                 id="annote"
