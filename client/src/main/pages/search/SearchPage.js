@@ -11,27 +11,26 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: "",
-      fromDate: "",
-      toDate: "",
       message: "",
       redirect: false,
       paperdata: [],
-      tableHeaders: ["Title", "Author", "Year"],
-      dateFrom: "1665",
-      dateTo: "2020",
-      nameOfField: "Method",
-      operator: "=",
-      filterValue: "TDD",
-      columnSelectDrop: false,
+      tableHeaders: [],
+      startDate: "1665",
+      endDate: "2020",
+      seType: "TDD",
+      annote:[],
+      annoteOptions:[{ title: "great performance", value: "great performance" },
+              { title: "more productive", value: "more productive" },],
+      // annote: ["great performance", "more productive"],
       tableRendered: false,
-      columnTOSelect: [
+      sortBy:"",
+      columnToSelect: [
         { title: "Title", value: "Title" },
         { title: "Author", value: "Author" },
         { title: "Year", value: "Year" },
-        { title: "Document Type", value: "DocumentType" },
-        { title: "DOI", value: "doi" },
-        { title: "Page Number", value: "pageNumber" },
+        { title: "SE Type", value: "SE Type" },
+        { title: "DOI", value: "DOI" },
+        { title: "Claim", value: "Claim" },
       ],
     };
   }
@@ -45,172 +44,142 @@ class Search extends React.Component {
     }
   };
 
-  // onFilterToggle = (event) => {
-  //   event.preventDefault();
-  //   axios
-  //   .get("/api/filtercontroller/getfilteredsearch", {
-  //     params
-  //   })
-  // }
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     console.log("not using filter..");
+    var annoteData = "";
+    for(var i=0;i<this.state.annote.length;i++) {
+      annoteData+=this.state.annote[i]+",";
+    }
+    console.log(annoteData.substring(0, annoteData.length-1))
     axios
-      .get("/api/papercontroller/getSearch", {
+      .get("/api/papercontroller/getfilteredsearch", {
         params: {
-          search: this.state.searchTerm,
+          seType: this.state.seType,
+          annote: annoteData.substring(0, annoteData.length-1),
+          startDate:this.state.dateFrom,
+          endDate: this.state.dateTo,
         },
       })
       .then((response) => {
         const data = response.data;
         this.setState({ paperdata: data, tableRendered: false });
         console.log("Data has been retrieved");
-        console.log(this.state.paperdata[0]);
+        console.log(this.state.paperdata);
       })
       .catch(() => {
         alert("Error from Server");
       });
   };
-  // if (this.state.dateFilter && this.state.operatorFilter) {
-  //   console.log("using both filters..");
-  //   axios
-  //     .get("/api/papercontroller/getSearch", {
-  //       params: {
-  //         search: this.state.searchTerm,
-  //         dateFilter: this.state.dateFilter,
-  //         startDate: this.state.dateFrom,
-  //         endDate: this.state.dateTo,
-  //         operatorFilter: this.state.operatorFilter,
-  //         filterValue: this.state.filterValue,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       const data = response.data;
-  //       this.setState({ paperdata: data });
-  //       console.log("Data has been retrieved");
-  //       console.log(this.state.paperdata);
-  //     })
-  //     .catch(() => {
-  //       alert("Error from Server");
-  //     });
-  // } else if (this.state.dateFilter) {
-  //   console.log("using date filter..");
-  //   axios
-  //     .get("/api/papercontroller/getSearch", {
-  //       params: {
-  //         search: this.state.searchTerm,
-  //         dateFilter: this.state.dateFilter,
-  //         startDate: this.state.dateFrom,
-  //         endDate: this.state.dateTo,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       const data = response.data;
-  //       this.setState({ paperdata: data });
-  //       console.log("Data has been retrieved");
-  //       console.log(this.state.paperdata);
-  //     })
-  //     .catch(() => {
-  //       alert("Error from Server");
-  //     });
-  // } else if (this.state.operatorFilter) {
-  //   console.log("using operator filter..");
-  //   axios
-  //     .get("/api/papercontroller/getSearch", {
-  //       params: {
-  //         search: this.state.searchTerm,
-  //         operatorFilter: this.state.operatorFilter,
-  //         filterValue: this.state.filterValue,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       const data = response.data;
-  //       this.setState({ paperdata: data,
-  //       tableRendered: false });
-  //       console.log("Data has been retrieved");
-  //       console.log(this.state.paperdata);
-  //     })
-  //     .catch(() => {
-  //       alert("Error from Server");
-  //     });
-  //   } else {
-  //     console.log("not using filter..");
-  //     axios
-  //       .get("/api/papercontroller/getSearch", {
-  //         params: {
-  //           search: this.state.searchTerm,
-  //         },
-  //       })
-  //       .then((response) => {
-  //         const data = response.data;
-  //         this.setState({ paperdata: data, tableRendered: false });
-  //         console.log("Data has been retrieved");
-  //         console.log(this.state.paperdata[0]);
-  //       })
-  //       .catch(() => {
-  //         alert("Error from Server");
-  //       });
-  //   }
-  // };
 
-  handleInputChange = (event) => {
+  handleStartDateChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
     console.log(event.target.value);
     this.setState({
-      searchTerm: data,
+      startDate: data,
     });
   };
-  handleDateFromChange = (event) => {
+  handleEndDateChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
     console.log(event.target.value);
     this.setState({
-      dateFrom: data,
+      endDate: data,
     });
   };
-  handleDateToChange = (event) => {
+  handleSETypeChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
     console.log(event.target.value);
     this.setState({
-      dateTo: data,
+      seType: data,
     });
   };
-  handleNameFieldChange = (event) => {
+  handleAnnoteChange = (event) => {
+    event.preventDefault();
+    var data = event.target.value;
+    var newAnnote = this.state.annote;
+    newAnnote[this.state.annote.length] = data
+    this.setState({
+      annote: newAnnote,
+    });
+  };
+  handleChangeForAnnoteInput = (input) => {
+    console.log(input);
+    var newArray = [];
+    if (input) {
+      for (var x in input) {
+        newArray.push(input[x].props.label);
+      }
+    }
+    console.log(newArray)
+    this.state.annote = newArray;
+    console.log(this.state.annote)
+  };
+  handleChangeForColumnSelectInput = (input) => {
+    console.log(input);
+    var newArray = [];
+    if (input) {
+      for (var x in input) {
+        newArray.push(input[x].props.label);
+      }
+    }
+    const sortOrder = ["SE Type", "Claim", "DOI", "Title", "Author", "Year"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    newArray.sort(sorter);
+    this.state.tableHeaders = newArray;
+    console.log(newArray);
+    console.log(this.state.tableHeaders);
+  };
+  handleSortByChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
     console.log(event.target.value);
     this.setState({
-      nameOfField: data,
+      sortBy: data,
     });
+    this.sortTable(data)
   };
-  handleOperatorChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      operator: data,
-    });
-  };
-  handleFilterValueChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    this.setState({
-      filterValue: data,
-    });
-  };
-  handleColumnSelectDrop = () => {
-    this.state.columnSelectDrop &&
-      this.setState({
-        columnSelectDrop: false,
-      });
-    !this.state.columnSelectDrop &&
-      this.setState({
-        columnSelectDrop: true,
-      });
-  };
+
+  sortTable = (column) => {
+    var table, rows, colNum, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("myTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      colNum = this.state.tableHeaders.indexOf(column)
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < (rows.length - 1); i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        x = rows[i].getElementsByTagName("td")[colNum];
+        y = rows[i + 1].getElementsByTagName("td")[colNum];
+        // Check if the two rows should switch place:
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
 
   buildTable = (data) => {
     if (this.state.tableRendered === false) {
@@ -227,18 +196,29 @@ class Search extends React.Component {
           tabledata.innerHTML += row;
         }
         var header = `<tr>`;
+        if (this.state.tableHeaders.includes("SE Type")) {
+          header = header + `<td>${data[i].method}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Claim")) {
+          header = header + `<td>${data[i].annote}</td>`;
+        }
+        if (this.state.tableHeaders.includes("DOI")) {
+          header = header + `<td>${data[i].month}</td>`;
+        }
         if (this.state.tableHeaders.includes("Title")) {
           header = header + `<td>${data[i].title}</td>`;
         }
-        header = header + `<td>${data[i].author}</td>`;
-        header = header + `<td>${data[i].year}</td>`;
+        if (this.state.tableHeaders.includes("Author")) {
+          header = header + `<td>${data[i].author}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Year")) {
+          header = header + `<td>${data[i].year}</td>`;
+        }
         header = header + `</tr>`;
         tabledata.innerHTML += header;
       }
     }
-    this.setState({
-      tableRendered: true,
-    });
+    this.state.tableRendered = true;
   };
 
   render() {
@@ -255,7 +235,7 @@ class Search extends React.Component {
               <select
                 name="date-from-option"
                 id="date-from-option"
-                onChange={this.handleDateFromChange}
+                onChange={this.handleStartDateChange}
               >
                 <option value="1665">1665</option>
                 <option value="2010">2010</option>
@@ -266,7 +246,7 @@ class Search extends React.Component {
               <select
                 name="date-to-option"
                 id="date-to-option"
-                onChange={this.handleDateToChange}
+                onChange={this.handleEndDateChange}
               >
                 <option value="2020">2020</option>
                 <option value="2015">2015</option>
@@ -290,36 +270,17 @@ class Search extends React.Component {
             <div className="option-selection">
               <label>If</label>
               <select
-                name="nameOfField"
-                id="nameOfField"
-                onChange={this.handleNameFieldChange}
+                name="seType"
+                id="seType"
+                onChange={this.handleSETypeChange}
               >
-                <option value="method">Method</option>
-                {/* <option value="author">Author</option> */}
+                <option value="TDD">TDD</option>
+                <option value="BDD">BDD</option>
               </select>
-              <select
-                name="operator"
-                id="operator"
-                onChange={this.handleOperatorChange}
-              >
-                <option value="equal">EQUALS</option>
-                {/* <option value="not equal">NOT EQUALS</option>
-                <option value="and">AND</option>
-                <option value="or">OR</option> */}
-              </select>
-              <select
-                name="filterValue"
-                id="filterValue"
-                onChange={this.handleFilterValueChange}
-              >
-                <option value="tdd">TDD</option>
-                {/* <option value="not tdd">Not TDD</option> */}
-              </select>
-            </div>
-            <Autocomplete
+              <Autocomplete
               multiple
               id="checkboxes-tags-demo"
-              options={this.state.columnTOSelect}
+              options={this.state.annoteOptions}
               disableCloseOnSelect
               getOptionLabel={(option) => option.title}
               renderOption={(option, { selected }) => (
@@ -340,6 +301,48 @@ class Search extends React.Component {
                   variant="outlined"
                   label="Choose columns"
                   placeholder=""
+                  onChange={this.handleChangeForAnnoteInput(
+                    params.InputProps.startAdornment
+                  )}
+                />
+              )}
+            />
+              {/* <select
+                name="annote"
+                id="annote"
+                onChange={this.handleAnnoteChange}
+              >
+                <option value="great performance">Great Performance</option>
+                <option value="more productive">More Productive</option>
+              </select> */}
+            </div>
+            <Autocomplete
+              multiple
+              id="checkboxes-tags-demo"
+              options={this.state.columnToSelect}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.title}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    // icon={icon}
+                    // checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.title}
+                </React.Fragment>
+              )}
+              style={{ width: 200 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Choose columns"
+                  placeholder=""
+                  onChange={this.handleChangeForColumnSelectInput(
+                    params.InputProps.startAdornment
+                  )}
                 />
               )}
             />
@@ -356,11 +359,11 @@ class Search extends React.Component {
                 <select
                   name="sortByOption"
                   id="sortByOption"
-                  onChange={this.handleDateToChange}
+                  onChange={this.handleSortByChange}
                 >
-                  <option value="sortBySePractice">SE Practice</option>
-                  <option value="sortByEvidence">Evidence</option>
-                  <option value="sortTitle">Title</option>
+                  <option value="SE Practice">SE Practice</option>
+                  <option value="Claim">Evidence</option>
+                  <option value="Title">Title</option>
                 </select>
               </div>
             </div>
