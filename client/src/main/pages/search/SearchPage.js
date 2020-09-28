@@ -19,7 +19,7 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
-      tableHeaders: [],
+      tableHeaders: ["SE Type", "Claim", "DOI", "Title"],
       startDate: "1665",
       endDate: "2020",
       seType: "",
@@ -35,14 +35,10 @@ class Search extends React.Component {
       tableRendered: false,
       sortBy: "",
       columnToSelect: [
-        { title: "Title", value: "Title" },
         { title: "Author", value: "Author" },
         { title: "Year", value: "Year" },
-        { title: "SE Type", value: "SE Type" },
-        { title: "DOI", value: "DOI" },
-        { title: "Claim", value: "Claim" },
       ],
-      radioYear: "",
+      radioYear: "custom",
       startDateOption: [
         { title: "1665", value: "1665" },
         { title: "2010", value: "2010" },
@@ -73,47 +69,46 @@ class Search extends React.Component {
     for (var i = 0; i < this.state.annote.length; i++) {
       annoteData += this.state.annote[i] + ",";
     }
-    if(this.state.radioYear==="custom") {
-    axios
-      .get("/api/papercontroller/getfilteredsearch", {
-        params: {
-          seType: this.state.seType,
-          annote: annoteData.substring(0, annoteData.length - 1),
-          startDate: this.state.startDate,
-          endDate: this.state.endDate,
-        },
-      })
-      .then((response) => {
-        const data = response.data;
-        this.setState({ paperdata: data, tableRendered: false });
-        console.log("Data has been retrieved");
-        console.log(this.state.paperdata);
-      })
-      .catch(() => {
-        alert("Error from Server");
-      });
-    }
-    else {
-      var newEndDate = "2020"
-      var newStartDate = this.state.radioYear
+    if (this.state.radioYear === "custom") {
       axios
-      .get("/api/papercontroller/getfilteredsearch", {
-        params: {
-          seType: this.state.seType,
-          annote: annoteData.substring(0, annoteData.length - 1),
-          startDate: newStartDate,
-          endDate: newEndDate,
-        },
-      })
-      .then((response) => {
-        const data = response.data;
-        this.setState({ paperdata: data, tableRendered: false });
-        console.log("Data has been retrieved");
-        console.log(this.state.paperdata);
-      })
-      .catch(() => {
-        alert("Error from Server");
-      });
+        .get("/api/papercontroller/getfilteredsearch", {
+          params: {
+            seType: this.state.seType,
+            annote: annoteData.substring(0, annoteData.length - 1),
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data, tableRendered: false });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
+    } else {
+      var newEndDate = "2020";
+      var newStartDate = this.state.radioYear;
+      axios
+        .get("/api/papercontroller/getfilteredsearch", {
+          params: {
+            seType: this.state.seType,
+            annote: annoteData.substring(0, annoteData.length - 1),
+            startDate: newStartDate,
+            endDate: newEndDate,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data, tableRendered: false });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
     }
   };
   handleStartDateChange = (input) => {
@@ -196,11 +191,11 @@ class Search extends React.Component {
     }
   };
   handleChangeForColumnSelectInput = (input) => {
-    const sortOrder = ["SE Type", "Claim", "DOI", "Title", "Author", "Year"];
+    const sortOrder = ["Author", "Year"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = [];
+    var newArray = ["SE Type", "Claim", "DOI", "Title"];
     var same = true;
     if (input) {
       for (var x in input) {
@@ -374,7 +369,6 @@ class Search extends React.Component {
                     value="custom"
                     control={<Radio />}
                     label="Custom"
-                    checked
                   />
                   <FormControlLabel
                     value="2015"
