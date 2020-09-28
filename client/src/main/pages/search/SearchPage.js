@@ -1,26 +1,55 @@
 import React from "react";
 import axios from "axios";
 import "../search/SearchPage.css";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+// import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+// import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: "",
-      fromDate: "",
-      toDate: "",
       message: "",
       redirect: false,
       paperdata: [],
-      dateFrom: "1665",
-      dateTo: "2020",
-      nameOfField: "Method",
-      operator: "=",
-      filterValue: "TDD",
-      dateFilter: false,
-      operatorFilter: false,
-      secondBlock: false,
-      thirdBlock: false,
+      tableHeaders: ["SE Type", "Claim", "DOI", "Title"],
+      startDate: "1665",
+      endDate: "2020",
+      seType: "",
+      annote: [],
+      seTypeOption: [
+        { title: "TDD", value: "TDD" },
+        { title: "BDD", value: "BDD" },
+      ],
+      annoteOptions: [
+        { title: "great performance", value: "great performance" },
+        { title: "more productive", value: "more productive" },
+      ],
+      tableRendered: false,
+      sortBy: "",
+      columnToSelect: [
+        { title: "Author", value: "Author" },
+        { title: "Year", value: "Year" },
+      ],
+      radioYear: "custom",
+      startDateOption: [
+        { title: "1665", value: "1665" },
+        { title: "2010", value: "2010" },
+        { title: "2015", value: "2015" },
+        { title: "2020", value: "2020" },
+      ],
+      endDateOption: [
+        { title: "2020", value: "2020" },
+        { title: "2015", value: "2015" },
+        { title: "2010", value: "2010" },
+      ],
     };
   }
 
@@ -33,71 +62,26 @@ class Search extends React.Component {
     }
   };
 
-  // onFilterToggle = (event) => {
-  //   event.preventDefault();
-  //   axios
-  //   .get("/api/filtercontroller/getfilteredsearch", {
-  //     params
-  //   })
-  // }
-
   getAcceptedPaperData = (event) => {
     event.preventDefault();
-    if (this.state.dateFilter && this.state.operatorFilter) {
-      console.log("using both filters..");
+    console.log("not using filter..");
+    var annoteData = "";
+    for (var i = 0; i < this.state.annote.length; i++) {
+      annoteData += this.state.annote[i] + ",";
+    }
+    if (this.state.radioYear === "custom") {
       axios
-        .get("/api/papercontroller/getSearch", {
+        .get("/api/papercontroller/getfilteredsearch", {
           params: {
-            search: this.state.searchTerm,
-            dateFilter: this.state.dateFilter,
-            startDate: this.state.dateFrom,
-            endDate: this.state.dateTo,
-            operatorFilter: this.state.operatorFilter,
-            filterValue: this.state.filterValue,
+            seType: this.state.seType,
+            annote: annoteData.substring(0, annoteData.length - 1),
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
           },
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
-    } else if (this.state.dateFilter) {
-      console.log("using date filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-            dateFilter: this.state.dateFilter,
-            startDate: this.state.dateFrom,
-            endDate: this.state.dateTo,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
-    } else if (this.state.operatorFilter) {
-      console.log("using operator filter..");
-      axios
-        .get("/api/papercontroller/getSearch", {
-          params: {
-            search: this.state.searchTerm,
-            operatorFilter: this.state.operatorFilter,
-            filterValue: this.state.filterValue,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data });
+          this.setState({ paperdata: data, tableRendered: false });
           console.log("Data has been retrieved");
           console.log(this.state.paperdata);
         })
@@ -105,16 +89,20 @@ class Search extends React.Component {
           alert("Error from Server");
         });
     } else {
-      console.log("not using filter..");
+      var newEndDate = "2020";
+      var newStartDate = this.state.radioYear;
       axios
-        .get("/api/papercontroller/getSearch", {
+        .get("/api/papercontroller/getfilteredsearch", {
           params: {
-            search: this.state.searchTerm,
+            seType: this.state.seType,
+            annote: annoteData.substring(0, annoteData.length - 1),
+            startDate: newStartDate,
+            endDate: newEndDate,
           },
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data });
+          this.setState({ paperdata: data, tableRendered: false });
           console.log("Data has been retrieved");
           console.log(this.state.paperdata);
         })
@@ -123,89 +111,212 @@ class Search extends React.Component {
         });
     }
   };
+  handleStartDateChange = (input) => {
+    // console.log(input);
+    if (input !== this.state.startDate) {
+      this.setState({
+        startDate: input,
+      });
+    }
+    console.log("startDate", this.state.startDate);
+  };
+  handleEndDateChange = (input) => {
+    // console.log(input);
+    if (input !== this.state.endDate) {
+      this.setState({
+        endDate: input,
+      });
+    }
+    console.log("endDate", this.state.endDate);
+  };
+  handleRadioYear = (event) => {
+    event.preventDefault();
+    // console.log(event.target.value);
+    var data = event.target.value;
+    this.setState({
+      radioYear: data,
+    });
+  };
+  handleSETypeChange = (input) => {
+    console.log(input);
+    if (input !== this.state.seType) {
+      this.setState({
+        seType: input,
+      });
+    }
+  };
+  handleAnnoteChange = (event) => {
+    event.preventDefault();
+    var data = event.target.value;
+    var newAnnote = this.state.annote;
+    newAnnote[this.state.annote.length] = data;
+    this.setState({
+      annote: newAnnote,
+    });
+  };
+  handleChangeForAnnoteInput = (input) => {
+    var newArray = [];
+    var same = true;
+    if (input) {
+      for (var x in input) {
+        newArray.push(input[x].props.label);
+      }
+    }
+    if (newArray.length >= this.state.annote.length) {
+      for (var j in newArray) {
+        if (this.state.annote[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.annote) {
+        if (this.state.annote[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        annote: null,
+      });
+      this.setState({
+        annote: newArray,
+      });
+    }
+  };
+  handleChangeForColumnSelectInput = (input) => {
+    const sortOrder = ["Author", "Year"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = ["SE Type", "Claim", "DOI", "Title"];
+    var same = true;
+    if (input) {
+      for (var x in input) {
+        newArray.push(input[x].props.label);
+      }
+      newArray.sort(sorter);
+    }
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
+  };
+  handleSortByChange = (event) => {
+    event.preventDefault();
+    var data = event.target.value;
+    console.log(event.target.value);
+    this.setState({
+      sortBy: data,
+    });
+    this.sortTable(data);
+  };
 
-  handleInputChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      searchTerm: data,
-    });
+  sortTable = (column) => {
+    var table, rows, colNum, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("myTable");
+    switching = true;
+    /* Make a loop that will continue until
+    no switching has been done: */
+    while (switching) {
+      // Start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      colNum = this.state.tableHeaders.indexOf(column);
+      /* Loop through all table rows (except the
+      first, which contains table headers): */
+      for (i = 1; i < rows.length - 1; i++) {
+        // Start by saying there should be no switching:
+        shouldSwitch = false;
+        /* Get the two elements you want to compare,
+        one from current row and one from the next: */
+        x = rows[i].getElementsByTagName("td")[colNum];
+        y = rows[i + 1].getElementsByTagName("td")[colNum];
+        // Check if the two rows should switch place:
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /* If a switch has been marked, make the switch
+        and mark that a switch has been done: */
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
   };
-  handleDateFromChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      dateFrom: data,
-    });
+
+  buildTable = (data) => {
+    if (this.state.tableRendered === false) {
+      var tabledata = document.getElementById("myTable");
+      console.log("I CALLED");
+      for (var i = 0; i < data.length; i++) {
+        if (i === 0) {
+          tabledata.innerHTML = "";
+          var row = `<tr>`;
+          for (var j = 0; j < this.state.tableHeaders.length; j++) {
+            row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+          }
+          row = row + `</tr>`;
+          tabledata.innerHTML += row;
+        }
+        var header = `<tr>`;
+        if (this.state.tableHeaders.includes("SE Type")) {
+          header = header + `<td>${data[i].method}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Claim")) {
+          header = header + `<td>${data[i].annote}</td>`;
+        }
+        if (this.state.tableHeaders.includes("DOI")) {
+          header = header + `<td>${data[i].month}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Title")) {
+          header = header + `<td>${data[i].title}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Author")) {
+          header = header + `<td>${data[i].author}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Year")) {
+          header = header + `<td>${data[i].year}</td>`;
+        }
+        header = header + `</tr>`;
+        tabledata.innerHTML += header;
+      }
+      this.setState({ tableRendered: true });
+    }
   };
-  handleDateToChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      dateTo: data,
-    });
-  };
-  handleNameFieldChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      nameOfField: data,
-    });
-  };
-  handleOperatorChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      operator: data,
-    });
-  };
-  handleFilterValueChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    this.setState({
-      filterValue: data,
-    });
-  };
-  handleDateFilterChange = (event) => {
-    var data = event.target.checked;
-    console.log("date ticked value: ", data);
-    this.setState({
-      dateFilter: data,
-    });
-  };
-  handleOperatorFilterChange = (event) => {
-    var data = event.target.checked;
-    console.log("operator ticked value: ", data);
-    this.setState({
-      operatorFilter: data,
-    });
-  };
-  // handlePlusForSecondBlock = () => {
-  //   this.setState({
-  //     secondBlock: true,
-  //   });
-  // };
-  // handleMinusForSecondBlock = () => {
-  //   this.setState({
-  //     secondBlock: false,
-  //     thirdBlock: false,
-  //   });
-  // };
-  // handlePlusForThirdBlock = () => {
-  //   this.setState({
-  //     thirdBlock: true,
-  //   });
-  // };
-  // handleMinusForThirdBlock = () => {
-  //   this.setState({
-  //     thirdBlock: false,
-  //   });
-  // };
+
   render() {
     //JSX
     return (
@@ -213,218 +324,180 @@ class Search extends React.Component {
         <div className="container-filter">
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
-            <div className="form-input">
-              <label>Enter Description</label>
-              <input
-                type="text"
-                id="userName"
-                placeholder="Enter Search Term"
-                value={this.state.searchTerm}
-                onChange={this.handleInputChange}
+            <div className="date-from">
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.startDateOption}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Date Range From"
+                    variant="outlined"
+                    onChange={this.handleStartDateChange(
+                      params.inputProps.value
+                    )}
+                  />
+                )}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.endDateOption}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Date Range To"
+                    variant="outlined"
+                    onChange={this.handleEndDateChange(params.inputProps.value)}
+                  />
+                )}
               />
             </div>
-            <div className="dateFilter">
-              <label>Using Date Filter</label>
-              <input
-                type="checkbox"
-                id="dateFilterCheckBox"
-                onChange={this.handleDateFilterChange}
+            <div>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Choose Year</FormLabel>
+                <RadioGroup
+                  aria-label="Year Range"
+                  name="radioYear"
+                  value={this.state.radioYear}
+                  onChange={this.handleRadioYear}
+                >
+                  <FormControlLabel
+                    value="custom"
+                    control={<Radio />}
+                    label="Custom"
+                  />
+                  <FormControlLabel
+                    value="2015"
+                    control={<Radio />}
+                    label="Last 5 year"
+                  />
+                  <FormControlLabel
+                    value="2010"
+                    control={<Radio />}
+                    label="Last 10 year"
+                  />
+                  <FormControlLabel
+                    value="2020"
+                    control={<Radio />}
+                    label="This year"
+                  />
+                  <FormControlLabel
+                    value="0"
+                    control={<Radio />}
+                    label="All years"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div>
+            <div className="option-selection">
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.seTypeOption}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Choose SE Type"
+                    variant="outlined"
+                    onChange={this.handleSETypeChange(params.inputProps.value)}
+                  />
+                )}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={this.state.annoteOptions}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.title}
+                renderOption={(option, { selected }) => (
+                  <React.Fragment>
+                    <Checkbox
+                      // icon={icon}
+                      // checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.title}
+                  </React.Fragment>
+                )}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Choose claims"
+                    placeholder=""
+                    onChange={this.handleChangeForAnnoteInput(
+                      params.InputProps.startAdornment
+                    )}
+                  />
+                )}
               />
             </div>
-            <div className="operatorFilter">
-              <label>Using Operator Filter</label>
-              <input
-                type="checkbox"
-                id="operatorFilterCheckBox"
-                onChange={this.handleOperatorFilterChange}
-              />
-            </div>
-            {this.state.dateFilter && (
-              <>
-                <div className="date-from">
-                  <label>Date Range</label>
-                  <br />
-                  <label>From</label>
-                  <select
-                    name="date-from-option"
-                    id="date-from-option"
-                    onChange={this.handleDateFromChange}
-                  >
-                    <option value="1665">More than 15 years</option>
-                    <option value="2010">Last 10 Years</option>
-                    <option value="2015">Last 5 Years</option>
-                    <option value="2020">This Year</option>
-                  </select>
-                </div>
-                <div className="date-to">
-                  <label>To</label>
-                  <select
-                    name="date-to-option"
-                    id="date-to-option"
-                    onChange={this.handleDateToChange}
-                  >
-                    <option value="2020">This Year</option>
-                    <option value="2015">Last 5 Years</option>
-                    <option value="2010">Last 10 Years</option>
-                  </select>
-                </div>
-              </>
-            )}
-            {this.state.operatorFilter && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    {/* <option value="author">Author</option> */}
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">EQUALS</option>
-                    {/* <option value="not equal">NOT EQUALS</option>
-                <option value="and">AND</option>
-                <option value="or">OR</option> */}
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    {/* <option value="not tdd">Not TDD</option> */}
-                  </select>
-                  {/* <button onClick={this.handlePlusForSecondBlock}>+</button>
-                  <button onClick={this.handleMinusForSecondBlock}>-</button> */}
-                </div>
-              </>
-            )}
-            {/* {this.state.secondBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.handlePlusForThirdBlock}>+</button>
-                  <button onClick={this.handleMinusForThirdBlock}>-</button>
-                </div>
-              </>
-            )}
-            {this.state.thirdBlock && (
-              <>
-                <div className="option-selection">
-                  <label>If</label>
-                  <select
-                    name="nameOfField"
-                    id="nameOfField"
-                    onChange={this.handleNameFieldChange}
-                  >
-                    <option value="method">Method</option>
-                    <option value="Author">Author</option>
-                  </select>
-                  <select
-                    name="operator"
-                    id="operator"
-                    onChange={this.handleOperatorChange}
-                  >
-                    <option value="equal">=</option>
-                    <option value="not equal">!=</option>
-                  </select>
-                  <select
-                    name="filterValue"
-                    id="filterValue"
-                    onChange={this.handleFilterValueChange}
-                  >
-                    <option value="tdd">TDD</option>
-                    <option value="not tdd">No TDD</option>
-                  </select>
-                  <button onClick={this.clickedPlusButtonForSecondBlock}>
-                    +
-                  </button>
-                  <button onClick={this.clickedMinusButtonForSecondBlock}>
-                    -
-                  </button>
-                </div>
-              </>
-            )} */}
-            <button className="submitBtn">submit</button>
+            <Autocomplete
+              multiple
+              id="checkboxes-tags-demo"
+              options={this.state.columnToSelect}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.title}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    // icon={icon}
+                    // checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.title}
+                </React.Fragment>
+              )}
+              style={{ width: 200 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Choose columns"
+                  placeholder=""
+                  onChange={this.handleChangeForColumnSelectInput(
+                    params.InputProps.startAdornment
+                  )}
+                />
+              )}
+            />
+            <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
-          {/* <h2>Filtering</h2>
-          <form onSubmit={this.onFilterToggle}>
-            <input
-              type="checkbox"
-              id="content1"
-              name="filterOptions"
-              value="article"
-            />
-            <label for="content1">Article</label>
-            <br />
-            <input
-              type="checkbox"
-              id="content2"
-              name="filterOptions"
-              value="proceeding"
-            />
-            <label for="content2">Proceeding</label>
-            <br />
-            <input
-              type="checkbox"
-              id="content3"
-              name="filterOptions"
-              value="book"
-            />
-            <label for="content3">Book</label>
-            <br />
-            <br />
-            <input type="submit" value="Submit" />
-          </form> */}
         </div>
         <div className="container-paperdata">
-          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
-          {this.state.paperdata.map((paperdetail, index) => {
-            return (
+          {this.state.paperdata.length > 0 && (
+            <div>
+              <h2>Search Results</h2>
               <div>
-                <b>{paperdetail.title}</b>
-                <br />
-                {paperdetail.author}
-                <br />
-                {paperdetail.year}
-                <br />
-                {paperdetail.publisher}
-                <br />
-                <br />
+                <label> Sort By: </label>
+                <select
+                  name="sortByOption"
+                  id="sortByOption"
+                  onChange={this.handleSortByChange}
+                >
+                  <option value="SE Practice">SE Practice</option>
+                  <option value="Claim">Evidence</option>
+                  <option value="Title">Title</option>
+                </select>
               </div>
-            );
-          })}
+            </div>
+          )}
+
+          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
+          <table id="myTable">
+            <tr></tr>
+            <tbody></tbody>
+          </table>
+          {this.buildTable(this.state.paperdata)}
         </div>
       </div>
     );
