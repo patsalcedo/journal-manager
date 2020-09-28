@@ -113,10 +113,10 @@ class Search extends React.Component {
       for (var x in input) {
         newArray.push(input[x].props.label);
       }
+      this.setState({
+        annote: newArray
+      })
     }
-    console.log(newArray)
-    this.state.annote = newArray;
-    console.log(this.state.annote)
   };
   handleChangeForColumnSelectInput = (input) => {
     console.log(input);
@@ -131,9 +131,9 @@ class Search extends React.Component {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
     newArray.sort(sorter);
-    this.state.tableHeaders = newArray;
-    console.log(newArray);
-    console.log(this.state.tableHeaders);
+    this.setState({
+      tableHeaders: newArray
+    })
   };
   handleSortByChange = (event) => {
     event.preventDefault();
@@ -217,8 +217,10 @@ class Search extends React.Component {
         header = header + `</tr>`;
         tabledata.innerHTML += header;
       }
+      this.setState({
+        tableRendered: true
+      })
     }
-    this.state.tableRendered = true;
   };
 
   render() {
@@ -254,7 +256,7 @@ class Search extends React.Component {
               </select>
             </div>
             <div>
-              <input type="radio" id="lastFive" name="dateRadio" value="2015" />
+              <input type="radio" id="lastFive" name="dateRadio" value="2015" onChange={this.handleRadioDate}/>
               <label for="lastFive">Last 5 Years</label>
               <br />
               <input type="radio" id="lastTen" name="dateRadio" value="2010" />
