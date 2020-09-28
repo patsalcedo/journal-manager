@@ -6,6 +6,11 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 // import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 // import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 
 class Search extends React.Component {
   constructor(props) {
@@ -17,13 +22,18 @@ class Search extends React.Component {
       tableHeaders: [],
       startDate: "1665",
       endDate: "2020",
-      seType: "TDD",
-      annote:[],
-      annoteOptions:[{ title: "great performance", value: "great performance" },
-              { title: "more productive", value: "more productive" },],
-      // annote: ["great performance", "more productive"],
+      seType: "",
+      annote: [],
+      seTypeOption: [
+        { title: "TDD", value: "TDD" },
+        { title: "BDD", value: "BDD" },
+      ],
+      annoteOptions: [
+        { title: "great performance", value: "great performance" },
+        { title: "more productive", value: "more productive" },
+      ],
       tableRendered: false,
-      sortBy:"",
+      sortBy: "",
       columnToSelect: [
         { title: "Title", value: "Title" },
         { title: "Author", value: "Author" },
@@ -31,6 +41,18 @@ class Search extends React.Component {
         { title: "SE Type", value: "SE Type" },
         { title: "DOI", value: "DOI" },
         { title: "Claim", value: "Claim" },
+      ],
+      radioYear: "",
+      startDateOption: [
+        { title: "1665", value: "1665" },
+        { title: "2010", value: "2010" },
+        { title: "2015", value: "2015" },
+        { title: "2020", value: "2020" },
+      ],
+      endDateOption: [
+        { title: "2020", value: "2020" },
+        { title: "2015", value: "2015" },
+        { title: "2010", value: "2010" },
       ],
     };
   }
@@ -44,22 +66,21 @@ class Search extends React.Component {
     }
   };
 
-
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     console.log("not using filter..");
     var annoteData = "";
-    for(var i=0;i<this.state.annote.length;i++) {
-      annoteData+=this.state.annote[i]+",";
+    for (var i = 0; i < this.state.annote.length; i++) {
+      annoteData += this.state.annote[i] + ",";
     }
-    console.log(annoteData.substring(0, annoteData.length-1))
+    if(this.state.radioYear==="custom") {
     axios
       .get("/api/papercontroller/getfilteredsearch", {
         params: {
           seType: this.state.seType,
-          annote: annoteData.substring(0, annoteData.length-1),
-          startDate:this.state.dateFrom,
-          endDate: this.state.dateTo,
+          annote: annoteData.substring(0, annoteData.length - 1),
+          startDate: this.state.startDate,
+          endDate: this.state.endDate,
         },
       })
       .then((response) => {
@@ -71,69 +92,149 @@ class Search extends React.Component {
       .catch(() => {
         alert("Error from Server");
       });
+    }
+    else {
+      var newEndDate = "2020"
+      var newStartDate = this.state.radioYear
+      axios
+      .get("/api/papercontroller/getfilteredsearch", {
+        params: {
+          seType: this.state.seType,
+          annote: annoteData.substring(0, annoteData.length - 1),
+          startDate: newStartDate,
+          endDate: newEndDate,
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        this.setState({ paperdata: data, tableRendered: false });
+        console.log("Data has been retrieved");
+        console.log(this.state.paperdata);
+      })
+      .catch(() => {
+        alert("Error from Server");
+      });
+    }
   };
-
-  handleStartDateChange = (event) => {
+  handleStartDateChange = (input) => {
+    // console.log(input);
+    if (input !== this.state.startDate) {
+      this.setState({
+        startDate: input,
+      });
+    }
+    console.log("startDate", this.state.startDate);
+  };
+  handleEndDateChange = (input) => {
+    // console.log(input);
+    if (input !== this.state.endDate) {
+      this.setState({
+        endDate: input,
+      });
+    }
+    console.log("endDate", this.state.endDate);
+  };
+  handleRadioYear = (event) => {
     event.preventDefault();
+    // console.log(event.target.value);
     var data = event.target.value;
-    console.log(event.target.value);
     this.setState({
-      startDate: data,
+      radioYear: data,
     });
   };
-  handleEndDateChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      endDate: data,
-    });
-  };
-  handleSETypeChange = (event) => {
-    event.preventDefault();
-    var data = event.target.value;
-    console.log(event.target.value);
-    this.setState({
-      seType: data,
-    });
+  handleSETypeChange = (input) => {
+    console.log(input);
+    if (input !== this.state.seType) {
+      this.setState({
+        seType: input,
+      });
+    }
   };
   handleAnnoteChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
     var newAnnote = this.state.annote;
-    newAnnote[this.state.annote.length] = data
+    newAnnote[this.state.annote.length] = data;
     this.setState({
       annote: newAnnote,
     });
   };
   handleChangeForAnnoteInput = (input) => {
-    console.log(input);
     var newArray = [];
+    var same = true;
     if (input) {
       for (var x in input) {
         newArray.push(input[x].props.label);
       }
+    }
+    if (newArray.length >= this.state.annote.length) {
+      for (var j in newArray) {
+        if (this.state.annote[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.annote) {
+        if (this.state.annote[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
       this.setState({
-        annote: newArray
-      })
+        annote: null,
+      });
+      this.setState({
+        annote: newArray,
+      });
     }
   };
   handleChangeForColumnSelectInput = (input) => {
-    console.log(input);
-    var newArray = [];
-    if (input) {
-      for (var x in input) {
-        newArray.push(input[x].props.label);
-      }
-    }
     const sortOrder = ["SE Type", "Claim", "DOI", "Title", "Author", "Year"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    newArray.sort(sorter);
-    this.setState({
-      tableHeaders: newArray
-    })
+    var newArray = [];
+    var same = true;
+    if (input) {
+      for (var x in input) {
+        newArray.push(input[x].props.label);
+      }
+      newArray.sort(sorter);
+    }
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
   };
   handleSortByChange = (event) => {
     event.preventDefault();
@@ -142,7 +243,7 @@ class Search extends React.Component {
     this.setState({
       sortBy: data,
     });
-    this.sortTable(data)
+    this.sortTable(data);
   };
 
   sortTable = (column) => {
@@ -155,10 +256,10 @@ class Search extends React.Component {
       // Start by saying: no switching is done:
       switching = false;
       rows = table.rows;
-      colNum = this.state.tableHeaders.indexOf(column)
+      colNum = this.state.tableHeaders.indexOf(column);
       /* Loop through all table rows (except the
       first, which contains table headers): */
-      for (i = 1; i < (rows.length - 1); i++) {
+      for (i = 1; i < rows.length - 1; i++) {
         // Start by saying there should be no switching:
         shouldSwitch = false;
         /* Get the two elements you want to compare,
@@ -179,7 +280,7 @@ class Search extends React.Component {
         switching = true;
       }
     }
-  }
+  };
 
   buildTable = (data) => {
     if (this.state.tableRendered === false) {
@@ -217,9 +318,7 @@ class Search extends React.Component {
         header = header + `</tr>`;
         tabledata.innerHTML += header;
       }
-      this.setState({
-        tableRendered: true
-      })
+      this.setState({ tableRendered: true });
     }
   };
 
@@ -231,92 +330,120 @@ class Search extends React.Component {
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
             <div className="date-from">
-              <p>Date Range</p>
-              <br />
-              <label>From</label>
-              <select
-                name="date-from-option"
-                id="date-from-option"
-                onChange={this.handleStartDateChange}
-              >
-                <option value="1665">1665</option>
-                <option value="2010">2010</option>
-                <option value="2015">2015</option>
-                <option value="2020">2020</option>
-              </select>
-              <label> To </label>
-              <select
-                name="date-to-option"
-                id="date-to-option"
-                onChange={this.handleEndDateChange}
-              >
-                <option value="2020">2020</option>
-                <option value="2015">2015</option>
-                <option value="2010">2010</option>
-              </select>
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.startDateOption}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Date Range From"
+                    variant="outlined"
+                    onChange={this.handleStartDateChange(
+                      params.inputProps.value
+                    )}
+                  />
+                )}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.endDateOption}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Date Range To"
+                    variant="outlined"
+                    onChange={this.handleEndDateChange(params.inputProps.value)}
+                  />
+                )}
+              />
             </div>
             <div>
-              <input type="radio" id="lastFive" name="dateRadio" value="2015" onChange={this.handleRadioDate}/>
-              <label for="lastFive">Last 5 Years</label>
-              <br />
-              <input type="radio" id="lastTen" name="dateRadio" value="2010" />
-              <label for="lastTen">Last 10 Years</label>
-              <br />
-              <input type="radio" id="thisYear" name="dateRadio" value="2020" />
-              <label for="thisYear">This Year</label>
-              <br />
-              <input type="radio" id="allYear" name="dateRadio" value="0" />
-              <label for="allYear">All Years</label>
-              <br />
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Choose Year</FormLabel>
+                <RadioGroup
+                  aria-label="Year Range"
+                  name="radioYear"
+                  value={this.state.radioYear}
+                  onChange={this.handleRadioYear}
+                >
+                  <FormControlLabel
+                    value="custom"
+                    control={<Radio />}
+                    label="Custom"
+                    checked
+                  />
+                  <FormControlLabel
+                    value="2015"
+                    control={<Radio />}
+                    label="Last 5 year"
+                  />
+                  <FormControlLabel
+                    value="2010"
+                    control={<Radio />}
+                    label="Last 10 year"
+                  />
+                  <FormControlLabel
+                    value="2020"
+                    control={<Radio />}
+                    label="This year"
+                  />
+                  <FormControlLabel
+                    value="0"
+                    control={<Radio />}
+                    label="All years"
+                  />
+                </RadioGroup>
+              </FormControl>
             </div>
             <div className="option-selection">
-              <label>If</label>
-              <select
-                name="seType"
-                id="seType"
-                onChange={this.handleSETypeChange}
-              >
-                <option value="TDD">TDD</option>
-                <option value="BDD">BDD</option>
-              </select>
               <Autocomplete
-              multiple
-              id="checkboxes-tags-demo"
-              options={this.state.annoteOptions}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.title}
-              renderOption={(option, { selected }) => (
-                <React.Fragment>
-                  <Checkbox
-                    // icon={icon}
-                    // checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
+                id="combo-box-demo"
+                options={this.state.seTypeOption}
+                getOptionLabel={(option) => option.title}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Choose SE Type"
+                    variant="outlined"
+                    onChange={this.handleSETypeChange(params.inputProps.value)}
                   />
-                  {option.title}
-                </React.Fragment>
-              )}
-              style={{ width: 200 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Choose columns"
-                  placeholder=""
-                  onChange={this.handleChangeForAnnoteInput(
-                    params.InputProps.startAdornment
-                  )}
-                />
-              )}
-            />
-              {/* <select
-                name="annote"
-                id="annote"
-                onChange={this.handleAnnoteChange}
-              >
-                <option value="great performance">Great Performance</option>
-                <option value="more productive">More Productive</option>
-              </select> */}
+                )}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={this.state.annoteOptions}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.title}
+                renderOption={(option, { selected }) => (
+                  <React.Fragment>
+                    <Checkbox
+                      // icon={icon}
+                      // checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.title}
+                  </React.Fragment>
+                )}
+                style={{ width: 200 }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Choose claims"
+                    placeholder=""
+                    onChange={this.handleChangeForAnnoteInput(
+                      params.InputProps.startAdornment
+                    )}
+                  />
+                )}
+              />
             </div>
             <Autocomplete
               multiple
