@@ -36,14 +36,16 @@ router.get("/papercontroller/getfilteredsearch", (req, res) => {
   //http://localhost:8080/api/acceptedpapercontroller/getsearch?searchterm
 
   const seType = req.query.seType === undefined ? "" : req.query.seType;
-  // annote = claims
-  const annote =
-    req.query.annote === undefined ? "" : req.query.annote.split(",");
+  // claims = claims
+  const claimsArray =
+    req.query.claims === undefined ? "" : req.query.claims.split(",");
   const startDate =
     req.query.startDate === undefined ? "1990" : req.query.startDate;
   const endDate = req.query.endDate === undefined ? "2020" : req.query.endDate;
+  
+  console.log("passed anoter:", claimsArray);
 
-  if (seType === "" && annote === "") {
+  if (seType === "" && claimsArray === "") {
     AcceptedPaperData.find({
       method: { $regex: seType, $options: "i" },
       year: { $gte: startDate, $lte: endDate },
@@ -55,7 +57,7 @@ router.get("/papercontroller/getfilteredsearch", (req, res) => {
       .catch((error) => {
         console.log("error: ", error);
       });
-  } else if (annote === "") {
+  } else if (claimsArray === "") {
     AcceptedPaperData.find({
       method: { $regex: seType, $options: "i" },
       year: { $gte: startDate, $lte: endDate },
@@ -68,13 +70,14 @@ router.get("/papercontroller/getfilteredsearch", (req, res) => {
         console.log("error: ", error);
       });
   } else {
+    console.log("hitting the else statement and anote is:", claimsArray);
     AcceptedPaperData.find({
       $and: [
-        {
-          $or: [{ annote: { $in: annote } }],
-        },
+       
         { method: { $regex: seType, $options: "i" } },
         { year: { $gte: startDate, $lte: endDate } },
+        { $or: [{ claims: { $in: claimsArray } }]}
+        
       ],
     }).then((data) => {
       return res.json(data);
