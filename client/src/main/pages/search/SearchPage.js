@@ -62,6 +62,9 @@ class Search extends React.Component {
     }
   };
 
+  sum = (a,b) => {
+    return a+b;
+  }
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     console.log("not using filter..");
