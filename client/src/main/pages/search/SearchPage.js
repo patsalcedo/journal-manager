@@ -19,30 +19,26 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
-      tableHeaders: [],
+      tableHeaders: ["SE Type", "Claim", "DOI", "Title"],
       startDate: "1665",
       endDate: "2020",
       seType: "",
-      annote: [],
+      claims: [],
       seTypeOption: [
         { title: "TDD", value: "TDD" },
         { title: "BDD", value: "BDD" },
       ],
-      annoteOptions: [
+      claimsOptions: [
         { title: "great performance", value: "great performance" },
         { title: "more productive", value: "more productive" },
       ],
       tableRendered: false,
       sortBy: "",
       columnToSelect: [
-        { title: "Title", value: "Title" },
         { title: "Author", value: "Author" },
         { title: "Year", value: "Year" },
-        { title: "SE Type", value: "SE Type" },
-        { title: "DOI", value: "DOI" },
-        { title: "Claim", value: "Claim" },
       ],
-      radioYear: "",
+      radioYear: "custom",
       startDateOption: [
         { title: "1665", value: "1665" },
         { title: "2010", value: "2010" },
@@ -69,51 +65,50 @@ class Search extends React.Component {
   getAcceptedPaperData = (event) => {
     event.preventDefault();
     console.log("not using filter..");
-    var annoteData = "";
-    for (var i = 0; i < this.state.annote.length; i++) {
-      annoteData += this.state.annote[i] + ",";
+    var claimsData = "";
+    for (var i = 0; i < this.state.claims.length; i++) {
+      claimsData += this.state.claims[i] + ",";
     }
-    if(this.state.radioYear==="custom") {
-    axios
-      .get("/api/papercontroller/getfilteredsearch", {
-        params: {
-          seType: this.state.seType,
-          annote: annoteData.substring(0, annoteData.length - 1),
-          startDate: this.state.startDate,
-          endDate: this.state.endDate,
-        },
-      })
-      .then((response) => {
-        const data = response.data;
-        this.setState({ paperdata: data, tableRendered: false });
-        console.log("Data has been retrieved");
-        console.log(this.state.paperdata);
-      })
-      .catch(() => {
-        alert("Error from Server");
-      });
-    }
-    else {
-      var newEndDate = "2020"
-      var newStartDate = this.state.radioYear
+    if (this.state.radioYear === "custom") {
       axios
-      .get("/api/papercontroller/getfilteredsearch", {
-        params: {
-          seType: this.state.seType,
-          annote: annoteData.substring(0, annoteData.length - 1),
-          startDate: newStartDate,
-          endDate: newEndDate,
-        },
-      })
-      .then((response) => {
-        const data = response.data;
-        this.setState({ paperdata: data, tableRendered: false });
-        console.log("Data has been retrieved");
-        console.log(this.state.paperdata);
-      })
-      .catch(() => {
-        alert("Error from Server");
-      });
+        .get("/api/papercontroller/getfilteredsearch", {
+          params: {
+            seType: this.state.seType,
+            claims: claimsData.substring(0, claimsData.length - 1),
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data, tableRendered: false });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
+    } else {
+      var newEndDate = "2020";
+      var newStartDate = this.state.radioYear;
+      axios
+        .get("/api/papercontroller/getfilteredsearch", {
+          params: {
+            seType: this.state.seType,
+            claims: claimsData.substring(0, claimsData.length - 1),
+            startDate: newStartDate,
+            endDate: newEndDate,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data, tableRendered: false });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
     }
   };
   handleStartDateChange = (input) => {
@@ -150,16 +145,16 @@ class Search extends React.Component {
       });
     }
   };
-  handleAnnoteChange = (event) => {
+  handleClaimsChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
-    var newAnnote = this.state.annote;
-    newAnnote[this.state.annote.length] = data;
+    var newClaim = this.state.claims;
+    newClaim[this.state.claims.length] = data;
     this.setState({
-      annote: newAnnote,
+      claims: newClaim,
     });
   };
-  handleChangeForAnnoteInput = (input) => {
+  handleChangeForClaimsInput = (input) => {
     var newArray = [];
     var same = true;
     if (input) {
@@ -167,9 +162,9 @@ class Search extends React.Component {
         newArray.push(input[x].props.label);
       }
     }
-    if (newArray.length >= this.state.annote.length) {
+    if (newArray.length >= this.state.claims.length) {
       for (var j in newArray) {
-        if (this.state.annote[j] === newArray[j]) {
+        if (this.state.claims[j] === newArray[j]) {
           same = true;
         } else {
           same = false;
@@ -177,8 +172,8 @@ class Search extends React.Component {
         }
       }
     } else {
-      for (var z in this.state.annote) {
-        if (this.state.annote[z] === newArray[z]) {
+      for (var z in this.state.claims) {
+        if (this.state.claims[z] === newArray[z]) {
           same = true;
         } else {
           same = false;
@@ -188,19 +183,19 @@ class Search extends React.Component {
     }
     if (!same) {
       this.setState({
-        annote: null,
+        claims: null,
       });
       this.setState({
-        annote: newArray,
+        claims: newArray,
       });
     }
   };
   handleChangeForColumnSelectInput = (input) => {
-    const sortOrder = ["SE Type", "Claim", "DOI", "Title", "Author", "Year"];
+    const sortOrder = ["Author", "Year"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = [];
+    var newArray = ["SE Type", "Claim", "DOI", "Title"];
     var same = true;
     if (input) {
       for (var x in input) {
@@ -301,7 +296,7 @@ class Search extends React.Component {
           header = header + `<td>${data[i].method}</td>`;
         }
         if (this.state.tableHeaders.includes("Claim")) {
-          header = header + `<td>${data[i].annote}</td>`;
+          header = header + `<td>${data[i].claims}</td>`;
         }
         if (this.state.tableHeaders.includes("DOI")) {
           header = header + `<td>${data[i].month}</td>`;
@@ -416,7 +411,7 @@ class Search extends React.Component {
               <Autocomplete
                 multiple
                 id="checkboxes-tags-demo"
-                options={this.state.annoteOptions}
+                options={this.state.claimsOptions}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
                 renderOption={(option, { selected }) => (
@@ -437,7 +432,7 @@ class Search extends React.Component {
                     variant="outlined"
                     label="Choose claims"
                     placeholder=""
-                    onChange={this.handleChangeForAnnoteInput(
+                    onChange={this.handleChangeForClaimsInput(
                       params.InputProps.startAdornment
                     )}
                   />
