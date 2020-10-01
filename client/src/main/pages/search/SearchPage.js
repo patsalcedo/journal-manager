@@ -374,7 +374,6 @@ class Search extends React.Component {
                     value="custom"
                     control={<Radio />}
                     label="Custom"
-                    checked
                   />
                   <FormControlLabel
                     value="2015"
@@ -490,9 +489,9 @@ class Search extends React.Component {
                   id="sortByOption"
                   onChange={this.handleSortByChange}
                 >
-                  <option value="SE Practice">SE Practice</option>
+                  {/* <option value="SE Practice">SE Practice</option>
                   <option value="Claim">Evidence</option>
-                  <option value="Title">Title</option>
+                  <option value="Title">Title</option> */}
                 </select>
               </div>
             </div>
