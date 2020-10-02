@@ -19,7 +19,7 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
-      tableHeaders: ["SE Type", "Claim", "DOI", "Title"],
+      tableHeaders: ["SE Type", "Claim", "Level of Evidence", "Type of Evidence", "Title", "Author", "Journal Name", "DOI"],
       startDate: "1665",
       endDate: "2020",
       seType: "",
@@ -29,14 +29,15 @@ class Search extends React.Component {
         { title: "BDD", value: "BDD" },
       ],
       claimsOptions: [
+        { title: "all claims", value: "all claims"},
         { title: "great performance", value: "great performance" },
         { title: "more productive", value: "more productive" },
       ],
       tableRendered: false,
       sortBy: "",
       columnToSelect: [
-        { title: "Author", value: "Author" },
         { title: "Year", value: "Year" },
+        { title: "Volume", value: "Volume" },
       ],
       radioYear: "custom",
       startDateOption: [
@@ -62,16 +63,24 @@ class Search extends React.Component {
     }
   };
 
-  sum = (a,b) => {
-    return a+b;
-  }
+
   getAcceptedPaperData = (event) => {
     event.preventDefault();
+    if(this.state.claims.length>0) {
+    this.setState({
+      paperdata : []
+    })
     console.log("not using filter..");
     var claimsData = "";
+    if(this.state.claims.includes("all claims"))
+    {
+      claimsData = "great performance,more productive "
+    }
+    else {
     for (var i = 0; i < this.state.claims.length; i++) {
       claimsData += this.state.claims[i] + ",";
     }
+  }
     if (this.state.radioYear === "custom") {
       axios
         .get("/api/papercontroller/getfilteredsearch", {
@@ -113,6 +122,10 @@ class Search extends React.Component {
           alert("Error from Server");
         });
     }
+  }
+  else {
+    alert("Select what claim(s) you're looking for!")
+  }
   };
   handleStartDateChange = (input) => {
     // console.log(input);
@@ -194,11 +207,12 @@ class Search extends React.Component {
     }
   };
   handleChangeForColumnSelectInput = (input) => {
-    const sortOrder = ["Author", "Year"];
+    const sortOrder = ["Year", "Volume"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = ["SE Type", "Claim", "DOI", "Title"];
+    var newArray = ["SE Type", "Claim", "Level of Evidence", "Type of Evidence", "Title", "Author", "Journal Name", "DOI"]
+
     var same = true;
     if (input) {
       for (var x in input) {
@@ -301,8 +315,11 @@ class Search extends React.Component {
         if (this.state.tableHeaders.includes("Claim")) {
           header = header + `<td>${data[i].claims}</td>`;
         }
-        if (this.state.tableHeaders.includes("DOI")) {
-          header = header + `<td>${data[i].month}</td>`;
+        if (this.state.tableHeaders.includes("Level of Evidence")) {
+          header = header + `<td>${data[i].level_of_evidence}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Type of Evidence")) {
+          header = header + `<td>${data[i].type_of_evidence}</td>`;
         }
         if (this.state.tableHeaders.includes("Title")) {
           header = header + `<td>${data[i].title}</td>`;
@@ -310,8 +327,17 @@ class Search extends React.Component {
         if (this.state.tableHeaders.includes("Author")) {
           header = header + `<td>${data[i].author}</td>`;
         }
+        if (this.state.tableHeaders.includes("Journal Name")) {
+          header = header + `<td>${data[i].publisher}</td>`;
+        }
+        if (this.state.tableHeaders.includes("DOI")) {
+          header = header + `<td>${data[i].doi}</td>`;
+        }
         if (this.state.tableHeaders.includes("Year")) {
           header = header + `<td>${data[i].year}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Volume")) {
+          header = header + `<td>${data[i].volume}</td>`;
         }
         header = header + `</tr>`;
         tabledata.innerHTML += header;
@@ -479,19 +505,18 @@ class Search extends React.Component {
         <div className="container-paperdata">
           {this.state.paperdata.length > 0 && (
             <div>
-              <h2>Search Results</h2>
-              <div>
+              {/* <div>
                 <label> Sort By: </label>
                 <select
                   name="sortByOption"
                   id="sortByOption"
                   onChange={this.handleSortByChange}
                 >
-                  {/* <option value="SE Practice">SE Practice</option>
+                  <option value="SE Practice">SE Practice</option>
                   <option value="Claim">Evidence</option>
-                  <option value="Title">Title</option> */}
+                  <option value="Title">Title</option>
                 </select>
-              </div>
+              </div> */}
             </div>
           )}
 
