@@ -39,17 +39,20 @@ class Search extends React.Component {
         { title: "Year", value: "Year" },
       ],
       radioYear: "custom",
-      startDateOption: [
-        { title: "1665", value: "1665" },
-        { title: "2010", value: "2010" },
-        { title: "2015", value: "2015" },
-        { title: "2020", value: "2020" },
-      ],
-      endDateOption: [
-        { title: "2020", value: "2020" },
-        { title: "2015", value: "2015" },
-        { title: "2010", value: "2010" },
-      ],
+      // startDateOption: [
+      //   { title: "1665", value: "1665" },
+      //   { title: "2010", value: "2010" },
+      //   { title: "2015", value: "2015" },
+      //   { title: "2020", value: "2020" },
+      // ],
+      startDateOption: Array.from(
+        { length: 2021 - 1665 },
+        (x, i) => `${i + 1665}`
+      ),
+      endDateOption: Array.from(
+        { length: 2021 - 1665 },
+        (x, i) => `${i + 1665}`
+      ),
     };
   }
 
@@ -328,7 +331,7 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.startDateOption}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
@@ -344,7 +347,7 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.endDateOption}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
