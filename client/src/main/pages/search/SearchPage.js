@@ -304,9 +304,18 @@ class Search extends React.Component {
   };
 
   buildTable = (data) => {
-    if (this.state.tableRendered === false) {
       var tabledata = document.getElementById("myTable");
-      console.log("I CALLED");
+      if(this.state.tableRendered === true)
+      {
+      console.log("I ENTERED")
+      tabledata.innerHTML = "";
+      var row = `<tr>`;
+      for (var j = 0; j < this.state.tableHeaders.length; j++) {
+        row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+      }
+      row = row + `</tr>`;
+      tabledata.innerHTML += row;
+    }
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           tabledata.innerHTML = "";
@@ -350,9 +359,8 @@ class Search extends React.Component {
         }
         header = header + `</tr>`;
         tabledata.innerHTML += header;
+        this.state.tableRendered = true
       }
-      this.setState({ tableRendered: true });
-    }
   };
 
   render() {
@@ -512,6 +520,7 @@ class Search extends React.Component {
           </form>
         </div>
         <div className="container-paperdata">
+        <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
               {/* <div>
@@ -529,7 +538,7 @@ class Search extends React.Component {
             </div>
           )}
 
-          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
+          {this.state.paperdata.length > 0}
           <table id="myTable">
             <tr></tr>
             <tbody></tbody>
