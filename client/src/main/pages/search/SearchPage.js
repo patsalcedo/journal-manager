@@ -56,10 +56,10 @@ class Search extends React.Component {
   componentDidMount = () => {
     //    this.getAcceptedPaperData();
     console.log("calling from searchpage.js:", this.props.isLoggedIn);
-    if (this.props.isLoggedIn === "false") {
-      this.props.history.push("/login");
-      console.log("navigating to login since isLoggedin is false");
-    }
+    // if (this.props.isLoggedIn === "false") {
+    //   this.props.history.push("/login");
+    //   console.log("navigating to login since isLoggedin is false");
+    // }
   };
 
   getAcceptedPaperData = (event) => {
