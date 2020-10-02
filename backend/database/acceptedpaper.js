@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const AcceptedPaperSchema = new Schema({
-  document_type: {
+  type_of_evidence: {
     type: String,
   },
   key: {
@@ -18,6 +18,15 @@ const AcceptedPaperSchema = new Schema({
     type: String,
   },
   method : {
+    type: String,
+  },
+  claims: {
+    type: Array,
+  },
+  doi: {
+    type: String,
+  },
+  level_of_evidence: {
     type: String,
   },
   publisher: {

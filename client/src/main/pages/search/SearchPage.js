@@ -19,24 +19,25 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
-      tableHeaders: ["SE Type", "Claim", "DOI", "Title"],
+      tableHeaders: ["SE Type", "Claim", "Level of Evidence", "Type of Evidence", "Title", "Author", "Journal Name", "DOI"],
       startDate: "1665",
       endDate: "2020",
       seType: "",
-      annote: [],
+      claims: [],
       seTypeOption: [
         { title: "TDD", value: "TDD" },
         { title: "BDD", value: "BDD" },
       ],
-      annoteOptions: [
+      claimsOptions: [
+        { title: "all claims", value: "all claims"},
         { title: "great performance", value: "great performance" },
         { title: "more productive", value: "more productive" },
       ],
       tableRendered: false,
       sortBy: "",
       columnToSelect: [
-        { title: "Author", value: "Author" },
         { title: "Year", value: "Year" },
+        { title: "Volume", value: "Volume" },
       ],
       radioYear: "custom",
       // startDateOption: [
@@ -65,19 +66,30 @@ class Search extends React.Component {
     }
   };
 
+
   getAcceptedPaperData = (event) => {
     event.preventDefault();
+    if(this.state.claims.length>0) {
+    this.setState({
+      paperdata : []
+    })
     console.log("not using filter..");
-    var annoteData = "";
-    for (var i = 0; i < this.state.annote.length; i++) {
-      annoteData += this.state.annote[i] + ",";
+    var claimsData = "";
+    if(this.state.claims.includes("all claims"))
+    {
+      claimsData = "great performance,more productive "
     }
+    else {
+    for (var i = 0; i < this.state.claims.length; i++) {
+      claimsData += this.state.claims[i] + ",";
+    }
+  }
     if (this.state.radioYear === "custom") {
       axios
         .get("/api/papercontroller/getfilteredsearch", {
           params: {
             seType: this.state.seType,
-            annote: annoteData.substring(0, annoteData.length - 1),
+            claims: claimsData.substring(0, claimsData.length - 1),
             startDate: this.state.startDate,
             endDate: this.state.endDate,
           },
@@ -98,7 +110,7 @@ class Search extends React.Component {
         .get("/api/papercontroller/getfilteredsearch", {
           params: {
             seType: this.state.seType,
-            annote: annoteData.substring(0, annoteData.length - 1),
+            claims: claimsData.substring(0, claimsData.length - 1),
             startDate: newStartDate,
             endDate: newEndDate,
           },
@@ -113,6 +125,10 @@ class Search extends React.Component {
           alert("Error from Server");
         });
     }
+  }
+  else {
+    alert("Select what claim(s) you're looking for!")
+  }
   };
   handleStartDateChange = (input) => {
     // console.log(input);
@@ -148,16 +164,16 @@ class Search extends React.Component {
       });
     }
   };
-  handleAnnoteChange = (event) => {
+  handleClaimsChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
-    var newAnnote = this.state.annote;
-    newAnnote[this.state.annote.length] = data;
+    var newClaim = this.state.claims;
+    newClaim[this.state.claims.length] = data;
     this.setState({
-      annote: newAnnote,
+      claims: newClaim,
     });
   };
-  handleChangeForAnnoteInput = (input) => {
+  handleChangeForClaimsInput = (input) => {
     var newArray = [];
     var same = true;
     if (input) {
@@ -165,9 +181,9 @@ class Search extends React.Component {
         newArray.push(input[x].props.label);
       }
     }
-    if (newArray.length >= this.state.annote.length) {
+    if (newArray.length >= this.state.claims.length) {
       for (var j in newArray) {
-        if (this.state.annote[j] === newArray[j]) {
+        if (this.state.claims[j] === newArray[j]) {
           same = true;
         } else {
           same = false;
@@ -175,8 +191,8 @@ class Search extends React.Component {
         }
       }
     } else {
-      for (var z in this.state.annote) {
-        if (this.state.annote[z] === newArray[z]) {
+      for (var z in this.state.claims) {
+        if (this.state.claims[z] === newArray[z]) {
           same = true;
         } else {
           same = false;
@@ -186,19 +202,20 @@ class Search extends React.Component {
     }
     if (!same) {
       this.setState({
-        annote: null,
+        claims: null,
       });
       this.setState({
-        annote: newArray,
+        claims: newArray,
       });
     }
   };
   handleChangeForColumnSelectInput = (input) => {
-    const sortOrder = ["Author", "Year"];
+    const sortOrder = ["Year", "Volume"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = ["SE Type", "Claim", "DOI", "Title"];
+    var newArray = ["SE Type", "Claim", "Level of Evidence", "Type of Evidence", "Title", "Author", "Journal Name", "DOI"]
+
     var same = true;
     if (input) {
       for (var x in input) {
@@ -299,10 +316,13 @@ class Search extends React.Component {
           header = header + `<td>${data[i].method}</td>`;
         }
         if (this.state.tableHeaders.includes("Claim")) {
-          header = header + `<td>${data[i].annote}</td>`;
+          header = header + `<td>${data[i].claims}</td>`;
         }
-        if (this.state.tableHeaders.includes("DOI")) {
-          header = header + `<td>${data[i].month}</td>`;
+        if (this.state.tableHeaders.includes("Level of Evidence")) {
+          header = header + `<td>${data[i].level_of_evidence}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Type of Evidence")) {
+          header = header + `<td>${data[i].type_of_evidence}</td>`;
         }
         if (this.state.tableHeaders.includes("Title")) {
           header = header + `<td>${data[i].title}</td>`;
@@ -310,8 +330,17 @@ class Search extends React.Component {
         if (this.state.tableHeaders.includes("Author")) {
           header = header + `<td>${data[i].author}</td>`;
         }
+        if (this.state.tableHeaders.includes("Journal Name")) {
+          header = header + `<td>${data[i].publisher}</td>`;
+        }
+        if (this.state.tableHeaders.includes("DOI")) {
+          header = header + `<td>${data[i].doi}</td>`;
+        }
         if (this.state.tableHeaders.includes("Year")) {
           header = header + `<td>${data[i].year}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Volume")) {
+          header = header + `<td>${data[i].volume}</td>`;
         }
         header = header + `</tr>`;
         tabledata.innerHTML += header;
@@ -414,7 +443,7 @@ class Search extends React.Component {
               <Autocomplete
                 multiple
                 id="checkboxes-tags-demo"
-                options={this.state.annoteOptions}
+                options={this.state.claimsOptions}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
                 renderOption={(option, { selected }) => (
@@ -435,7 +464,7 @@ class Search extends React.Component {
                     variant="outlined"
                     label="Choose claims"
                     placeholder=""
-                    onChange={this.handleChangeForAnnoteInput(
+                    onChange={this.handleChangeForClaimsInput(
                       params.InputProps.startAdornment
                     )}
                   />
@@ -479,8 +508,7 @@ class Search extends React.Component {
         <div className="container-paperdata">
           {this.state.paperdata.length > 0 && (
             <div>
-              <h2>Search Results</h2>
-              <div>
+              {/* <div>
                 <label> Sort By: </label>
                 <select
                   name="sortByOption"
@@ -491,7 +519,7 @@ class Search extends React.Component {
                   <option value="Claim">Evidence</option>
                   <option value="Title">Title</option>
                 </select>
-              </div>
+              </div> */}
             </div>
           )}
 
