@@ -33,6 +33,7 @@ class Add extends React.Component {
     method: "",
     publisher: "",
     journal: "",
+    doi:"",
     year: "",
     month: "",
     volume: "",
@@ -81,13 +82,16 @@ class Add extends React.Component {
     this.setState({ message: "" });
     if (formValid(this.state)) {
       const payload = {
-        document_type: this.state.document_type,
+        type_of_evidence: this.state.document_type,
         key: this.state.key,
         title: this.state.title,
         author: this.state.author,
         method: this.state.method,
         publisher: this.state.publisher,
+        doi:this.state.doi,
+        claims:"",
         journal: this.state.journal,
+        level_of_evidence:"",
         year: this.state.year,
         month: this.state.month,
         volume: this.state.volume,
