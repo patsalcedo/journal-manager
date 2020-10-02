@@ -93,9 +93,7 @@ class Search extends React.Component {
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data, tableRendered: false });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
+          this.setState({ paperdata: data});
         })
         .catch(() => {
           alert("Error from Server");
@@ -114,9 +112,8 @@ class Search extends React.Component {
         })
         .then((response) => {
           const data = response.data;
-          this.setState({ paperdata: data, tableRendered: false });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
+          this.setState({ paperdata: data});
+          console.log("Table rendered? ", this.state.tableRendered);
         })
         .catch(() => {
           alert("Error from Server");
@@ -295,9 +292,7 @@ class Search extends React.Component {
   };
 
   buildTable = (data) => {
-    if (this.state.tableRendered === false) {
       var tabledata = document.getElementById("myTable");
-      console.log("I CALLED");
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           tabledata.innerHTML = "";
@@ -342,8 +337,6 @@ class Search extends React.Component {
         header = header + `</tr>`;
         tabledata.innerHTML += header;
       }
-      this.setState({ tableRendered: true });
-    }
   };
 
   render() {
