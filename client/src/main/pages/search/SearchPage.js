@@ -4,8 +4,6 @@ import "../search/SearchPage.css";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-// import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-// import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -19,7 +17,16 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
-      tableHeaders: ["SE Type", "Claim", "Level of Evidence", "Type of Evidence", "Title", "Author", "Journal Name", "DOI"],
+      tableHeaders: [
+        "SE Type",
+        "Claim",
+        "Level of Evidence",
+        "Type of Evidence",
+        "Title",
+        "Author",
+        "Journal Name",
+        "DOI",
+      ],
       startDate: "1665",
       endDate: "2020",
       seType: "",
@@ -29,7 +36,7 @@ class Search extends React.Component {
         { title: "BDD", value: "BDD" },
       ],
       claimsOptions: [
-        { title: "all claims", value: "all claims"},
+        { title: "all claims", value: "all claims" },
         { title: "great performance", value: "great performance" },
         { title: "more productive", value: "more productive" },
       ],
@@ -40,17 +47,14 @@ class Search extends React.Component {
         { title: "Volume", value: "Volume" },
       ],
       radioYear: "custom",
-      startDateOption: [
-        { title: "1665", value: "1665" },
-        { title: "2010", value: "2010" },
-        { title: "2015", value: "2015" },
-        { title: "2020", value: "2020" },
-      ],
-      endDateOption: [
-        { title: "2020", value: "2020" },
-        { title: "2015", value: "2015" },
-        { title: "2010", value: "2010" },
-      ],
+      startDateOption: Array.from(
+        { length: 2021 - 1665 },
+        (x, i) => `${i + 1665}`
+      ),
+      endDateOption: Array.from(
+        { length: 2021 - 1665 },
+        (x, i) => `${i + 1665}`
+      ),
     };
   }
 
@@ -63,66 +67,65 @@ class Search extends React.Component {
     }
   };
 
-
   getAcceptedPaperData = (event) => {
     event.preventDefault();
-    if(this.state.claims.length>0) {
-    this.setState({
-      paperdata : []
-    })
-    console.log("not using filter..");
-    var claimsData = "";
-    if(this.state.claims.includes("all claims"))
-    {
-      claimsData = "great performance,more productive "
-    }
-    else {
-    for (var i = 0; i < this.state.claims.length; i++) {
-      claimsData += this.state.claims[i] + ",";
-    }
-  }
-    if (this.state.radioYear === "custom") {
-      axios
-        .get("/api/papercontroller/getfilteredsearch", {
-          params: {
-            seType: this.state.seType,
-            claims: claimsData.substring(0, claimsData.length - 1),
-            startDate: this.state.startDate,
-            endDate: this.state.endDate,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data});
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
+    if (this.state.claims.length > 0) {
+      this.setState({
+        paperdata: [],
+      });
+      console.log("not using filter..");
+      var claimsData = "";
+      if (this.state.claims.includes("all claims")) {
+        claimsData = "great performance,more productive ";
+      } else {
+        for (var i = 0; i < this.state.claims.length; i++) {
+          claimsData += this.state.claims[i] + ",";
+        }
+      }
+      if (this.state.radioYear === "custom") {
+        axios
+          .get("/api/papercontroller/getfilteredsearch", {
+            params: {
+              seType: this.state.seType,
+              claims: claimsData.substring(0, claimsData.length - 1),
+              startDate: this.state.startDate,
+              endDate: this.state.endDate,
+            },
+          })
+          .then((response) => {
+            const data = response.data;
+            this.setState({ paperdata: data, tableRendered: false });
+            console.log("Data has been retrieved");
+            console.log(this.state.paperdata);
+          })
+          .catch(() => {
+            alert("Error from Server");
+          });
+      } else {
+        var newEndDate = "2020";
+        var newStartDate = this.state.radioYear;
+        axios
+          .get("/api/papercontroller/getfilteredsearch", {
+            params: {
+              seType: this.state.seType,
+              claims: claimsData.substring(0, claimsData.length - 1),
+              startDate: newStartDate,
+              endDate: newEndDate,
+            },
+          })
+          .then((response) => {
+            const data = response.data;
+            this.setState({ paperdata: data, tableRendered: false });
+            console.log("Data has been retrieved");
+            console.log(this.state.paperdata);
+          })
+          .catch(() => {
+            alert("Error from Server");
+          });
+      }
     } else {
-      var newEndDate = "2020";
-      var newStartDate = this.state.radioYear;
-      axios
-        .get("/api/papercontroller/getfilteredsearch", {
-          params: {
-            seType: this.state.seType,
-            claims: claimsData.substring(0, claimsData.length - 1),
-            startDate: newStartDate,
-            endDate: newEndDate,
-          },
-        })
-        .then((response) => {
-          const data = response.data;
-          this.setState({ paperdata: data});
-          console.log("Table rendered? ", this.state.tableRendered);
-        })
-        .catch(() => {
-          alert("Error from Server");
-        });
+      alert("Select what claim(s) you're looking for!");
     }
-  }
-  else {
-    alert("Select what claim(s) you're looking for!")
-  }
   };
   handleStartDateChange = (input) => {
     // console.log(input);
@@ -208,7 +211,16 @@ class Search extends React.Component {
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = ["SE Type", "Claim", "Level of Evidence", "Type of Evidence", "Title", "Author", "Journal Name", "DOI"]
+    var newArray = [
+      "SE Type",
+      "Claim",
+      "Level of Evidence",
+      "Type of Evidence",
+      "Title",
+      "Author",
+      "Journal Name",
+      "DOI",
+    ];
 
     var same = true;
     if (input) {
@@ -293,6 +305,17 @@ class Search extends React.Component {
 
   buildTable = (data) => {
       var tabledata = document.getElementById("myTable");
+      if(this.state.tableRendered === true)
+      {
+      console.log("I ENTERED")
+      tabledata.innerHTML = "";
+      var row = `<tr>`;
+      for (var j = 0; j < this.state.tableHeaders.length; j++) {
+        row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+      }
+      row = row + `</tr>`;
+      tabledata.innerHTML += row;
+    }
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           tabledata.innerHTML = "";
@@ -336,6 +359,7 @@ class Search extends React.Component {
         }
         header = header + `</tr>`;
         tabledata.innerHTML += header;
+        this.state.tableRendered = true
       }
   };
 
@@ -350,7 +374,7 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.startDateOption}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
@@ -366,7 +390,7 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.endDateOption}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
@@ -496,6 +520,7 @@ class Search extends React.Component {
           </form>
         </div>
         <div className="container-paperdata">
+        <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
               {/* <div>
@@ -513,7 +538,7 @@ class Search extends React.Component {
             </div>
           )}
 
-          {this.state.paperdata.length > 0 && <h2>Search Results</h2>}
+          {this.state.paperdata.length > 0}
           <table id="myTable">
             <tr></tr>
             <tbody></tbody>
