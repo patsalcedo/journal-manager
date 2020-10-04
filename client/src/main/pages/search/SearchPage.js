@@ -4,7 +4,6 @@ import "../search/SearchPage.css";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import Select from "@material-ui/core/Select"
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -50,11 +49,11 @@ class Search extends React.Component {
       radioYear: "custom",
       startDateOption: Array.from(
         { length: 2021 - 1665 },
-        (x, i) => `${2020 - i}`
+        (x, i) => `${i + 1665}`
       ),
       endDateOption: Array.from(
         { length: 2021 - 1665 },
-        (x, i) => `${2020 - i}`
+        (x, i) => `${i + 1665}`
       ),
     };
   }
@@ -128,19 +127,23 @@ class Search extends React.Component {
       alert("Select what claim(s) you're looking for!");
     }
   };
-  handleStartDateChange = (event) => {
+  handleStartDateChange = (input) => {
     // console.log(input);
+    if (input !== this.state.startDate) {
       this.setState({
-        startDate: event.target.value,
+        startDate: input,
       });
+    }
     console.log("startDate", this.state.startDate);
   };
-  handleEndDateChange = (event) => {
+  handleEndDateChange = (input) => {
     // console.log(input);
-    this.setState({
-      endDate: event.target.value,
-    });
-  console.log("endDate", this.state.endDate);
+    if (input !== this.state.endDate) {
+      this.setState({
+        endDate: input,
+      });
+    }
+    console.log("endDate", this.state.endDate);
   };
   handleRadioYear = (event) => {
     event.preventDefault();
@@ -150,10 +153,13 @@ class Search extends React.Component {
       radioYear: data,
     });
   };
-  handleSETypeChange = (event) => {
+  handleSETypeChange = (input) => {
+    console.log(input);
+    if (input !== this.state.seType) {
       this.setState({
-        seType: event.target.value,
+        seType: input,
       });
+    }
   };
   handleClaimsChange = (event) => {
     event.preventDefault();
@@ -163,7 +169,6 @@ class Search extends React.Component {
     this.setState({
       claims: newClaim,
     });
-    console.log(this.state.claims)
   };
   handleChangeForClaimsInput = (input) => {
     var newArray = [];
@@ -299,10 +304,9 @@ class Search extends React.Component {
   };
 
   buildTable = (data) => {
-      var tabledata = document.getElementById("myTable");
-      if(this.state.tableRendered === true)
-      {
-      console.log("I ENTERED")
+    var tabledata = document.getElementById("myTable");
+    if (this.state.tableRendered === true) {
+      console.log("I ENTERED");
       tabledata.innerHTML = "";
       var row = `<tr>`;
       for (var j = 0; j < this.state.tableHeaders.length; j++) {
@@ -311,81 +315,53 @@ class Search extends React.Component {
       row = row + `</tr>`;
       tabledata.innerHTML += row;
     }
-      for (var i = 0; i < data.length; i++) {
-        if (i === 0) {
-          tabledata.innerHTML = "";
-          var row = `<tr>`;
-          for (var j = 0; j < this.state.tableHeaders.length; j++) {
-            row = row + `<th>${this.state.tableHeaders[j]}</th>`;
-          }
-          row = row + `</tr>`;
-          tabledata.innerHTML += row;
+    for (var i = 0; i < data.length; i++) {
+      if (i === 0) {
+        tabledata.innerHTML = "";
+        var row = `<tr>`;
+        for (var j = 0; j < this.state.tableHeaders.length; j++) {
+          row = row + `<th>${this.state.tableHeaders[j]}</th>`;
         }
-        var header = `<tr>`;
-        if (this.state.tableHeaders.includes("SE Type")) {
-          header = header + `<td>${data[i].method}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Claim")) {
-          header = header + `<td>${data[i].claims}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Level of Evidence")) {
-          header = header + `<td>${data[i].level_of_evidence}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Type of Evidence")) {
-          header = header + `<td>${data[i].type_of_evidence}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Title")) {
-          header = header + `<td>${data[i].title}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Author")) {
-          header = header + `<td>${data[i].author}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Journal Name")) {
-          header = header + `<td>${data[i].publisher}</td>`;
-        }
-        if (this.state.tableHeaders.includes("DOI")) {
-          header = header + `<td>${data[i].doi}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Year")) {
-          header = header + `<td>${data[i].year}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Volume")) {
-          header = header + `<td>${data[i].volume}</td>`;
-        }
-        header = header + `</tr>`;
-        tabledata.innerHTML += header;
-        this.state.tableRendered = true
+        row = row + `</tr>`;
+        tabledata.innerHTML += row;
       }
+      var header = `<tr>`;
+      if (this.state.tableHeaders.includes("SE Type")) {
+        header = header + `<td>${data[i].method}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Claim")) {
+        header = header + `<td>${data[i].claims}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Level of Evidence")) {
+        header = header + `<td>${data[i].level_of_evidence}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Type of Evidence")) {
+        header = header + `<td>${data[i].type_of_evidence}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Title")) {
+        header = header + `<td>${data[i].title}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Author")) {
+        header = header + `<td>${data[i].author}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Journal Name")) {
+        header = header + `<td>${data[i].publisher}</td>`;
+      }
+      if (this.state.tableHeaders.includes("DOI")) {
+        header = header + `<td>${data[i].doi}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Year")) {
+        header = header + `<td>${data[i].year}</td>`;
+      }
+      if (this.state.tableHeaders.includes("Volume")) {
+        header = header + `<td>${data[i].volume}</td>`;
+      }
+      header = header + `</tr>`;
+      tabledata.innerHTML += header;
+      this.state.tableRendered = true;
+    }
   };
 
-  renderDateOptions = () => {
-    return this.state.startDateOption.map((i, j) => {
-      return (<option 
-      key={i} 
-      value={i.toString()}>
-        {i}
-      </option>
-      );
-    });
-  }
-  renderSETypeOptions = () => {
-    return this.state.seTypeOption.map((i, j) => {
-      return (<option key={i.title} 
-        value={i.value}>
-        {i.title}
-      </option>
-      );
-    });
-  }
-  renderClaimsOptions = () => {
-    return this.state.claimsOptions.map((i, j) => {
-      return (<option key={i.title} 
-        value={i.value}>
-        {i.title}
-      </option>
-      );
-    });
-  }
   render() {
     //JSX
     return (
@@ -394,22 +370,36 @@ class Search extends React.Component {
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
             <div className="date-from">
-              <Select
-                id="date-from"
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.startDateOption}
+                getOptionLabel={(option) => option}
                 style={{ width: 200 }}
-                onChange = {this.handleStartDateChange}
-              >
-                {this.renderDateOptions()}
-              </Select>
-              <div className="date-from">
-              <Select
-                id="date-to"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Date Range From"
+                    variant="outlined"
+                    onChange={this.handleStartDateChange(
+                      params.inputProps.value
+                    )}
+                  />
+                )}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.endDateOption}
+                getOptionLabel={(option) => option}
                 style={{ width: 200 }}
-                onChange = {this.handleEndDateChange}
-              >
-                {this.renderDateOptions()}
-              </Select>
-            </div>
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Date Range To"
+                    variant="outlined"
+                    onChange={this.handleEndDateChange(params.inputProps.value)}
+                  />
+                )}
+              />
             </div>
             <div>
               <FormControl component="fieldset">
@@ -449,14 +439,21 @@ class Search extends React.Component {
               </FormControl>
             </div>
             <div className="option-selection">
-                <Select
-                id="se-type"
+              <Autocomplete
+                id="combo-box-demo"
+                options={this.state.seTypeOption}
+                getOptionLabel={(option) => option.title}
                 style={{ width: 200 }}
-                onChange = {this.handleSETypeChange}
-              >
-                {this.renderSETypeOptions()}
-              </Select>
-              {/* <Autocomplete
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Choose SE Type"
+                    variant="outlined"
+                    onChange={this.handleSETypeChange(params.inputProps.value)}
+                  />
+                )}
+              />
+              <Autocomplete
                 multiple
                 id="checkboxes-tags-demo"
                 options={this.state.claimsOptions}
@@ -485,14 +482,7 @@ class Search extends React.Component {
                     )}
                   />
                 )}
-              /> */}
-              <Select
-                id="claims"
-                style={{ width: 200 }}
-                onChange = {this.handleClaimsChange}
-              >
-                {this.renderClaimsOptions()}
-              </Select>
+              />
             </div>
             <Autocomplete
               multiple
@@ -529,7 +519,7 @@ class Search extends React.Component {
           </form>
         </div>
         <div className="container-paperdata">
-        <h2>Search Results</h2>
+          <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
               {/* <div>
