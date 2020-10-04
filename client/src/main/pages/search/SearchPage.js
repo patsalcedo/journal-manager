@@ -4,6 +4,7 @@ import "../search/SearchPage.css";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import Select from "@material-ui/core/Select"
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -49,11 +50,11 @@ class Search extends React.Component {
       radioYear: "custom",
       startDateOption: Array.from(
         { length: 2021 - 1665 },
-        (x, i) => `${i + 1665}`
+        (x, i) => `${2020 - i}`
       ),
       endDateOption: Array.from(
         { length: 2021 - 1665 },
-        (x, i) => `${i + 1665}`
+        (x, i) => `${2020 - i}`
       ),
     };
   }
@@ -127,23 +128,19 @@ class Search extends React.Component {
       alert("Select what claim(s) you're looking for!");
     }
   };
-  handleStartDateChange = (input) => {
+  handleStartDateChange = (event) => {
     // console.log(input);
-    if (input !== this.state.startDate) {
       this.setState({
-        startDate: input,
+        startDate: event.target.value,
       });
-    }
     console.log("startDate", this.state.startDate);
   };
-  handleEndDateChange = (input) => {
+  handleEndDateChange = (event) => {
     // console.log(input);
-    if (input !== this.state.endDate) {
-      this.setState({
-        endDate: input,
-      });
-    }
-    console.log("endDate", this.state.endDate);
+    this.setState({
+      endDate: event.target.value,
+    });
+  console.log("endDate", this.state.endDate);
   };
   handleRadioYear = (event) => {
     event.preventDefault();
@@ -153,13 +150,10 @@ class Search extends React.Component {
       radioYear: data,
     });
   };
-  handleSETypeChange = (input) => {
-    console.log(input);
-    if (input !== this.state.seType) {
+  handleSETypeChange = (event) => {
       this.setState({
-        seType: input,
+        seType: event.target.value,
       });
-    }
   };
   handleClaimsChange = (event) => {
     event.preventDefault();
@@ -169,6 +163,7 @@ class Search extends React.Component {
     this.setState({
       claims: newClaim,
     });
+    console.log(this.state.claims)
   };
   handleChangeForClaimsInput = (input) => {
     var newArray = [];
@@ -363,6 +358,34 @@ class Search extends React.Component {
       }
   };
 
+  renderDateOptions = () => {
+    return this.state.startDateOption.map((i, j) => {
+      return (<option 
+      key={i} 
+      value={i.toString()}>
+        {i}
+      </option>
+      );
+    });
+  }
+  renderSETypeOptions = () => {
+    return this.state.seTypeOption.map((i, j) => {
+      return (<option key={i.title} 
+        value={i.value}>
+        {i.title}
+      </option>
+      );
+    });
+  }
+  renderClaimsOptions = () => {
+    return this.state.claimsOptions.map((i, j) => {
+      return (<option key={i.title} 
+        value={i.value}>
+        {i.title}
+      </option>
+      );
+    });
+  }
   render() {
     //JSX
     return (
@@ -371,36 +394,22 @@ class Search extends React.Component {
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
             <div className="date-from">
-              <Autocomplete
-                id="combo-box-demo"
-                options={this.state.startDateOption}
-                getOptionLabel={(option) => option}
+              <Select
+                id="date-from"
                 style={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Date Range From"
-                    variant="outlined"
-                    onChange={this.handleStartDateChange(
-                      params.inputProps.value
-                    )}
-                  />
-                )}
-              />
-              <Autocomplete
-                id="combo-box-demo"
-                options={this.state.endDateOption}
-                getOptionLabel={(option) => option}
+                onChange = {this.handleStartDateChange}
+              >
+                {this.renderDateOptions()}
+              </Select>
+              <div className="date-from">
+              <Select
+                id="date-to"
                 style={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Date Range To"
-                    variant="outlined"
-                    onChange={this.handleEndDateChange(params.inputProps.value)}
-                  />
-                )}
-              />
+                onChange = {this.handleEndDateChange}
+              >
+                {this.renderDateOptions()}
+              </Select>
+            </div>
             </div>
             <div>
               <FormControl component="fieldset">
@@ -440,21 +449,14 @@ class Search extends React.Component {
               </FormControl>
             </div>
             <div className="option-selection">
-              <Autocomplete
-                id="combo-box-demo"
-                options={this.state.seTypeOption}
-                getOptionLabel={(option) => option.title}
+                <Select
+                id="se-type"
                 style={{ width: 200 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Choose SE Type"
-                    variant="outlined"
-                    onChange={this.handleSETypeChange(params.inputProps.value)}
-                  />
-                )}
-              />
-              <Autocomplete
+                onChange = {this.handleSETypeChange}
+              >
+                {this.renderSETypeOptions()}
+              </Select>
+              {/* <Autocomplete
                 multiple
                 id="checkboxes-tags-demo"
                 options={this.state.claimsOptions}
@@ -483,7 +485,14 @@ class Search extends React.Component {
                     )}
                   />
                 )}
-              />
+              /> */}
+              <Select
+                id="claims"
+                style={{ width: 200 }}
+                onChange = {this.handleClaimsChange}
+              >
+                {this.renderClaimsOptions()}
+              </Select>
             </div>
             <Autocomplete
               multiple

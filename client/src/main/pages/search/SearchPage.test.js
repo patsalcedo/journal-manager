@@ -1,4 +1,4 @@
-//import SearchPage from "./SearchPage.js"
+import SearchPage from "./SearchPage.js"
 const arr = ["1"]
 
 it('array length', () => {
