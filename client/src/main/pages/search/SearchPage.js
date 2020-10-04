@@ -17,6 +17,7 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
+      paperdataChecked: [],
       tableHeaders: [
         "SE Type",
         "Claim",
@@ -303,19 +304,29 @@ class Search extends React.Component {
     }
   };
 
-  buildTable = (data) => {
-      var tabledata = document.getElementById("myTable");
-      if(this.state.tableRendered === true)
-      {
-      console.log("I ENTERED")
-      tabledata.innerHTML = "";
-      var row = `<tr>`;
-      for (var j = 0; j < this.state.tableHeaders.length; j++) {
-        row = row + `<th>${this.state.tableHeaders[j]}</th>`;
-      }
-      row = row + `</tr>`;
-      tabledata.innerHTML += row;
+  arraysEqual = (_arr1, _arr2) => {
+    if (
+      !Array.isArray(_arr1) ||
+      !Array.isArray(_arr2) ||
+      _arr1.length !== _arr2.length
+    )
+      return false;
+
+    var arr1 = _arr1.concat().sort();
+    var arr2 = _arr2.concat().sort();
+
+    for (var i in arr1) {
+      if (arr1[i] !== arr2[i]) return false;
     }
+
+    return true;
+  };
+
+  buildTable = (data) => {
+    var same = this.arraysEqual(data, this.state.paperdataChecked);
+    // console.log("same doi", same);
+    var tabledata = document.getElementById("myTable");
+    if (!same && data.length > 0) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           tabledata.innerHTML = "";
@@ -359,8 +370,22 @@ class Search extends React.Component {
         }
         header = header + `</tr>`;
         tabledata.innerHTML += header;
-        this.state.tableRendered = true
       }
+    } else if (!same && data.length <= 0) {
+      // console.log("I ENTERED");
+      tabledata.innerHTML = "";
+      row = `<tr>`;
+      for (j = 0; j < this.state.tableHeaders.length; j++) {
+        row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+      }
+      row = row + `</tr>`;
+      tabledata.innerHTML += row;
+    }
+    if (!same) {
+      this.setState({ paperdataChecked: null });
+      this.setState({ paperdataChecked: data });
+      // console.log("afterchangepaperchecked", this.state.paperdataChecked);
+    }
   };
 
   render() {
@@ -520,7 +545,7 @@ class Search extends React.Component {
           </form>
         </div>
         <div className="container-paperdata">
-        <h2>Search Results</h2>
+          <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
               {/* <div>
