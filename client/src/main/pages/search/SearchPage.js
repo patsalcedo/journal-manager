@@ -49,12 +49,12 @@ class Search extends React.Component {
       ],
       radioYear: "custom",
       startDateOption: Array.from(
-        { length: 2021 - 1665 },
-        (x, i) => `${i + 1665}`
+        { length: 2020 - 1943 },
+        (x, i) => `${2020 - i}`
       ),
       endDateOption: Array.from(
-        { length: 2021 - 1665 },
-        (x, i) => `${i + 1665}`
+        { length: 2020 - 1943 },
+        (x, i) => `${2020 - i}`
       ),
     };
   }
