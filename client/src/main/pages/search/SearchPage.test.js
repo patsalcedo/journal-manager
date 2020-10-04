@@ -1,5 +1,4 @@
 import SearchPage from "./SearchPage.js"
-import axion from "axios"
 import Adapter from "enzyme-adapter-react-16";
 import React from 'react'
 import { shallow, configure, mount } from "enzyme";
@@ -20,6 +19,7 @@ jest.mock("axios")
                 message: "",
                 redirect: false,
                 paperdata: [],
+                paperdataChecked: [],
                 tableHeaders: [
                   "SE Type",
                   "Claim",
@@ -51,13 +51,13 @@ jest.mock("axios")
                 ],
                 radioYear: "custom",
                 startDateOption: Array.from(
-                  { length: 2021 - 1665 },
-                  (x, i) => `${i + 1665}`
-                ),
-                endDateOption: Array.from(
-                  { length: 2021 - 1665 },
-                  (x, i) => `${i + 1665}`
-                ),
+                    { length: 2020 - 1943 },
+                    (x, i) => `${2020 - i}`
+                  ),
+                  endDateOption: Array.from(
+                    { length: 2020 - 1943 },
+                    (x, i) => `${2020 - i}`
+                  ),
               };
 
               wrapper.instance().handleSETypeChange("TDD");
