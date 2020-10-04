@@ -9,3 +9,5 @@ before_script:
 
 script:
   - npm run build
+  - cd client
+  - npm test
