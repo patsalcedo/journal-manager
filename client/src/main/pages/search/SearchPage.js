@@ -17,6 +17,7 @@ class Search extends React.Component {
       message: "",
       redirect: false,
       paperdata: [],
+      paperdataChecked: [],
       tableHeaders: [
         "SE Type",
         "Claim",
@@ -303,62 +304,87 @@ class Search extends React.Component {
     }
   };
 
+  arraysEqual = (_arr1, _arr2) => {
+    if (
+      !Array.isArray(_arr1) ||
+      !Array.isArray(_arr2) ||
+      _arr1.length !== _arr2.length
+    )
+      return false;
+
+    var arr1 = _arr1.concat().sort();
+    var arr2 = _arr2.concat().sort();
+
+    for (var i in arr1) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+
+    return true;
+  };
+
   buildTable = (data) => {
+    var same = this.arraysEqual(data, this.state.paperdataChecked);
+    // console.log("same doi", same);
     var tabledata = document.getElementById("myTable");
-    if (this.state.tableRendered === true) {
-      console.log("I ENTERED");
+    if (!same && data.length > 0) {
+      for (var i = 0; i < data.length; i++) {
+        if (i === 0) {
+          tabledata.innerHTML = "";
+          var row = `<tr>`;
+          for (var j = 0; j < this.state.tableHeaders.length; j++) {
+            row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+          }
+          row = row + `</tr>`;
+          tabledata.innerHTML += row;
+        }
+        var header = `<tr>`;
+        if (this.state.tableHeaders.includes("SE Type")) {
+          header = header + `<td>${data[i].method}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Claim")) {
+          header = header + `<td>${data[i].claims}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Level of Evidence")) {
+          header = header + `<td>${data[i].level_of_evidence}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Type of Evidence")) {
+          header = header + `<td>${data[i].type_of_evidence}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Title")) {
+          header = header + `<td>${data[i].title}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Author")) {
+          header = header + `<td>${data[i].author}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Journal Name")) {
+          header = header + `<td>${data[i].publisher}</td>`;
+        }
+        if (this.state.tableHeaders.includes("DOI")) {
+          header = header + `<td>${data[i].doi}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Year")) {
+          header = header + `<td>${data[i].year}</td>`;
+        }
+        if (this.state.tableHeaders.includes("Volume")) {
+          header = header + `<td>${data[i].volume}</td>`;
+        }
+        header = header + `</tr>`;
+        tabledata.innerHTML += header;
+      }
+    } else if (!same && data.length <= 0) {
+      // console.log("I ENTERED");
       tabledata.innerHTML = "";
-      var row = `<tr>`;
-      for (var j = 0; j < this.state.tableHeaders.length; j++) {
+      row = `<tr>`;
+      for (j = 0; j < this.state.tableHeaders.length; j++) {
         row = row + `<th>${this.state.tableHeaders[j]}</th>`;
       }
       row = row + `</tr>`;
       tabledata.innerHTML += row;
     }
-    for (var i = 0; i < data.length; i++) {
-      if (i === 0) {
-        tabledata.innerHTML = "";
-        var row = `<tr>`;
-        for (var j = 0; j < this.state.tableHeaders.length; j++) {
-          row = row + `<th>${this.state.tableHeaders[j]}</th>`;
-        }
-        row = row + `</tr>`;
-        tabledata.innerHTML += row;
-      }
-      var header = `<tr>`;
-      if (this.state.tableHeaders.includes("SE Type")) {
-        header = header + `<td>${data[i].method}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Claim")) {
-        header = header + `<td>${data[i].claims}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Level of Evidence")) {
-        header = header + `<td>${data[i].level_of_evidence}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Type of Evidence")) {
-        header = header + `<td>${data[i].type_of_evidence}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Title")) {
-        header = header + `<td>${data[i].title}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Author")) {
-        header = header + `<td>${data[i].author}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Journal Name")) {
-        header = header + `<td>${data[i].publisher}</td>`;
-      }
-      if (this.state.tableHeaders.includes("DOI")) {
-        header = header + `<td>${data[i].doi}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Year")) {
-        header = header + `<td>${data[i].year}</td>`;
-      }
-      if (this.state.tableHeaders.includes("Volume")) {
-        header = header + `<td>${data[i].volume}</td>`;
-      }
-      header = header + `</tr>`;
-      tabledata.innerHTML += header;
-      this.state.tableRendered = true;
+    if (!same) {
+      this.setState({ paperdataChecked: null });
+      this.setState({ paperdataChecked: data });
+      // console.log("afterchangepaperchecked", this.state.paperdataChecked);
     }
   };
 
