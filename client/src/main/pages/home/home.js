@@ -17,26 +17,34 @@ class Home extends Component {
 
   render() {
     let bannerContent;
-    if (this.props.isLoggedIn === "true")
-      bannerContent = (
-        <>
-          <h2>Find papers now!</h2>
-          <Link className="nav-links" to="/searchpage">
-            <button className="btn">Search</button>
-          </Link>
-        </>
-      );
-    else
-      bannerContent = (
-        <>
-          <Link className="nav-links" to="/login">
-            <button className="btn">Login</button>
-          </Link>
-          <Link className="nav-links" to="/register">
-            <button className="btn">Register</button>
-          </Link>
-        </>
-      );
+    // if (this.props.isLoggedIn === "true")
+    //   bannerContent = (
+    //     <>
+    //       <h2>Find papers now!</h2>
+    //       <Link className="nav-links" to="/searchpage">
+    //         <button className="btn">Search</button>
+    //       </Link>
+    //     </>
+    //   );
+    // else
+    //   bannerContent = (
+    //     <>
+    //       <Link className="nav-links" to="/login">
+    //         <button className="btn">Login</button>
+    //       </Link>
+    //       <Link className="nav-links" to="/register">
+    //         <button className="btn">Register</button>
+    //       </Link>
+    //     </>
+    //   );
+    bannerContent = (
+          <>
+            <h2>Find papers now!</h2>
+            <Link className="nav-links" to="/searchpage">
+              <button className="btn">Search</button>
+            </Link>
+          </>
+        );
 
     return (
       <div>
