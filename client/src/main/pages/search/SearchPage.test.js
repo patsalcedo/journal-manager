@@ -1,7 +1,7 @@
 import SearchPage from "./SearchPage.js"
 import Adapter from "enzyme-adapter-react-16";
 import React from 'react'
-import { shallow, configure, mount } from "enzyme";
+import { shallow, configure} from "enzyme";
 
 configure({ adapter: new Adapter() });
 jest.mock("axios")
