@@ -9,6 +9,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 class Search extends React.Component {
   constructor(props) {
@@ -19,6 +21,16 @@ class Search extends React.Component {
       paperdata: [],
       paperdataChecked: [],
       tableHeaders: [
+        "SE Type",
+        "Claim",
+        "Level of Evidence",
+        "Type of Evidence",
+        "Title",
+        "Author",
+        "Journal Name",
+        "DOI",
+      ],
+      defaultTableHeaders: [
         "SE Type",
         "Claim",
         "Level of Evidence",
@@ -56,6 +68,8 @@ class Search extends React.Component {
         { length: 2020 - 1943 },
         (x, i) => `${2020 - i}`
       ),
+      mouseX: null,
+      mouseY: null,
     };
   }
 
@@ -66,6 +80,72 @@ class Search extends React.Component {
     //   this.props.history.push("/login");
     //   console.log("navigating to login since isLoggedin is false");
     // }
+  };
+
+  handleClick = (event) => {
+    event.preventDefault();
+    this.setState({
+      mouseX: event.clientX - 2,
+      mouseY: event.clientY - 4,
+    });
+  };
+
+  handleYearClose = () => {
+    console.log(!this.state.tableHeaders.includes("Year"));
+    if (!this.state.tableHeaders.includes("Year")) {
+      var newArr = [
+        "SE Type",
+        "Claim",
+        "Level of Evidence",
+        "Type of Evidence",
+        "Title",
+        "Author",
+        "Journal Name",
+        "DOI",
+        "Year",
+      ];
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArr,
+        mouseX: null,
+        mouseY: null,
+      });
+    } else {
+      var newArr = [
+        "SE Type",
+        "Claim",
+        "Level of Evidence",
+        "Type of Evidence",
+        "Title",
+        "Author",
+        "Journal Name",
+        "DOI",
+      ];
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArr,
+        mouseX: null,
+        mouseY: null,
+      });
+    }
+    console.log(this.state.tableHeaders);
+  };
+
+  handleVolumeClose = () => {
+    if (!this.state.tableHeaders.includes("Volume")) {
+      const newArr = this.state.tableHeaders;
+      newArr[newArr.length] = "Volume";
+      console.log(newArr);
+      this.setState({
+        tableHeaders: newArr,
+        mouseX: null,
+        mouseY: null,
+      });
+    }
   };
 
   getAcceptedPaperData = (event) => {
@@ -135,7 +215,6 @@ class Search extends React.Component {
         startDate: input,
       });
     }
-    console.log("startDate", this.state.startDate);
   };
   handleEndDateChange = (input) => {
     // console.log(input);
@@ -144,7 +223,6 @@ class Search extends React.Component {
         endDate: input,
       });
     }
-    console.log("endDate", this.state.endDate);
   };
   handleRadioYear = (event) => {
     event.preventDefault();
@@ -155,7 +233,6 @@ class Search extends React.Component {
     });
   };
   handleSETypeChange = (input) => {
-    console.log(input);
     if (input !== this.state.seType) {
       this.setState({
         seType: input,
@@ -544,7 +621,7 @@ class Search extends React.Component {
             <span>{this.state.message}</span>
           </form>
         </div>
-        <div className="container-paperdata">
+        <div className="container-paperdata" onContextMenu={this.handleClick}>
           <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
@@ -562,7 +639,20 @@ class Search extends React.Component {
               </div> */}
             </div>
           )}
-
+          <Menu
+            keepMounted
+            open={this.state.mouseY !== null}
+            onClose={this.handleClose}
+            anchorReference="anchorPosition"
+            anchorPosition={
+              this.state.mouseY !== null && this.state.mouseX !== null
+                ? { top: this.state.mouseY, left: this.state.mouseX }
+                : undefined
+            }
+          >
+            <MenuItem onClick={this.handleYearClose}>Year</MenuItem>
+            <MenuItem onClick={this.handleVolumeClose}>Volume</MenuItem>
+          </Menu>
           {this.state.paperdata.length > 0}
           <table id="myTable">
             <tr></tr>
