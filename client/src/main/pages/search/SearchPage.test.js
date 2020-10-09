@@ -16,6 +16,8 @@ beforeEach(() => {
 
 it("should handleChange for seType", () => {
   const expected_state = {
+    orderBy: "year",
+    isAscending: true,
     message: "",
     redirect: false,
     paperdata: [],
