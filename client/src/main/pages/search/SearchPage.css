@@ -55,3 +55,8 @@ td {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.headerButton {
+  width: 100%;
+  height: 100%;
+}
