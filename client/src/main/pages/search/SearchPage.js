@@ -30,16 +30,6 @@ class Search extends React.Component {
         "Journal Name",
         "DOI",
       ],
-      defaultTableHeaders: [
-        "SE Type",
-        "Claim",
-        "Level of Evidence",
-        "Type of Evidence",
-        "Title",
-        "Author",
-        "Journal Name",
-        "DOI",
-      ],
       startDate: "1665",
       endDate: "2020",
       seType: "",
@@ -59,6 +49,8 @@ class Search extends React.Component {
         { title: "Year", value: "Year" },
         { title: "Volume", value: "Volume" },
       ],
+      yearCol: false,
+      volCol: false,
       radioYear: "custom",
       startDateOption: Array.from(
         { length: 2020 - 1943 },
@@ -91,61 +83,119 @@ class Search extends React.Component {
   };
 
   handleYearClose = () => {
-    console.log(!this.state.tableHeaders.includes("Year"));
-    if (!this.state.tableHeaders.includes("Year")) {
-      var newArr = [
-        "SE Type",
-        "Claim",
-        "Level of Evidence",
-        "Type of Evidence",
-        "Title",
-        "Author",
-        "Journal Name",
-        "DOI",
-        "Year",
-      ];
+    const sortOrder = ["Year", "Volume"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = []
+    console.log(this.state.yearCol)
+    if(this.state.yearCol) {
+      newArray = this.state.tableHeaders
+      newArray.splice(8,1)
       this.setState({
-        tableHeaders: null,
-      });
-      this.setState({
-        tableHeaders: newArr,
-        mouseX: null,
-        mouseY: null,
-      });
+        yearCol: false
+      })
     } else {
-      var newArr = [
-        "SE Type",
-        "Claim",
-        "Level of Evidence",
-        "Type of Evidence",
-        "Title",
-        "Author",
-        "Journal Name",
-        "DOI",
-      ];
+      newArray = this.state.tableHeaders
+      newArray.push("Year")
+      newArray.sort(sorter)
+      this.setState({
+        yearCol: true
+      })
+    }
+    var same = true;
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
       this.setState({
         tableHeaders: null,
       });
       this.setState({
-        tableHeaders: newArr,
-        mouseX: null,
-        mouseY: null,
+        tableHeaders: newArray,
       });
     }
-    console.log(this.state.tableHeaders);
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    })
+    console.log(this.state.tableHeaders)
+    this.buildTable(this.state.paperdata)
+
   };
 
+
   handleVolumeClose = () => {
-    if (!this.state.tableHeaders.includes("Volume")) {
-      const newArr = this.state.tableHeaders;
-      newArr[newArr.length] = "Volume";
-      console.log(newArr);
+    const sortOrder = ["Year", "Volume"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = []
+    console.log(this.state.volCol)
+    if(this.state.volCol) {
+      newArray = this.state.tableHeaders
+      newArray.splice(8,1)
       this.setState({
-        tableHeaders: newArr,
-        mouseX: null,
-        mouseY: null,
+        volCol: false
+      })
+    } else {
+      newArray = this.state.tableHeaders
+      newArray.push("Volume")
+      newArray.sort(sorter)
+      this.setState({
+        volCol: true
+      })
+    }
+    var same = true;
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
       });
     }
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    })
+    console.log(this.state.tableHeaders)
+    this.buildTable(this.state.paperdata)
   };
 
   getAcceptedPaperData = (event) => {
@@ -403,7 +453,7 @@ class Search extends React.Component {
     var same = this.arraysEqual(data, this.state.paperdataChecked);
     // console.log("same doi", same);
     var tabledata = document.getElementById("myTable");
-    if (!same && data.length > 0) {
+    // if (!same && data.length > 0) {
       for (var i = 0; i < data.length; i++) {
         if (i === 0) {
           tabledata.innerHTML = "";
@@ -448,21 +498,20 @@ class Search extends React.Component {
         header = header + `</tr>`;
         tabledata.innerHTML += header;
       }
-    } else if (!same && data.length <= 0) {
-      // console.log("I ENTERED");
-      tabledata.innerHTML = "";
-      row = `<tr>`;
-      for (j = 0; j < this.state.tableHeaders.length; j++) {
-        row = row + `<th>${this.state.tableHeaders[j]}</th>`;
-      }
-      row = row + `</tr>`;
-      tabledata.innerHTML += row;
-    }
-    if (!same) {
-      this.setState({ paperdataChecked: null });
-      this.setState({ paperdataChecked: data });
-      // console.log("afterchangepaperchecked", this.state.paperdataChecked);
-    }
+    // } else if (!same && data.length <= 0) {
+    //   tabledata.innerHTML = "";
+    //   row = `<tr>`;
+    //   for (j = 0; j < this.state.tableHeaders.length; j++) {
+    //     row = row + `<th>${this.state.tableHeaders[j]}</th>`;
+    //   }
+    //   row = row + `</tr>`;
+    //   tabledata.innerHTML += row;
+    //}
+    // if (!same) {
+    //   this.setState({ paperdataChecked: null });
+    //   this.setState({ paperdataChecked: data });
+    //   // console.log("afterchangepaperchecked", this.state.paperdataChecked);
+    // }
   };
 
   render() {
@@ -587,7 +636,7 @@ class Search extends React.Component {
                 )}
               />
             </div>
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               id="checkboxes-tags-demo"
               options={this.state.columnToSelect}
@@ -616,7 +665,7 @@ class Search extends React.Component {
                   )}
                 />
               )}
-            />
+            /> */}
             <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
