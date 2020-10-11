@@ -34,7 +34,7 @@ it("should handleChange for seType", () => {
     ],
     startDate: "1665",
     endDate: "2020",
-    seType: "",
+    seType: "TDD",
     claims: [],
     seTypeOption: [
       { title: "TDD", value: "TDD" },
