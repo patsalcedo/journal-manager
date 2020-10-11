@@ -60,6 +60,18 @@ th {
   padding-top: 0%;
 }
 
+=======
+.MenuItem {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.MenuItem.selected { 
+  color: green;
+  font-weight: bold;
+}
+
 .headerButton {
   width: 100%;
   height: 100%;

@@ -9,6 +9,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 class Search extends React.Component {
   constructor(props) {
@@ -49,15 +51,16 @@ class Search extends React.Component {
         { title: "Year", value: "Year" },
         { title: "Volume", value: "Volume" },
       ],
+      yearCol: false,
+      volCol: false,
       radioYear: "custom",
       startDateOption: Array.from(
         { length: 2020 - 1943 },
         (x, i) => `${2020 - i}`
       ),
-      endDateOption: Array.from(
-        { length: 2020 - 1943 },
-        (x, i) => `${2020 - i}`
-      ),
+      endDateOption: Array.from({ length: 2020 - 1943 }, (x, i) => `${2020 - i}`),
+      mouseX: null,
+      mouseY: null,
     };
   }
 
@@ -68,6 +71,130 @@ class Search extends React.Component {
     //   this.props.history.push("/login");
     //   console.log("navigating to login since isLoggedin is false");
     // }
+  };
+
+  handleClick = (event) => {
+    event.preventDefault();
+    this.setState({
+      mouseX: event.clientX - 2,
+      mouseY: event.clientY - 4,
+    });
+  };
+
+  handleYearClose = () => {
+    const sortOrder = ["Year", "Volume"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = []
+    console.log(this.state.yearCol)
+    if(this.state.yearCol) {
+      newArray = this.state.tableHeaders
+      newArray.splice(8,1)
+      this.setState({
+        yearCol: false
+      })
+    } else {
+      newArray = this.state.tableHeaders
+      newArray.push("Year")
+      newArray.sort(sorter)
+      this.setState({
+        yearCol: true
+      })
+    }
+    var same = true;
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    })
+    console.log(this.state.tableHeaders)
+    this.buildTable(this.state.paperdata)
+
+  };
+
+
+  handleVolumeClose = () => {
+    const sortOrder = ["Year", "Volume"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = []
+    console.log(this.state.volCol)
+    if(this.state.volCol) {
+      newArray = this.state.tableHeaders
+      newArray.splice(8,1)
+      this.setState({
+        volCol: false
+      })
+    } else {
+      newArray = this.state.tableHeaders
+      newArray.push("Volume")
+      newArray.sort(sorter)
+      this.setState({
+        volCol: true
+      })
+    }
+    var same = true;
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    })
+    console.log(this.state.tableHeaders)
+    this.buildTable(this.state.paperdata)
   };
 
   getAcceptedPaperData = (event) => {
@@ -137,7 +264,6 @@ class Search extends React.Component {
         startDate: input,
       });
     }
-    console.log("startDate", this.state.startDate);
   };
   handleEndDateChange = (input) => {
     // console.log(input);
@@ -146,7 +272,6 @@ class Search extends React.Component {
         endDate: input,
       });
     }
-    console.log("endDate", this.state.endDate);
   };
   handleRadioYear = (event) => {
     event.preventDefault();
@@ -157,7 +282,6 @@ class Search extends React.Component {
     });
   };
   handleSETypeChange = (input) => {
-    console.log(input);
     if (input !== this.state.seType) {
       this.setState({
         seType: input,
@@ -627,7 +751,7 @@ class Search extends React.Component {
                 )}
               />
             </div>
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               id="checkboxes-tags-demo"
               options={this.state.columnToSelect}
@@ -656,12 +780,12 @@ class Search extends React.Component {
                   )}
                 />
               )}
-            />
+            /> */}
             <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
         </div>
-        <div className="container-paperdata">
+        <div className="container-paperdata" onContextMenu={this.handleClick}>
           <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
@@ -679,6 +803,20 @@ class Search extends React.Component {
               </div> */}
             </div>
           )}
+          <Menu
+            keepMounted
+            open={this.state.mouseY !== null}
+            onClose={this.handleClose}
+            anchorReference="anchorPosition"
+            anchorPosition={
+              this.state.mouseY !== null && this.state.mouseX !== null
+                ? { top: this.state.mouseY, left: this.state.mouseX }
+                : undefined
+            }
+          >
+            <MenuItem onClick={this.handleYearClose} selected={this.state.yearCol} classes={{ root: 'MenuItem', selected: 'selected' }}>Year</MenuItem>
+            <MenuItem onClick={this.handleVolumeClose} selected={this.state.volCol} classes={{ root: 'MenuItem', selected: 'selected' }}>Volume</MenuItem>
+          </Menu>
           {this.state.paperdata.length > 0}
           {/* <table id="myTable">
             <tr></tr>
