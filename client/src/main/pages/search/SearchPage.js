@@ -28,7 +28,7 @@ class Search extends React.Component {
         "Journal Name",
         "DOI",
       ],
-      startDate: "1665",
+      startDate: "1944",
       endDate: "2020",
       seType: "",
       claims: [],
@@ -83,30 +83,30 @@ class Search extends React.Component {
           claimsData += this.state.claims[i] + ",";
         }
       }
-        axios
-          .get("/api/papercontroller/getfilteredsearch", {
-            params: {
-              seType: this.state.seType,
-              claims: claimsData.substring(0, claimsData.length - 1),
-              startDate: this.state.startDate,
-              endDate: this.state.endDate,
-            },
-          })
-          .then((response) => {
-            const data = response.data;
-            this.setState({ paperdata: data, tableRendered: false });
-            console.log("Data has been retrieved");
-            console.log(this.state.paperdata);
-          })
-          .catch(() => {
-            alert("Error from Server");
-          });
-      
+      axios
+        .get("/api/papercontroller/getfilteredsearch", {
+          params: {
+            seType: this.state.seType,
+            claims: claimsData.substring(0, claimsData.length - 1),
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data, tableRendered: false });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
     } else {
       alert("Select what claim(s) you're looking for!");
     }
   };
   handleStartDateChange = (input) => {
+    console.log("input is serted", input);
     if (input !== "" && input !== this.state.startDate) {
       this.setState({
         startDate: input,
@@ -117,7 +117,7 @@ class Search extends React.Component {
   };
   handleEndDateChange = (input) => {
     if (input !== "" && input !== this.state.endDate) {
-      console.log("handleEndDateChange: Inside if loop.")
+      console.log("handleEndDateChange: Inside if loop.");
       this.setState({
         endDate: input,
       });
@@ -127,11 +127,13 @@ class Search extends React.Component {
   handleRadioYear = (event) => {
     event.preventDefault();
     var data = event.target.value;
+    console.log("radio year to change start date", data);
 
     this.setState({
       radioYear: data,
+      startDate: data,
       // endDate:data,
-      endDate:"2020"
+      endDate: "2020",
     });
     console.log("radio year: ", this.state.radioYear);
     console.log("changed radio year to : ", data);
@@ -139,7 +141,6 @@ class Search extends React.Component {
 
     //this.forceUpdate();
   };
-
 
   handleSETypeChange = (input) => {
     console.log(input);
@@ -386,13 +387,13 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.startDateOption}
-                //key={this.state.startDate}        
+                key={this.state.startDate}
                 getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={this.state.startDate}//"Date Range From"
+                    label={this.state.startDate} //"Date Range From"
                     variant="outlined"
                     defaultValue={this.state.startDate}
                     onChange={this.handleStartDateChange(
@@ -410,11 +411,11 @@ class Search extends React.Component {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={this.state.endDate}//"Date Range To"
+                    label={this.state.endDate} //"Date Range To"
                     variant="outlined"
                     //value={this.state.endDate}
                     onChange={this.handleEndDateChange(params.inputProps.value)}
-                />
+                  />
                 )}
               />
             </div>
