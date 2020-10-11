@@ -402,23 +402,15 @@ class Search extends React.Component {
   };
 
   buildTable = (data) => {
-    var same = this.arraysEqual(data, this.state.paperdataChecked);
+    // var same = this.arraysEqual(data, this.state.paperdataChecked);
     var sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
-    // console.log("same doi", same);
-    // var tabledata = document.getElementById("myTable");
-    if (!same && data.length > 0) {
-      // sortData = null;
-      // sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
-      console.log("sorted", sortData);
-    }
-
-    if (!same) {
-      this.setState({ paperdataChecked: null });
-      this.setState({ paperdataChecked: data });
-      // console.log("afterchangepaperchecked", this.state.paperdataChecked);
-    }
-    // this.createRows(data, this.state.tableHeaders);
-
+    // if (!same && data.length > 0) {
+    //   console.log("sorted", sortData);
+    // }
+    // if (!same) {
+    //   this.setState({ paperdataChecked: null });
+    //   this.setState({ paperdataChecked: data });
+    // }
     return this.state.paperdata.length > 0 ? (
       <table id="myTable">
         {this.state.tableHeaders.map((data) => {
@@ -451,9 +443,9 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
-                <td>{data.year}</td>
-                <td>{data.volume}</td>
+                <td className="numberCell">{data.doi}</td>
+                <td className="numberCell">{data.year}</td>
+                <td className="numberCell">{data.volume}</td>
               </tr>
             );
           } else if (
@@ -469,8 +461,8 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
-                <td>{data.volume}</td>
+                <td className="numberCell">{data.doi}</td>
+                <td className="numberCell">{data.volume}</td>
               </tr>
             );
           } else if (
@@ -486,8 +478,8 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
-                <td>{data.year}</td>
+                <td className="numberCell">{data.doi}</td>
+                <td className="numberCell">{data.year}</td>
               </tr>
             );
           } else if (
@@ -503,7 +495,7 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
+                <td className="numberCell">{data.doi}</td>
               </tr>
             );
           }
