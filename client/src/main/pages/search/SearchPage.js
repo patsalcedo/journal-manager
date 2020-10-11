@@ -9,11 +9,15 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      orderBy: "year",
+      isAscending: true,
       message: "",
       redirect: false,
       paperdata: [],
@@ -47,6 +51,8 @@ class Search extends React.Component {
         { title: "Year", value: "Year" },
         { title: "Volume", value: "Volume" },
       ],
+      yearCol: false,
+      volCol: false,
       radioYear: "custom",
       startDateOption: Array.from(
         { length: 2020 - 1943 },
@@ -56,6 +62,8 @@ class Search extends React.Component {
         { length: 2020 - 1943 },
         (x, i) => `${2020 - i}`
       ),
+      mouseX: null,
+      mouseY: null,
     };
   }
 
@@ -66,6 +74,128 @@ class Search extends React.Component {
     //   this.props.history.push("/login");
     //   console.log("navigating to login since isLoggedin is false");
     // }
+  };
+
+  handleClick = (event) => {
+    event.preventDefault();
+    this.setState({
+      mouseX: event.clientX - 2,
+      mouseY: event.clientY - 4,
+    });
+  };
+
+  handleYearClose = () => {
+    const sortOrder = ["Year", "Volume"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = [];
+    console.log(this.state.yearCol);
+    if (this.state.yearCol) {
+      newArray = this.state.tableHeaders;
+      newArray.splice(8, 1);
+      this.setState({
+        yearCol: false,
+      });
+    } else {
+      newArray = this.state.tableHeaders;
+      newArray.push("Year");
+      newArray.sort(sorter);
+      this.setState({
+        yearCol: true,
+      });
+    }
+    var same = true;
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    });
+    console.log(this.state.tableHeaders);
+    this.buildTable(this.state.paperdata);
+  };
+
+  handleVolumeClose = () => {
+    const sortOrder = ["Year", "Volume"];
+    const sorter = (a, b) => {
+      return sortOrder.indexOf(a) - sortOrder.indexOf(b);
+    };
+    var newArray = [];
+    console.log(this.state.volCol);
+    if (this.state.volCol) {
+      newArray = this.state.tableHeaders;
+      newArray.splice(8, 1);
+      this.setState({
+        volCol: false,
+      });
+    } else {
+      newArray = this.state.tableHeaders;
+      newArray.push("Volume");
+      newArray.sort(sorter);
+      this.setState({
+        volCol: true,
+      });
+    }
+    var same = true;
+    if (newArray.length >= this.state.tableHeaders.length) {
+      for (var j in newArray) {
+        if (this.state.tableHeaders[j] === newArray[j]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    } else {
+      for (var z in this.state.tableHeaders) {
+        if (this.state.tableHeaders[z] === newArray[z]) {
+          same = true;
+        } else {
+          same = false;
+          break;
+        }
+      }
+    }
+    if (!same) {
+      this.setState({
+        tableHeaders: null,
+      });
+      this.setState({
+        tableHeaders: newArray,
+      });
+    }
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    });
+    console.log(this.state.tableHeaders);
+    this.buildTable(this.state.paperdata);
   };
 
   getAcceptedPaperData = (event) => {
@@ -112,8 +242,6 @@ class Search extends React.Component {
         startDate: input,
       });
     }
-
-    console.log("startDate:", this.state.startDate);
   };
   handleEndDateChange = (input) => {
     if (input !== "" && input !== this.state.endDate) {
@@ -122,7 +250,6 @@ class Search extends React.Component {
         endDate: input,
       });
     }
-    console.log("endDate:", this.state.endDate);
   };
   handleRadioYear = (event) => {
     event.preventDefault();
@@ -143,7 +270,6 @@ class Search extends React.Component {
   };
 
   handleSETypeChange = (input) => {
-    console.log(input);
     if (input !== this.state.seType) {
       this.setState({
         seType: input,
@@ -310,70 +436,193 @@ class Search extends React.Component {
     return true;
   };
 
+  sortPaperData = (sortBy, paperdataInput) => {
+    console.log("sortBy is", sortBy);
+    var data = [];
+    var ordermultiplier = 1;
+    if (!this.state.isAscending) {
+      ordermultiplier = -1;
+    }
+    const sorter = (a, b) => {
+      if (sortBy === "year" || sortBy === "volume" || sortBy === "doi") {
+        return this.state.isAscending
+          ? a[sortBy] - b[sortBy]
+          : b[sortBy] - a[sortBy];
+      } else if (sortBy === "claims") {
+        return this.state.isAscending
+          ? a[sortBy].length - b[sortBy].length
+          : b[sortBy].length - a[sortBy].length;
+      } else {
+        let newA = a[sortBy].toLowerCase().replace(/\s/g, "");
+        let newB = b[sortBy].toLowerCase().replace(/\s/g, "");
+        console.log(newA);
+        console.log(newB);
+        console.log(newA - newB);
+        if (newA > newB) return ordermultiplier * 1;
+        else return ordermultiplier * -1;
+      }
+    };
+    for (let i in paperdataInput) {
+      data.push({
+        method: paperdataInput[i].method,
+        claims: paperdataInput[i].claims,
+        level_of_evidence: paperdataInput[i].level_of_evidence,
+        type_of_evidence: paperdataInput[i].type_of_evidence,
+        title: paperdataInput[i].title,
+        author: paperdataInput[i].author,
+        publisher: paperdataInput[i].publisher,
+        doi: parseInt(paperdataInput[i].doi),
+        year: parseInt(paperdataInput[i].year),
+        volume: parseInt(paperdataInput[i].volume),
+      });
+    }
+    data.sort(sorter);
+    console.log("new data after sort", data);
+    return data;
+  };
+
+  handleTableHealerButton = (event) => {
+    let data = event.target.name;
+    let change = "";
+    if (data === "SE Type") {
+      change = "method";
+    } else if (data === "Claim") {
+      change = "claims";
+    } else if (data === "Level of Evidence") {
+      change = "level_of_evidence";
+    } else if (data === "Type of Evidence") {
+      change = "type_of_evidence";
+    } else if (data === "Title") {
+      change = "title";
+    } else if (data === "Author") {
+      change = "author";
+    } else if (data === "Journal Name") {
+      change = "publisher";
+    } else if (data === "DOI") {
+      change = "doi";
+    } else if (data === "Year") {
+      change = "year";
+    } else if (data === "Volume") {
+      change = "volume";
+    }
+    this.setState({ orderBy: change });
+    if (this.state.isAscending) {
+      this.setState({ isAscending: false });
+    } else {
+      this.setState({ isAscending: true });
+    }
+  };
+
   buildTable = (data) => {
     var same = this.arraysEqual(data, this.state.paperdataChecked);
+    var sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
     // console.log("same doi", same);
-    var tabledata = document.getElementById("myTable");
+    // var tabledata = document.getElementById("myTable");
     if (!same && data.length > 0) {
-      for (var i = 0; i < data.length; i++) {
-        if (i === 0) {
-          tabledata.innerHTML = "";
-          var row = `<tr>`;
-          for (var j = 0; j < this.state.tableHeaders.length; j++) {
-            row = row + `<th>${this.state.tableHeaders[j]}</th>`;
-          }
-          row = row + `</tr>`;
-          tabledata.innerHTML += row;
-        }
-        var header = `<tr>`;
-        if (this.state.tableHeaders.includes("SE Type")) {
-          header = header + `<td>${data[i].method}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Claim")) {
-          header = header + `<td>${data[i].claims}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Level of Evidence")) {
-          header = header + `<td>${data[i].level_of_evidence}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Type of Evidence")) {
-          header = header + `<td>${data[i].type_of_evidence}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Title")) {
-          header = header + `<td>${data[i].title}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Author")) {
-          header = header + `<td>${data[i].author}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Journal Name")) {
-          header = header + `<td>${data[i].publisher}</td>`;
-        }
-        if (this.state.tableHeaders.includes("DOI")) {
-          header = header + `<td>${data[i].doi}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Year")) {
-          header = header + `<td>${data[i].year}</td>`;
-        }
-        if (this.state.tableHeaders.includes("Volume")) {
-          header = header + `<td>${data[i].volume}</td>`;
-        }
-        header = header + `</tr>`;
-        tabledata.innerHTML += header;
-      }
-    } else if (!same && data.length <= 0) {
-      // console.log("I ENTERED");
-      tabledata.innerHTML = "";
-      row = `<tr>`;
-      for (j = 0; j < this.state.tableHeaders.length; j++) {
-        row = row + `<th>${this.state.tableHeaders[j]}</th>`;
-      }
-      row = row + `</tr>`;
-      tabledata.innerHTML += row;
+      // sortData = null;
+      // sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
+      console.log("sorted", sortData);
     }
+
     if (!same) {
       this.setState({ paperdataChecked: null });
       this.setState({ paperdataChecked: data });
       // console.log("afterchangepaperchecked", this.state.paperdataChecked);
     }
+    // this.createRows(data, this.state.tableHeaders);
+
+    return this.state.paperdata.length > 0 ? (
+      <table id="myTable">
+        {this.state.tableHeaders.map((data) => {
+          return (
+            <th>
+              <button
+                className="headerButton"
+                name={data}
+                onClick={this.handleTableHealerButton}
+              >
+                {data}
+              </button>
+            </th>
+            // <th onClick={this.ohMyGod}>
+            //   {data}
+            // </th>
+          );
+        })}
+        {sortData.map((data) => {
+          if (
+            this.state.tableHeaders.includes("Year") &&
+            this.state.tableHeaders.includes("Volume")
+          ) {
+            return (
+              <tr>
+                <td>{data.method}</td>
+                <td>{data.claims}</td>
+                <td>{data.level_of_evidence}</td>
+                <td>{data.type_of_evidence}</td>
+                <td>{data.title}</td>
+                <td>{data.author}</td>
+                <td>{data.publisher}</td>
+                <td>{data.doi}</td>
+                <td>{data.year}</td>
+                <td>{data.volume}</td>
+              </tr>
+            );
+          } else if (
+            !this.state.tableHeaders.includes("Year") &&
+            this.state.tableHeaders.includes("Volume")
+          ) {
+            return (
+              <tr>
+                <td>{data.method}</td>
+                <td>{data.claims}</td>
+                <td>{data.level_of_evidence}</td>
+                <td>{data.type_of_evidence}</td>
+                <td>{data.title}</td>
+                <td>{data.author}</td>
+                <td>{data.publisher}</td>
+                <td>{data.doi}</td>
+                <td>{data.volume}</td>
+              </tr>
+            );
+          } else if (
+            this.state.tableHeaders.includes("Year") &&
+            !this.state.tableHeaders.includes("Volume")
+          ) {
+            return (
+              <tr>
+                <td>{data.method}</td>
+                <td>{data.claims}</td>
+                <td>{data.level_of_evidence}</td>
+                <td>{data.type_of_evidence}</td>
+                <td>{data.title}</td>
+                <td>{data.author}</td>
+                <td>{data.publisher}</td>
+                <td>{data.doi}</td>
+                <td>{data.year}</td>
+              </tr>
+            );
+          } else if (
+            !this.state.tableHeaders.includes("Year") &&
+            !this.state.tableHeaders.includes("Volume")
+          ) {
+            return (
+              <tr>
+                <td>{data.method}</td>
+                <td>{data.claims}</td>
+                <td>{data.level_of_evidence}</td>
+                <td>{data.type_of_evidence}</td>
+                <td>{data.title}</td>
+                <td>{data.author}</td>
+                <td>{data.publisher}</td>
+                <td>{data.doi}</td>
+              </tr>
+            );
+          }
+          return null;
+        })}
+      </table>
+    ) : null;
   };
 
   render() {
@@ -443,11 +692,11 @@ class Search extends React.Component {
                     control={<Radio />}
                     label="This year"
                   />
-                  {/* <FormControlLabel
-                    value="0"
+                  <FormControlLabel
+                    value="1944"
                     control={<Radio />}
                     label="All years"
-                  /> */}
+                  />
                 </RadioGroup>
               </FormControl>
             </div>
@@ -497,7 +746,7 @@ class Search extends React.Component {
                 )}
               />
             </div>
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               id="checkboxes-tags-demo"
               options={this.state.columnToSelect}
@@ -526,12 +775,12 @@ class Search extends React.Component {
                   )}
                 />
               )}
-            />
+            /> */}
             <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
         </div>
-        <div className="container-paperdata">
+        <div className="container-paperdata" onContextMenu={this.handleClick}>
           <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
             <div>
@@ -549,13 +798,47 @@ class Search extends React.Component {
               </div> */}
             </div>
           )}
-
+          <Menu
+            keepMounted
+            open={this.state.mouseY !== null}
+            onClose={this.handleClose}
+            anchorReference="anchorPosition"
+            anchorPosition={
+              this.state.mouseY !== null && this.state.mouseX !== null
+                ? { top: this.state.mouseY, left: this.state.mouseX }
+                : undefined
+            }
+          >
+            <MenuItem
+              onClick={this.handleYearClose}
+              selected={this.state.yearCol}
+              classes={{ root: "MenuItem", selected: "selected" }}
+            >
+              Year
+            </MenuItem>
+            <MenuItem
+              onClick={this.handleVolumeClose}
+              selected={this.state.volCol}
+              classes={{ root: "MenuItem", selected: "selected" }}
+            >
+              Volume
+            </MenuItem>
+          </Menu>
           {this.state.paperdata.length > 0}
-          <table id="myTable">
+          {/* <table id="myTable">
             <tr></tr>
             <tbody></tbody>
           </table>
+          <th>
+            <button type="button" onClick={this.ohMyGod}>
+              Name
+            </button>
+          </th>
+          <th onclick={this.ohMyGod}>maybe</th> */}
+          {/* {this.buildTable(this.state.paperdata)} */}
           {this.buildTable(this.state.paperdata)}
+          {/* {this.createTableHeaders(this.state.paperdata)} */}
+          {/* {this.sortPaperData("seType", this.state.paperdata)} */}
         </div>
       </div>
     );
