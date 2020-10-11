@@ -51,12 +51,16 @@ it("should handleChange for seType", () => {
       { title: "Year", value: "Year" },
       { title: "Volume", value: "Volume" },
     ],
+    yearCol: false,
+    volCol: false,
     radioYear: "custom",
     startDateOption: Array.from(
       { length: 2020 - 1943 },
       (x, i) => `${2020 - i}`
     ),
     endDateOption: Array.from({ length: 2020 - 1943 }, (x, i) => `${2020 - i}`),
+    mouseX: null,
+    mouseY: null,
   };
 
   wrapper.instance().handleSETypeChange("TDD");
