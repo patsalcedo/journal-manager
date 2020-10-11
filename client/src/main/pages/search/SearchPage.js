@@ -83,7 +83,6 @@ class Search extends React.Component {
           claimsData += this.state.claims[i] + ",";
         }
       }
-      if (this.state.radioYear === "custom") {
         axios
           .get("/api/papercontroller/getfilteredsearch", {
             params: {
@@ -102,58 +101,46 @@ class Search extends React.Component {
           .catch(() => {
             alert("Error from Server");
           });
-      } else {
-        var newEndDate = "2020";
-        var newStartDate = this.state.radioYear;
-        axios
-          .get("/api/papercontroller/getfilteredsearch", {
-            params: {
-              seType: this.state.seType,
-              claims: claimsData.substring(0, claimsData.length - 1),
-              startDate: newStartDate,
-              endDate: newEndDate,
-            },
-          })
-          .then((response) => {
-            const data = response.data;
-            this.setState({ paperdata: data, tableRendered: false });
-            console.log("Data has been retrieved");
-            console.log(this.state.paperdata);
-          })
-          .catch(() => {
-            alert("Error from Server");
-          });
-      }
+      
     } else {
       alert("Select what claim(s) you're looking for!");
     }
   };
   handleStartDateChange = (input) => {
-    // console.log(input);
-    if (input !== this.state.startDate) {
+    if (input !== "" && input !== this.state.startDate) {
       this.setState({
         startDate: input,
       });
     }
-    console.log("startDate", this.state.startDate);
+
+    console.log("startDate:", this.state.startDate);
   };
   handleEndDateChange = (input) => {
-    // console.log(input);
-    if (input !== this.state.endDate) {
+    if (input !== "" && input !== this.state.endDate) {
+      console.log("handleEndDateChange: Inside if loop.")
       this.setState({
         endDate: input,
       });
     }
-    console.log("endDate", this.state.endDate);
+    console.log("endDate:", this.state.endDate);
   };
   handleRadioYear = (event) => {
     event.preventDefault();
-    // console.log(event.target.value);
     var data = event.target.value;
+
     this.setState({
       radioYear: data,
+      // endDate:data,
+      endDate:"2020"
     });
+    console.log("radio year: ", this.state.radioYear);
+    console.log("changed radio year to : ", data);
+    this.handleStartDateChange(data);
+
+    //this.forceUpdate();
   };
+
+
   handleSETypeChange = (input) => {
     console.log(input);
     if (input !== this.state.seType) {
@@ -399,13 +386,15 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.startDateOption}
+                //key={this.state.startDate}        
                 getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Date Range From"
+                    label={this.state.startDate}//"Date Range From"
                     variant="outlined"
+                    defaultValue={this.state.startDate}
                     onChange={this.handleStartDateChange(
                       params.inputProps.value
                     )}
@@ -415,15 +404,17 @@ class Search extends React.Component {
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.endDateOption}
+                //key={this.state.endDate}
                 getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Date Range To"
+                    label={this.state.endDate}//"Date Range To"
                     variant="outlined"
+                    //value={this.state.endDate}
                     onChange={this.handleEndDateChange(params.inputProps.value)}
-                  />
+                />
                 )}
               />
             </div>
@@ -436,11 +427,6 @@ class Search extends React.Component {
                   value={this.state.radioYear}
                   onChange={this.handleRadioYear}
                 >
-                  <FormControlLabel
-                    value="custom"
-                    control={<Radio />}
-                    label="Custom"
-                  />
                   <FormControlLabel
                     value="2015"
                     control={<Radio />}
@@ -456,11 +442,11 @@ class Search extends React.Component {
                     control={<Radio />}
                     label="This year"
                   />
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     value="0"
                     control={<Radio />}
                     label="All years"
-                  />
+                  /> */}
                 </RadioGroup>
               </FormControl>
             </div>
