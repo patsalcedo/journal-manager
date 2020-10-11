@@ -699,8 +699,8 @@ class Search extends React.Component {
                 : undefined
             }
           >
-            <MenuItem onClick={this.handleYearClose}>Year</MenuItem>
-            <MenuItem onClick={this.handleVolumeClose}>Volume</MenuItem>
+            <MenuItem onClick={this.handleYearClose} selected={this.state.yearCol} classes={{ root: 'MenuItem', selected: 'selected' }}>Year</MenuItem>
+            <MenuItem onClick={this.handleVolumeClose} selected={this.state.volCol} classes={{ root: 'MenuItem', selected: 'selected' }}>Volume</MenuItem>
           </Menu>
           {this.state.paperdata.length > 0}
           <table id="myTable">
