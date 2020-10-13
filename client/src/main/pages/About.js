@@ -1,8 +1,8 @@
-import React from 'react'
-import '../../main/main.css'
-import SeerLogo from '../../Images/seerlogov2black.png'
+import React from "react";
+import "../../main/main.css";
+import SeerLogo from "../../Images/seerlogov2black.png";
 
-function About (props) {
+function About () {
   return (
     <div className="pagelayout">
       <div className="container">
@@ -19,7 +19,7 @@ function About (props) {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default About
+export default About;
