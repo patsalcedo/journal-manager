@@ -25,16 +25,16 @@ class Login extends React.Component {
     let formErrors = { ...this.state.formErrors };
 
     switch (id) {
-      case "userName":
-        formErrors.userName =
-          value.length <= 1 ? "Minimum 2 Characters Required" : {};
-        break;
-      case "password":
-        formErrors.password =
-          value.length < 6 ? "Minimum 6 Characters Required" : {};
-        break;
-      default:
-        break;
+    case "userName":
+      formErrors.userName =
+        value.length <= 1 ? "Minimum 2 Characters Required" : {};
+      break;
+    case "password":
+      formErrors.password =
+        value.length < 6 ? "Minimum 6 Characters Required" : {};
+      break;
+    default:
+      break;
     }
     this.setState({ formErrors, [id]: value });
   };

@@ -513,7 +513,7 @@ class Search extends React.Component {
     }
   };
 
-  buildTable = (data) => {
+  buildTable = () => {
     // var same = this.arraysEqual(data, this.state.paperdataChecked);
     var sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
     // if (!same && data.length > 0) {

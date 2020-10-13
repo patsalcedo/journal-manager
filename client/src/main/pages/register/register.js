@@ -58,34 +58,34 @@ class Register extends React.Component {
     let formErrors = { ...this.state.formErrors };
 
     switch (id) {
-      case "userName":
-        formErrors.userName =
+    case "userName":
+      formErrors.userName =
           value.length <= 1 ? "Minimum 2 Characters Required" : {};
-        break;
-      case "firstName":
-        formErrors.firstName =
+      break;
+    case "firstName":
+      formErrors.firstName =
           value.length < 2 ? "Minimum 2 Characters Required" : {};
-        break;
-      case "lastName":
-        formErrors.lastName =
+      break;
+    case "lastName":
+      formErrors.lastName =
           value.length < 2 ? "Minimum 2 Characters Required" : {};
-        break;
-      case "email":
-        formErrors.email = emailRegex.test(value)
-          ? {}
-          : "Invalid Email Address";
-        break;
-      case "dob":
-        formErrors.dob = dobRegex.test(value)
-          ? {}
-          : "Invalid Date of Birth Input! Format is DD/MM/YYYY";
-        break;
-      case "password":
-        formErrors.password =
+      break;
+    case "email":
+      formErrors.email = emailRegex.test(value)
+        ? {}
+        : "Invalid Email Address";
+      break;
+    case "dob":
+      formErrors.dob = dobRegex.test(value)
+        ? {}
+        : "Invalid Date of Birth Input! Format is DD/MM/YYYY";
+      break;
+    case "password":
+      formErrors.password =
           value.length < 6 ? "Minimum 6 Characters Required" : {};
-        break;
-      default:
-        break;
+      break;
+    default:
+      break;
     }
     // this.setState({ formErrors, [id]: value }, () => console.log(this.state));
     this.setState({ formErrors, [id]: value });
