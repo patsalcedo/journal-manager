@@ -40,7 +40,6 @@
   "proxy": "http://localhost:8080/",
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
