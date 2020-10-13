@@ -262,6 +262,7 @@ class Search extends React.Component {
     if (input !== this.state.startDate) {
       this.setState({
         startDate: input,
+        endDateOption: Array.from({ length: 2020 - input }, (x, i) => `${2020 - i}`)
       });
     }
   };
@@ -270,6 +271,7 @@ class Search extends React.Component {
     if (input !== this.state.endDate) {
       this.setState({
         endDate: input,
+        startDateOption: Array.from({ length: input - 1943 }, (x, i) => `${input - i}`)
       });
     }
   };
