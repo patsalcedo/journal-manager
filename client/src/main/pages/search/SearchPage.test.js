@@ -32,7 +32,7 @@ it("should handleChange for seType", () => {
       "Journal Name",
       "DOI",
     ],
-    startDate: "1665",
+    startDate: "1944",
     endDate: "2020",
     seType: "TDD",
     claims: [],
