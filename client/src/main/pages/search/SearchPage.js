@@ -10,7 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+// import MenuItem from "@material-ui/core/MenuItem";
 
 class Search extends React.Component {
   constructor(props) {
@@ -62,8 +62,10 @@ class Search extends React.Component {
         { length: 2020 - 1943 },
         (x, i) => `${2020 - i}`
       ),
+      // endDateOption: null,
       mouseX: null,
       mouseY: null,
+      adjustEndDate: false,
     };
   }
 
@@ -237,13 +239,32 @@ class Search extends React.Component {
   };
   handleStartDateChange = (input) => {
     console.log("input is serted", input);
+    let intInput = parseInt(input);
+    let checkEndDate = parseInt(this.state.endDate);
+    if (intInput > checkEndDate) {
+      this.setState({ endDate: "2020", adjustEndDate: true });
+    }
+    console.log(this.state.endDate);
     if (input !== "" && input !== this.state.startDate) {
       this.setState({
         startDate: input,
+        endDateOption: null,
+      });
+      this.setState({
+        endDateOption: Array.from(
+          { length: 2020 - (intInput - 1) },
+          (x, i) => `${2020 - i}`
+        ),
       });
     }
   };
   handleEndDateChange = (input) => {
+    let intInput = parseInt(input);
+    let checkStartDate = parseInt(this.state.startDate);
+    if (intInput < checkStartDate && this.state.adjustEndDate) {
+      this.setState({ endDate: "2020", adjustEndDate: false });
+    }
+    console.log(this.state.endDate);
     if (input !== "" && input !== this.state.endDate) {
       console.log("handleEndDateChange: Inside if loop.");
       this.setState({
@@ -265,6 +286,7 @@ class Search extends React.Component {
     console.log("radio year: ", this.state.radioYear);
     console.log("changed radio year to : ", data);
     this.handleStartDateChange(data);
+    this.handleEndDateChange("2020");
 
     //this.forceUpdate();
   };
@@ -536,9 +558,6 @@ class Search extends React.Component {
                 {data}
               </button>
             </th>
-            // <th onClick={this.ohMyGod}>
-            //   {data}
-            // </th>
           );
         })}
         {sortData.map((data) => {
@@ -625,8 +644,11 @@ class Search extends React.Component {
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
             <div className="date-from">
+              <span>
+                <b>Start Date</b>
+              </span>
               <Autocomplete
-                id="combo-box-demo"
+                id="combo-box-demo-date-from"
                 options={this.state.startDateOption}
                 key={this.state.startDate}
                 getOptionLabel={(option) => option}
@@ -634,27 +656,33 @@ class Search extends React.Component {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label={this.state.startDate} //"Date Range From"
+                    label={this.state.startDate}
+                    // value={this.state.startDate} //"Date Range From"
                     variant="outlined"
-                    defaultValue={this.state.startDate}
+                    // defaultValue={this.state.startDate}
                     onChange={this.handleStartDateChange(
                       params.inputProps.value
                     )}
                   />
                 )}
               />
+            </div>
+            <div className="date-to">
+              <span>
+                <b>End Date</b>
+              </span>
               <Autocomplete
-                id="combo-box-demo"
+                id="combo-box-demo-date-to"
                 options={this.state.endDateOption}
-                //key={this.state.endDate}
+                key={this.state.endDate}
                 getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label={this.state.endDate} //"Date Range To"
+                    // value={this.state.endDate}
                     variant="outlined"
-                    //value={this.state.endDate}
                     onChange={this.handleEndDateChange(params.inputProps.value)}
                   />
                 )}
@@ -662,7 +690,7 @@ class Search extends React.Component {
             </div>
             <div>
               <FormControl component="fieldset">
-                <FormLabel component="legend">Choose Year</FormLabel>
+                <FormLabel component="legend"></FormLabel>
                 <RadioGroup
                   aria-label="Year Range"
                   name="radioYear"
@@ -693,6 +721,9 @@ class Search extends React.Component {
               </FormControl>
             </div>
             <div className="option-selection">
+              <span>
+                <b>SE Practice</b>
+              </span>
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.seTypeOption}
@@ -701,15 +732,18 @@ class Search extends React.Component {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Choose SE Type"
+                    // label="Choose SE Practice"
                     variant="outlined"
                     onChange={this.handleSETypeChange(params.inputProps.value)}
                   />
                 )}
               />
+              <span>
+                <b>Claims</b>
+              </span>
               <Autocomplete
                 multiple
-                id="checkboxes-tags-demo"
+                id="checkboxes-claims"
                 options={this.state.claimsOptions}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
@@ -729,7 +763,7 @@ class Search extends React.Component {
                   <TextField
                     {...params}
                     variant="outlined"
-                    label="Choose claims"
+                    // label="Choose claims"
                     placeholder=""
                     onChange={this.handleChangeForClaimsInput(
                       params.InputProps.startAdornment
@@ -801,7 +835,7 @@ class Search extends React.Component {
                 : undefined
             }
           >
-            <MenuItem
+            {/* <MenuItem
               onClick={this.handleYearClose}
               selected={this.state.yearCol}
               classes={{ root: "MenuItem", selected: "selected" }}
@@ -814,7 +848,28 @@ class Search extends React.Component {
               classes={{ root: "MenuItem", selected: "selected" }}
             >
               Volume
-            </MenuItem>
+            </MenuItem> */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onClick={this.handleYearClose}
+                  checked={this.state.yearCol}
+                  name="yearSelectionCheckBox"
+                />
+              }
+              label="Year"
+            />
+            <br />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onClick={this.handleVolumeClose}
+                  checked={this.state.volCol}
+                  name="volumeSelectionCheckBox"
+                />
+              }
+              label="Volume"
+            />
           </Menu>
           {this.state.paperdata.length > 0}
           {/* <table id="myTable">
