@@ -45,15 +45,19 @@
   /* padding: 20px; */
 }
 
+table,
 th,
 td {
   border: 1px solid black;
 }
 
-th,
 td {
   padding-left: 10px;
   padding-right: 10px;
+}
+
+th {
+  padding-top: 0%;
 }
 
 .MenuItem {
@@ -62,11 +66,25 @@ td {
   width: 30px;
   height: 30px;
 }
-.MenuItem.selected { 
+.MenuItem.selected {
   color: green;
   font-weight: bold;
 }
+
 .headerButton {
   width: 100%;
   height: 100%;
+  background-color: #7b47bd;
+  color: white;
+  display: inline-block;
+}
+
+.headerButton:hover {
+  background-color: white;
+  color: #7b47bd;
+  display: inline-block;
+}
+
+.numberCell {
+  text-align: right;
 }

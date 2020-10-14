@@ -10,7 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+// import MenuItem from "@material-ui/core/MenuItem";
 
 class Search extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class Search extends React.Component {
         "Journal Name",
         "DOI",
       ],
-      startDate: "1665",
+      startDate: "1944",
       endDate: "2020",
       seType: "",
       claims: [],
@@ -58,9 +58,14 @@ class Search extends React.Component {
         { length: 2020 - 1943 },
         (x, i) => `${2020 - i}`
       ),
-      endDateOption: Array.from({ length: 2020 - 1943 }, (x, i) => `${2020 - i}`),
+      endDateOption: Array.from(
+        { length: 2020 - 1943 },
+        (x, i) => `${2020 - i}`
+      ),
+      // endDateOption: null,
       mouseX: null,
       mouseY: null,
+      adjustEndDate: false,
     };
   }
 
@@ -86,21 +91,21 @@ class Search extends React.Component {
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = []
-    console.log(this.state.yearCol)
-    if(this.state.yearCol) {
-      newArray = this.state.tableHeaders
-      newArray.splice(8,1)
+    var newArray = [];
+    console.log(this.state.yearCol);
+    if (this.state.yearCol) {
+      newArray = this.state.tableHeaders;
+      newArray.splice(8, 1);
       this.setState({
-        yearCol: false
-      })
+        yearCol: false,
+      });
     } else {
-      newArray = this.state.tableHeaders
-      newArray.push("Year")
-      newArray.sort(sorter)
+      newArray = this.state.tableHeaders;
+      newArray.push("Year");
+      newArray.sort(sorter);
       this.setState({
-        yearCol: true
-      })
+        yearCol: true,
+      });
     }
     var same = true;
     if (newArray.length >= this.state.tableHeaders.length) {
@@ -133,33 +138,31 @@ class Search extends React.Component {
     this.setState({
       mouseX: null,
       mouseY: null,
-    })
-    console.log(this.state.tableHeaders)
-    this.buildTable(this.state.paperdata)
-
+    });
+    console.log(this.state.tableHeaders);
+    this.buildTable(this.state.paperdata);
   };
-
 
   handleVolumeClose = () => {
     const sortOrder = ["Year", "Volume"];
     const sorter = (a, b) => {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
-    var newArray = []
-    console.log(this.state.volCol)
-    if(this.state.volCol) {
-      newArray = this.state.tableHeaders
-      newArray.splice(8,1)
+    var newArray = [];
+    console.log(this.state.volCol);
+    if (this.state.volCol) {
+      newArray = this.state.tableHeaders;
+      newArray.splice(8, 1);
       this.setState({
-        volCol: false
-      })
+        volCol: false,
+      });
     } else {
-      newArray = this.state.tableHeaders
-      newArray.push("Volume")
-      newArray.sort(sorter)
+      newArray = this.state.tableHeaders;
+      newArray.push("Volume");
+      newArray.sort(sorter);
       this.setState({
-        volCol: true
-      })
+        volCol: true,
+      });
     }
     var same = true;
     if (newArray.length >= this.state.tableHeaders.length) {
@@ -192,9 +195,9 @@ class Search extends React.Component {
     this.setState({
       mouseX: null,
       mouseY: null,
-    })
-    console.log(this.state.tableHeaders)
-    this.buildTable(this.state.paperdata)
+    });
+    console.log(this.state.tableHeaders);
+    this.buildTable(this.state.paperdata);
   };
 
   getAcceptedPaperData = (event) => {
@@ -212,63 +215,58 @@ class Search extends React.Component {
           claimsData += this.state.claims[i] + ",";
         }
       }
-      if (this.state.radioYear === "custom") {
-        axios
-          .get("/api/papercontroller/getfilteredsearch", {
-            params: {
-              seType: this.state.seType,
-              claims: claimsData.substring(0, claimsData.length - 1),
-              startDate: this.state.startDate,
-              endDate: this.state.endDate,
-            },
-          })
-          .then((response) => {
-            const data = response.data;
-            this.setState({ paperdata: data, tableRendered: false });
-            console.log("Data has been retrieved");
-            console.log(this.state.paperdata);
-          })
-          .catch(() => {
-            alert("Error from Server");
-          });
-      } else {
-        var newEndDate = "2020";
-        var newStartDate = this.state.radioYear;
-        axios
-          .get("/api/papercontroller/getfilteredsearch", {
-            params: {
-              seType: this.state.seType,
-              claims: claimsData.substring(0, claimsData.length - 1),
-              startDate: newStartDate,
-              endDate: newEndDate,
-            },
-          })
-          .then((response) => {
-            const data = response.data;
-            this.setState({ paperdata: data, tableRendered: false });
-            console.log("Data has been retrieved");
-            console.log(this.state.paperdata);
-          })
-          .catch(() => {
-            alert("Error from Server");
-          });
-      }
+      axios
+        .get("/api/papercontroller/getfilteredsearch", {
+          params: {
+            seType: this.state.seType,
+            claims: claimsData.substring(0, claimsData.length - 1),
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+          },
+        })
+        .then((response) => {
+          const data = response.data;
+          this.setState({ paperdata: data, tableRendered: false });
+          console.log("Data has been retrieved");
+          console.log(this.state.paperdata);
+        })
+        .catch(() => {
+          alert("Error from Server");
+        });
     } else {
       alert("Select what claim(s) you're looking for!");
     }
   };
   handleStartDateChange = (input) => {
-    // console.log(input);
-    if (input !== this.state.startDate) {
+    console.log("input is serted", input);
+    let intInput = parseInt(input);
+    let checkEndDate = parseInt(this.state.endDate);
+    if (intInput > checkEndDate) {
+      this.setState({ endDate: "2020", adjustEndDate: true });
+    }
+    console.log(this.state.endDate);
+    if (input !== "" && input !== this.state.startDate) {
       this.setState({
         startDate: input,
-        endDateOption: Array.from({ length: 2020 - input }, (x, i) => `${2020 - i}`)
+        endDateOption: null,
+      });
+      this.setState({
+        endDateOption: Array.from(
+          { length: 2020 - (intInput - 1) },
+          (x, i) => `${2020 - i}`
+        ),
       });
     }
   };
   handleEndDateChange = (input) => {
-    // console.log(input);
-    if (input !== this.state.endDate) {
+    let intInput = parseInt(input);
+    let checkStartDate = parseInt(this.state.startDate);
+    if (intInput < checkStartDate && this.state.adjustEndDate) {
+      this.setState({ endDate: "2020", adjustEndDate: false });
+    }
+    console.log(this.state.endDate);
+    if (input !== "" && input !== this.state.endDate) {
+      console.log("handleEndDateChange: Inside if loop.");
       this.setState({
         endDate: input,
         startDateOption: Array.from({ length: input - 1943 }, (x, i) => `${input - i}`)
@@ -277,12 +275,23 @@ class Search extends React.Component {
   };
   handleRadioYear = (event) => {
     event.preventDefault();
-    // console.log(event.target.value);
     var data = event.target.value;
+    console.log("radio year to change start date", data);
+
     this.setState({
       radioYear: data,
+      startDate: data,
+      // endDate:data,
+      endDate: "2020",
     });
+    console.log("radio year: ", this.state.radioYear);
+    console.log("changed radio year to : ", data);
+    this.handleStartDateChange(data);
+    this.handleEndDateChange("2020");
+
+    //this.forceUpdate();
   };
+
   handleSETypeChange = (input) => {
     if (input !== this.state.seType) {
       this.setState({
@@ -528,23 +537,15 @@ class Search extends React.Component {
   };
 
   buildTable = (data) => {
-    var same = this.arraysEqual(data, this.state.paperdataChecked);
+    // var same = this.arraysEqual(data, this.state.paperdataChecked);
     var sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
-    // console.log("same doi", same);
-    // var tabledata = document.getElementById("myTable");
-    if (!same && data.length > 0) {
-      // sortData = null;
-      // sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
-      console.log("sorted", sortData);
-    }
-
-    if (!same) {
-      this.setState({ paperdataChecked: null });
-      this.setState({ paperdataChecked: data });
-      // console.log("afterchangepaperchecked", this.state.paperdataChecked);
-    }
-    // this.createRows(data, this.state.tableHeaders);
-
+    // if (!same && data.length > 0) {
+    //   console.log("sorted", sortData);
+    // }
+    // if (!same) {
+    //   this.setState({ paperdataChecked: null });
+    //   this.setState({ paperdataChecked: data });
+    // }
     return this.state.paperdata.length > 0 ? (
       <table id="myTable">
         {this.state.tableHeaders.map((data) => {
@@ -558,9 +559,6 @@ class Search extends React.Component {
                 {data}
               </button>
             </th>
-            // <th onClick={this.ohMyGod}>
-            //   {data}
-            // </th>
           );
         })}
         {sortData.map((data) => {
@@ -577,9 +575,9 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
-                <td>{data.year}</td>
-                <td>{data.volume}</td>
+                <td className="numberCell">{data.doi}</td>
+                <td className="numberCell">{data.year}</td>
+                <td className="numberCell">{data.volume}</td>
               </tr>
             );
           } else if (
@@ -595,8 +593,8 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
-                <td>{data.volume}</td>
+                <td className="numberCell">{data.doi}</td>
+                <td className="numberCell">{data.volume}</td>
               </tr>
             );
           } else if (
@@ -612,8 +610,8 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
-                <td>{data.year}</td>
+                <td className="numberCell">{data.doi}</td>
+                <td className="numberCell">{data.year}</td>
               </tr>
             );
           } else if (
@@ -629,7 +627,7 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td>{data.doi}</td>
+                <td className="numberCell">{data.doi}</td>
               </tr>
             );
           }
@@ -647,31 +645,44 @@ class Search extends React.Component {
           <h2>Seer Paper Search</h2>
           <form onSubmit={this.getAcceptedPaperData}>
             <div className="date-from">
+              <span>
+                <b>Start Date</b>
+              </span>
               <Autocomplete
-                id="combo-box-demo"
+                id="combo-box-demo-date-from"
                 options={this.state.startDateOption}
+                key={this.state.startDate}
                 getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Date Range From"
+                    label={this.state.startDate}
+                    // value={this.state.startDate} //"Date Range From"
                     variant="outlined"
+                    // defaultValue={this.state.startDate}
                     onChange={this.handleStartDateChange(
                       params.inputProps.value
                     )}
                   />
                 )}
               />
+            </div>
+            <div className="date-to">
+              <span>
+                <b>End Date</b>
+              </span>
               <Autocomplete
-                id="combo-box-demo"
+                id="combo-box-demo-date-to"
                 options={this.state.endDateOption}
+                key={this.state.endDate}
                 getOptionLabel={(option) => option}
                 style={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Date Range To"
+                    label={this.state.endDate} //"Date Range To"
+                    // value={this.state.endDate}
                     variant="outlined"
                     onChange={this.handleEndDateChange(params.inputProps.value)}
                   />
@@ -680,18 +691,13 @@ class Search extends React.Component {
             </div>
             <div>
               <FormControl component="fieldset">
-                <FormLabel component="legend">Choose Year</FormLabel>
+                <FormLabel component="legend"></FormLabel>
                 <RadioGroup
                   aria-label="Year Range"
                   name="radioYear"
                   value={this.state.radioYear}
                   onChange={this.handleRadioYear}
                 >
-                  <FormControlLabel
-                    value="custom"
-                    control={<Radio />}
-                    label="Custom"
-                  />
                   <FormControlLabel
                     value="2015"
                     control={<Radio />}
@@ -708,7 +714,7 @@ class Search extends React.Component {
                     label="This year"
                   />
                   <FormControlLabel
-                    value="0"
+                    value="1944"
                     control={<Radio />}
                     label="All years"
                   />
@@ -716,6 +722,9 @@ class Search extends React.Component {
               </FormControl>
             </div>
             <div className="option-selection">
+              <span>
+                <b>SE Practice</b>
+              </span>
               <Autocomplete
                 id="combo-box-demo"
                 options={this.state.seTypeOption}
@@ -724,15 +733,18 @@ class Search extends React.Component {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Choose SE Type"
+                    // label="Choose SE Practice"
                     variant="outlined"
                     onChange={this.handleSETypeChange(params.inputProps.value)}
                   />
                 )}
               />
+              <span>
+                <b>Claims</b>
+              </span>
               <Autocomplete
                 multiple
-                id="checkboxes-tags-demo"
+                id="checkboxes-claims"
                 options={this.state.claimsOptions}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
@@ -752,7 +764,7 @@ class Search extends React.Component {
                   <TextField
                     {...params}
                     variant="outlined"
-                    label="Choose claims"
+                    // label="Choose claims"
                     placeholder=""
                     onChange={this.handleChangeForClaimsInput(
                       params.InputProps.startAdornment
@@ -824,8 +836,41 @@ class Search extends React.Component {
                 : undefined
             }
           >
-            <MenuItem onClick={this.handleYearClose} selected={this.state.yearCol} classes={{ root: 'MenuItem', selected: 'selected' }}>Year</MenuItem>
-            <MenuItem onClick={this.handleVolumeClose} selected={this.state.volCol} classes={{ root: 'MenuItem', selected: 'selected' }}>Volume</MenuItem>
+            {/* <MenuItem
+              onClick={this.handleYearClose}
+              selected={this.state.yearCol}
+              classes={{ root: "MenuItem", selected: "selected" }}
+            >
+              Year
+            </MenuItem>
+            <MenuItem
+              onClick={this.handleVolumeClose}
+              selected={this.state.volCol}
+              classes={{ root: "MenuItem", selected: "selected" }}
+            >
+              Volume
+            </MenuItem> */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onClick={this.handleYearClose}
+                  checked={this.state.yearCol}
+                  name="yearSelectionCheckBox"
+                />
+              }
+              label="Year"
+            />
+            <br />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onClick={this.handleVolumeClose}
+                  checked={this.state.volCol}
+                  name="volumeSelectionCheckBox"
+                />
+              }
+              label="Volume"
+            />
           </Menu>
           {this.state.paperdata.length > 0}
           {/* <table id="myTable">
