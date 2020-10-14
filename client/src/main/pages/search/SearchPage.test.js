@@ -61,6 +61,7 @@ it("should handleChange for seType", () => {
     endDateOption: Array.from({ length: 2020 - 1943 }, (x, i) => `${2020 - i}`),
     mouseX: null,
     mouseY: null,
+    adjustEndDate: false,
   };
 
   wrapper.instance().handleSETypeChange("TDD");
