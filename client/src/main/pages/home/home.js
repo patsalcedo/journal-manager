@@ -10,10 +10,10 @@ class Home extends Component {
     super(props);
     this.state = {};
   }
-  handleLogOutClick() {
-    this.props.handleLogOut();
-    this.props.history.push("/home");
-  }
+  // handleLogOutClick() {
+  //   this.props.handleLogOut();
+  //   this.props.history.push("/home");
+  // }
 
   render() {
     let bannerContent;
