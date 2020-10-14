@@ -3,6 +3,7 @@ import Adapter from "enzyme-adapter-react-16";
 import React from "react";
 import { shallow, configure } from "enzyme";
 
+
 configure({ adapter: new Adapter() });
 jest.mock("axios");
 
