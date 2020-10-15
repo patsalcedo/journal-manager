@@ -47,11 +47,7 @@ class Add extends React.Component {
   };
 
   componentDidMount = () => {
-    // console.log("calling from add-document.js:", this.props.isLoggedIn);
-    // if (this.props.isLoggedIn === "false") {
-    //   this.props.history.push("/login");
-    //   console.log("navigating to login since isLoggedin is false");
-    // }
+  
   };
 
   handleChange = (e) => {
