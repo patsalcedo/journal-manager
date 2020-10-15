@@ -122,13 +122,14 @@ class Main extends Component {
             <Route
               exact
               path="/"
-              render={(props) => (
-                <Home
-                  {...props}
-                  // isLoggedIn={this.state.isLoggedIn}
-                  // handleLogOut={this.handleLogOut}
-                />
-              )}
+              component={Home}
+              // render={(props) => (
+              //   <Home
+              //     {...props}
+              //     // isLoggedIn={this.state.isLoggedIn}
+              //     // handleLogOut={this.handleLogOut}
+              //   />
+              // )}
             />
             <Route
               path="/home"
