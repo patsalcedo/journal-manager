@@ -34,14 +34,14 @@ app.use("/api", papercontroller);
 // app.get("/searchpage",function(req,res){
 //   res.send("/client/src/main/pages/search/SearchPage.js");
 // });
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "/client/src/main/main.js"), function (
-    err
-  ) {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
-});
+// app.get("/*", function (req, res) {
+//   res.sendFile(path.join(__dirname, "/client/src/main/main.js"), function (
+//     err
+//   ) {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//   });
+// });
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
