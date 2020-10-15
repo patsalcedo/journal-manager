@@ -31,8 +31,8 @@ app.use(morgan("tiny"));
 //controller uses
 app.use("/api", usercontroller);
 app.use("/api", papercontroller);
-app.get("/searchpage",function(req,res){
-  res.send("/client/src/main/pages/search/SearchPage.js");
-});
+// app.get("/searchpage",function(req,res){
+//   res.send("/client/src/main/pages/search/SearchPage.js");
+// });
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
