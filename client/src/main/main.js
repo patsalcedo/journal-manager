@@ -13,7 +13,6 @@ import Add from "./pages/add-document/add-document";
 class Main extends Component {
   constructor() {
     super();
-
     this.state = {
       isLoggedIn: "false",
       userData: {},
@@ -132,15 +131,13 @@ class Main extends Component {
             />
             <Route
               path="/home"
-              exact
-              // render={(props) => (
-              //   <Home
-              //     {...props}
-              //     // isLoggedIn={this.state.isLoggedIn}
-              //     // handleLogOut={this.handleLogOut}
-              //   />
-              // )}
-              component={Home}
+              render={(props) => (
+                <Home
+                  {...props}
+                  // isLoggedIn={this.state.isLoggedIn}
+                  // handleLogOut={this.handleLogOut}
+                />
+              )}
             />
             <Route
               path="/register"
@@ -150,12 +147,10 @@ class Main extends Component {
             <Route path="/about" render={(props) => <About {...props} />} />
             <Route
               path="/searchpage"
-              exact
-              // render={(props) => (
-              //   <SearchPage {...props} />
-              //   // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
-              // )}
-              component={SearchPage}
+              render={(props) => (
+                <SearchPage {...props} />
+                // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
+              )}
             />
             <Route
               path="/add-document"
