@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const path = require("path");
+var path = require("path");
 
 const mongo_db_connectionstring =
   "mongodb+srv://seer_db:itsmedio@seer.mwxsn.mongodb.net/SeerDatabase?retryWrites=true&w=majority";

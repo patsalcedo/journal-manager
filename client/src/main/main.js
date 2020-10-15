@@ -6,7 +6,7 @@ import "./main.css";
 import Nav from "../Components/Nav";
 import Footer from "../Components/Footer";
 import About from "./pages/About";
-import SearchPage from "./pages//search/SearchPage";
+import SearchPage from "./pages/search/SearchPage";
 import Login from "./pages/login/login.js";
 import Add from "./pages/add-document/add-document";
 
