@@ -90,7 +90,6 @@ class Search extends React.Component {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
     var newArray = [];
-    console.log(this.state.yearCol);
     if (this.state.yearCol) {
       newArray = this.state.tableHeaders;
       newArray.splice(8, 1);
@@ -137,7 +136,6 @@ class Search extends React.Component {
       mouseX: null,
       mouseY: null,
     });
-    console.log(this.state.tableHeaders);
     this.buildTable(this.state.paperdata);
   };
 
@@ -147,7 +145,6 @@ class Search extends React.Component {
       return sortOrder.indexOf(a) - sortOrder.indexOf(b);
     };
     var newArray = [];
-    console.log(this.state.volCol);
     if (this.state.volCol) {
       newArray = this.state.tableHeaders;
       newArray.splice(8, 1);
@@ -194,7 +191,6 @@ class Search extends React.Component {
       mouseX: null,
       mouseY: null,
     });
-    console.log(this.state.tableHeaders);
     this.buildTable(this.state.paperdata);
   };
   handleClose = () => {
@@ -210,7 +206,6 @@ class Search extends React.Component {
       this.setState({
         paperdata: [],
       });
-      console.log("not using filter..");
       var claimsData = "";
       if (this.state.claims.includes("all claims")) {
         claimsData = "great performance,more productive ";
@@ -231,8 +226,6 @@ class Search extends React.Component {
         .then((response) => {
           const data = response.data;
           this.setState({ paperdata: data, tableRendered: false });
-          console.log("Data has been retrieved");
-          console.log(this.state.paperdata);
         })
         .catch(() => {
           alert("Error from Server");
@@ -242,13 +235,11 @@ class Search extends React.Component {
     }
   };
   handleStartDateChange = (input) => {
-    console.log("input is serted", input);
     let intInput = parseInt(input);
     let checkEndDate = parseInt(this.state.endDate);
     if (intInput > checkEndDate) {
       this.setState({ endDate: "2020", adjustEndDate: true });
     }
-    console.log(this.state.endDate);
     if (input !== "" && input !== this.state.startDate) {
       this.setState({
         startDate: input,
@@ -268,9 +259,7 @@ class Search extends React.Component {
     if (intInput < checkStartDate && this.state.adjustEndDate) {
       this.setState({ endDate: "2020", adjustEndDate: false });
     }
-    console.log(this.state.endDate);
     if (input !== "" && input !== this.state.endDate) {
-      console.log("handleEndDateChange: Inside if loop.");
       this.setState({
         endDate: input,
         startDateOption: Array.from({ length: input - 1943 }, (x, i) => `${input - i}`)
@@ -280,7 +269,6 @@ class Search extends React.Component {
   handleRadioYear = (event) => {
     event.preventDefault();
     var data = event.target.value;
-    console.log("radio year to change start date", data);
 
     this.setState({
       radioYear: data,
@@ -288,8 +276,6 @@ class Search extends React.Component {
       // endDate:data,
       endDate: "2020",
     });
-    console.log("radio year: ", this.state.radioYear);
-    console.log("changed radio year to : ", data);
     this.handleStartDateChange(data);
     this.handleEndDateChange("2020");
 
@@ -414,7 +400,6 @@ class Search extends React.Component {
   handleSortByChange = (event) => {
     event.preventDefault();
     var data = event.target.value;
-    console.log(event.target.value);
     this.setState({
       sortBy: data,
     });
@@ -441,7 +426,6 @@ class Search extends React.Component {
   };
 
   sortPaperData = (sortBy, paperdataInput) => {
-    console.log("sortBy is", sortBy);
     var data = [];
     var ordermultiplier = 1;
     if (!this.state.isAscending) {
@@ -459,9 +443,6 @@ class Search extends React.Component {
       } else {
         let newA = a[sortBy].toLowerCase().replace(/\s/g, "");
         let newB = b[sortBy].toLowerCase().replace(/\s/g, "");
-        console.log(newA);
-        console.log(newB);
-        console.log(newA - newB);
         if (newA > newB) return ordermultiplier * 1;
         else return ordermultiplier * -1;
       }
@@ -481,7 +462,6 @@ class Search extends React.Component {
       });
     }
     data.sort(sorter);
-    console.log("new data after sort", data);
     return data;
   };
 
