@@ -34,5 +34,8 @@ app.use("/api", papercontroller);
 // app.get("/searchpage",function(req,res){
 //   res.send("/client/src/main/pages/search/SearchPage.js");
 // });
+app.get("/", function (req, res) {
+  res.render("/client/src/main/main.js", {});
+});
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));

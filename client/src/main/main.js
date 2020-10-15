@@ -122,14 +122,13 @@ class Main extends Component {
             <Route
               exact
               path="/"
-              component={Home}
-              // render={(props) => (
-              //   <Home
-              //     {...props}
-              //     // isLoggedIn={this.state.isLoggedIn}
-              //     // handleLogOut={this.handleLogOut}
-              //   />
-              // )}
+              render={(props) => (
+                <Home
+                  {...props}
+                  // isLoggedIn={this.state.isLoggedIn}
+                  // handleLogOut={this.handleLogOut}
+                />
+              )}
             />
             <Route
               path="/home"
@@ -151,14 +150,10 @@ class Main extends Component {
             <Route
               path="/searchpage"
               exact
-              component={SearchPage}
-              // render={(props) => (
-              //   <HashRouter>
-              //     <SearchPage {...props} />
-              //   </HashRouter>
-
-              // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
-              // )}
+              render={(props) => (
+                <SearchPage {...props} />
+                // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
+              )}
             />
             <Route
               path="/add-document"
