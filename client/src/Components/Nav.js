@@ -24,19 +24,19 @@ function Nav() {
           alt="Plant a Tree"
         />
       </Link>
-      <Link to="/about">
+      {/* <Link to="/about">
         <button className="nav-btn">About</button>
-      </Link>
+      </Link> */}
       <Link to="/searchpage">
         <button className="nav-btn">Search</button>
       </Link>
-      <Link to="/add-document">
+      {/* <Link to="/add-document">
         <button className="nav-btn">Add document</button>
-      </Link>
+      </Link> */}
       {/* <button className="nav-btn" onClick={() => handleLogOutClick()}>
         Log Out
       </button> */}
-      <div className="dropdown">
+      {/* <div className="dropdown">
         <Link to="/">
           <button className="nav-btn">
             Account<i className="fa fa-caret-down"></i>
@@ -51,7 +51,7 @@ function Nav() {
             </Link>
           </ul>
         </div>
-      </div>
+      </div> */}
     </nav>
   );
 
