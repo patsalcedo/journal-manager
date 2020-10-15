@@ -69,7 +69,7 @@ class Search extends React.Component {
 
   componentDidMount = () => {
     //    this.getAcceptedPaperData();
-    console.log("calling from searchpage.js:", this.props.isLoggedIn);
+    //console.log("calling from searchpage.js:", this.props.isLoggedIn);
     // if (this.props.isLoggedIn === "false") {
     //   this.props.history.push("/login");
     //   console.log("navigating to login since isLoggedin is false");
@@ -485,7 +485,7 @@ class Search extends React.Component {
     return data;
   };
 
-  handleTableHealerButton = (event) => {
+  handleTableHeaderButton = (event) => {
     let data = event.target.name;
     let change = "";
     if (data === "SE Type") {
@@ -517,7 +517,7 @@ class Search extends React.Component {
     }
   };
 
-  buildTable = (data) => {
+  buildTable = () => {
     // var same = this.arraysEqual(data, this.state.paperdataChecked);
     var sortData = this.sortPaperData(this.state.orderBy, this.state.paperdata);
     // if (!same && data.length > 0) {
@@ -535,7 +535,7 @@ class Search extends React.Component {
               <button
                 className="headerButton"
                 name={data}
-                onClick={this.handleTableHealerButton}
+                onClick={this.handleTableHeaderButton}
               >
                 {data}
               </button>

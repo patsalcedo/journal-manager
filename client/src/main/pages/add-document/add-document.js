@@ -56,18 +56,18 @@ class Add extends React.Component {
     let formErrors = { ...this.state.formErrors };
 
     switch (id) {
-      case "document_type":
-        formErrors.document_type =
-          value.length < 4 ? "Type of document need to be filled" : {};
-        break;
-      case "key":
-        formErrors.key = value.length < 4 ? "Key need to be filled" : {};
-        break;
-      case "title":
-        formErrors.title = value.length < 4 ? "Title need to be filled" : {};
-        break;
-      default:
-        break;
+    case "document_type":
+      formErrors.document_type =
+      value.length < 4 ? "Type of document need to be filled" : {};
+      break;
+    case "key":
+      formErrors.key = value.length < 4 ? "Key need to be filled" : {};
+      break;
+    case "title":
+      formErrors.title = value.length < 4 ? "Title need to be filled" : {};
+      break;
+    default:
+      break;
     }
     this.setState({ formErrors, [id]: value });
   };
@@ -300,7 +300,7 @@ class Add extends React.Component {
             <button className="submitBtn">Add Document</button>
             <span>{this.state.message}</span>
           </form>
-              <h3>{this.state.response_message}</h3>
+          <h3>{this.state.response_message}</h3>
         </div>
       </div>
     );
