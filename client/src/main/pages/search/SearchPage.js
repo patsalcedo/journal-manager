@@ -202,6 +202,7 @@ class Search extends React.Component {
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
+    if(this.state.seType !== "") {
     if (this.state.claims.length > 0) {
       this.setState({
         paperdata: [],
@@ -233,6 +234,9 @@ class Search extends React.Component {
     } else {
       alert("Select what claim(s) you're looking for!");
     }
+  } else {
+    alert("Select what SE Practice you're looking for!");
+  }
   };
   handleStartDateChange = (input) => {
     let intInput = parseInt(input);
@@ -287,6 +291,7 @@ class Search extends React.Component {
       this.setState({
         seType: input,
         claimsOptions: [],
+        claims: []
       });
       document.getElementById("checkboxes-claims")
     }
