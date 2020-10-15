@@ -9,8 +9,6 @@ import About from "./pages/About";
 import SearchPage from "./pages/search/SearchPage";
 import Login from "./pages/login/login.js";
 import Add from "./pages/add-document/add-document";
-import {HashRouter} from "react-router-dom";
-
 
 class Main extends Component {
   constructor() {
@@ -115,11 +113,10 @@ class Main extends Component {
   render() {
     return (
       <div className="main">
-        <HashRouter>
         <Router>
           <Nav
-            // isLoggedIn={this.state.isLoggedIn}
-            // handleLogOut={this.handleLogOut}
+          // isLoggedIn={this.state.isLoggedIn}
+          // handleLogOut={this.handleLogOut}
           />
           <Switch>
             <Route
@@ -147,39 +144,25 @@ class Main extends Component {
             <Route
               path="/register"
               exact
-              render={(props) => (
-                <Register {...props} />
-              )}
+              render={(props) => <Register {...props} />}
             />
+            <Route path="/about" render={(props) => <About {...props} />} />
             <Route
-              path="/about"
-              render={(props) => (
-                <About {...props}  />
-              )}
-            />
-            <Route
+              exact
               path="/searchpage"
               render={(props) => (
-                <SearchPage {...props}  />
+                <SearchPage {...props} />
                 // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
               )}
             />
             <Route
               path="/add-document"
-              render={(props) => (
-                <Add {...props}  />
-              )}
+              render={(props) => <Add {...props} />}
             />
-            <Route
-              path="/login"
-              render={(props) => (
-                <Login {...props}/>
-              )}
-            />
+            <Route path="/login" render={(props) => <Login {...props} />} />
           </Switch>
           <Footer />
         </Router>
-        </HashRouter>
       </div>
     );
   }
