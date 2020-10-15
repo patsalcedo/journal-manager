@@ -9,6 +9,7 @@ import About from "./pages/About";
 import SearchPage from "./pages/search/SearchPage";
 import Login from "./pages/login/login.js";
 import Add from "./pages/add-document/add-document";
+import {HashRouter} from "react-router-dom";
 
 
 class Main extends Component {
@@ -114,6 +115,7 @@ class Main extends Component {
   render() {
     return (
       <div className="main">
+        <HashRouter>
         <Router>
           <Nav
             // isLoggedIn={this.state.isLoggedIn}
@@ -177,6 +179,7 @@ class Main extends Component {
           </Switch>
           <Footer />
         </Router>
+        </HashRouter>
       </div>
     );
   }
