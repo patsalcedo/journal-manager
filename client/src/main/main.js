@@ -153,15 +153,16 @@ class Main extends Component {
             />
             <Route path="/about" render={(props) => <About {...props} />} />
             <Route
-              exact
               path="/searchpage"
-              render={(props) => (
-                <HashRouter>
-                  <SearchPage {...props} />
-                </HashRouter>
+              exact
+              component={SearchPage}
+              // render={(props) => (
+              //   <HashRouter>
+              //     <SearchPage {...props} />
+              //   </HashRouter>
 
-                // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
-              )}
+              // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
+              // )}
             />
             <Route
               path="/add-document"
