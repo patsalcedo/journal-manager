@@ -7,9 +7,10 @@ import SearchPage from "./main/pages/search/SearchPage.js"
 class App extends Component {
   render() {
     return (
-      <Router exact path="/searchpage" component={SearchPage}>
+      <Router>
       <div className="app">
         <Main />
+        <Route exact path="/searchpage" component={SearchPage}/>
       </div>
       </Router>
     );
