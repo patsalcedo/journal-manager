@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import SeerLogo from "../Images/seerlogov2.png";
 // import { Popover, Menu, Position, Button } from "evergreen-ui";
 
-function Nav(props) {
+function Nav() {
   //let history = useHistory();
   // const handleLogOutClick = () => {
   //   props.handleLogOut();
@@ -14,7 +14,7 @@ function Nav(props) {
 
   // var sampleLink = <Link to="/about">About</Link>;
   return (
-      <nav>
+    <nav>
       <Link to="/">
         <img
           className="nav-logo"
@@ -39,7 +39,7 @@ function Nav(props) {
       <div className="dropdown">
         <Link to="/">
           <button className="nav-btn">
-            Account<i class="fa fa-caret-down"></i>
+            Account<i className="fa fa-caret-down"></i>
           </button>
         </Link>
         <div className="dropdown-content">
@@ -53,7 +53,7 @@ function Nav(props) {
         </div>
       </div>
     </nav>
-  )
+  );
 
   // return props.isLoggedIn === "true" ? (
   //   <nav>
