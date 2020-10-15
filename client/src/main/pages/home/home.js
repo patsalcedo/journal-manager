@@ -6,8 +6,8 @@ import Banner from "../../../Components/Banner.js";
 import { Link } from "react-router-dom";
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {};
   }
   // handleLogOutClick() {

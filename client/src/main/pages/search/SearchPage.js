@@ -13,8 +13,8 @@ import Menu from "@material-ui/core/Menu";
 
 
 class Search extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super()
     this.state = {
       orderBy: "year",
       isAscending: true,

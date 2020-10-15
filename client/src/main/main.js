@@ -133,13 +133,14 @@ class Main extends Component {
             <Route
               path="/home"
               exact
-              render={(props) => (
-                <Home
-                  {...props}
-                  // isLoggedIn={this.state.isLoggedIn}
-                  // handleLogOut={this.handleLogOut}
-                />
-              )}
+              // render={(props) => (
+              //   <Home
+              //     {...props}
+              //     // isLoggedIn={this.state.isLoggedIn}
+              //     // handleLogOut={this.handleLogOut}
+              //   />
+              // )}
+              component={Home}
             />
             <Route
               path="/register"
@@ -150,10 +151,10 @@ class Main extends Component {
             <Route
               path="/searchpage"
               exact
-              render={(props) => (
-                <SearchPage {...props} />
-                // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
-              )}
+              // render={(props) => (
+              //   <SearchPage {...props} />
+              //   // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
+              // )}
               component={SearchPage}
             />
             <Route
