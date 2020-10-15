@@ -154,6 +154,7 @@ class Main extends Component {
                 <SearchPage {...props} />
                 // <SearchPage {...props} isLoggedIn={this.state.isLoggedIn} />
               )}
+              component={SearchPage}
             />
             <Route
               path="/add-document"
