@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import axios from "axios";
 import "../search/SearchPage.css";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -10,7 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Menu from "@material-ui/core/Menu";
-// import MenuItem from "@material-ui/core/MenuItem";
+
 
 class Search extends React.Component {
   constructor(props) {
@@ -40,11 +40,7 @@ class Search extends React.Component {
         { title: "TDD", value: "TDD" },
         { title: "BDD", value: "BDD" },
       ],
-      claimsOptions: [
-        { title: "all claims", value: "all claims" },
-        { title: "great performance", value: "great performance" },
-        { title: "more productive", value: "more productive" },
-      ],
+      claimsOptions: [],
       tableRendered: false,
       sortBy: "",
       columnToSelect: [
@@ -68,6 +64,8 @@ class Search extends React.Component {
       adjustEndDate: false,
     };
   }
+
+  
 
   componentDidMount = () => {
     //    this.getAcceptedPaperData();
@@ -199,6 +197,12 @@ class Search extends React.Component {
     console.log(this.state.tableHeaders);
     this.buildTable(this.state.paperdata);
   };
+  handleClose = () => {
+    this.setState({
+      mouseX: null,
+      mouseY: null,
+    });
+  };
 
   getAcceptedPaperData = (event) => {
     event.preventDefault();
@@ -293,9 +297,21 @@ class Search extends React.Component {
   };
 
   handleSETypeChange = (input) => {
-    if (input !== this.state.seType) {
+    if (input !== this.state.seType && input==="") {
       this.setState({
         seType: input,
+        claimsOptions: [],
+      });
+      document.getElementById("checkboxes-claims")
+    }
+    else if (input !== this.state.seType) {
+      this.setState({
+        seType: input,
+        claimsOptions: [
+          { title: "all claims", value: "all claims" },
+          { title: "great performance", value: "great performance" },
+          { title: "more productive", value: "more productive" },
+        ]
       });
     }
   };
@@ -405,41 +421,6 @@ class Search extends React.Component {
     this.sortTable(data);
   };
 
-  sortTable = (column) => {
-    var table, rows, colNum, switching, i, x, y, shouldSwitch;
-    table = document.getElementById("myTable");
-    switching = true;
-    /* Make a loop that will continue until
-    no switching has been done: */
-    while (switching) {
-      // Start by saying: no switching is done:
-      switching = false;
-      rows = table.rows;
-      colNum = this.state.tableHeaders.indexOf(column);
-      /* Loop through all table rows (except the
-      first, which contains table headers): */
-      for (i = 1; i < rows.length - 1; i++) {
-        // Start by saying there should be no switching:
-        shouldSwitch = false;
-        /* Get the two elements you want to compare,
-        one from current row and one from the next: */
-        x = rows[i].getElementsByTagName("td")[colNum];
-        y = rows[i + 1].getElementsByTagName("td")[colNum];
-        // Check if the two rows should switch place:
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-          // If so, mark as a switch and break the loop:
-          shouldSwitch = true;
-          break;
-        }
-      }
-      if (shouldSwitch) {
-        /* If a switch has been marked, make the switch
-        and mark that a switch has been done: */
-        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-        switching = true;
-      }
-    }
-  };
 
   arraysEqual = (_arr1, _arr2) => {
     if (
@@ -746,6 +727,8 @@ class Search extends React.Component {
                 multiple
                 id="checkboxes-claims"
                 options={this.state.claimsOptions}
+                //disabled = {this.state.seType===""}
+                //value={this.state.seType==="" ? [] : params}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
                 renderOption={(option, { selected }) => (
@@ -764,7 +747,6 @@ class Search extends React.Component {
                   <TextField
                     {...params}
                     variant="outlined"
-                    // label="Choose claims"
                     placeholder=""
                     onChange={this.handleChangeForClaimsInput(
                       params.InputProps.startAdornment
@@ -773,36 +755,6 @@ class Search extends React.Component {
                 )}
               />
             </div>
-            {/* <Autocomplete
-              multiple
-              id="checkboxes-tags-demo"
-              options={this.state.columnToSelect}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.title}
-              renderOption={(option, { selected }) => (
-                <React.Fragment>
-                  <Checkbox
-                    // icon={icon}
-                    // checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.title}
-                </React.Fragment>
-              )}
-              style={{ width: 200 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Choose columns"
-                  placeholder=""
-                  onChange={this.handleChangeForColumnSelectInput(
-                    params.InputProps.startAdornment
-                  )}
-                />
-              )}
-            /> */}
             <button className="submitBtn">Run Search</button>
             <span>{this.state.message}</span>
           </form>
@@ -810,83 +762,43 @@ class Search extends React.Component {
         <div className="container-paperdata" onContextMenu={this.handleClick}>
           <h2>Search Results</h2>
           {this.state.paperdata.length > 0 && (
-            <div>
-              {/* <div>
-                <label> Sort By: </label>
-                <select
-                  name="sortByOption"
-                  id="sortByOption"
-                  onChange={this.handleSortByChange}
-                >
-                  <option value="SE Practice">SE Practice</option>
-                  <option value="Claim">Evidence</option>
-                  <option value="Title">Title</option>
-                </select>
-              </div> */}
-            </div>
+             <Menu
+             keepMounted
+             open={this.state.mouseY !== null}
+             onClose={this.handleClose}
+             anchorReference="anchorPosition"
+             anchorPosition={
+               this.state.mouseY !== null && this.state.mouseX !== null
+                 ? { top: this.state.mouseY, left: this.state.mouseX }
+                 : undefined
+             }
+           >
+             <FormControlLabel
+               control={
+                 <Checkbox
+                   onClick={this.handleYearClose}
+                   checked={this.state.yearCol}
+                   name="yearSelectionCheckBox"
+                 />
+               }
+               label="Year"
+             />
+             <br />
+             <FormControlLabel
+               control={
+                 <Checkbox
+                   onClick={this.handleVolumeClose}
+                   checked={this.state.volCol}
+                   name="volumeSelectionCheckBox"
+                 />
+               }
+               label="Volume"
+             />
+           </Menu>
           )}
-          <Menu
-            keepMounted
-            open={this.state.mouseY !== null}
-            onClose={this.handleClose}
-            anchorReference="anchorPosition"
-            anchorPosition={
-              this.state.mouseY !== null && this.state.mouseX !== null
-                ? { top: this.state.mouseY, left: this.state.mouseX }
-                : undefined
-            }
-          >
-            {/* <MenuItem
-              onClick={this.handleYearClose}
-              selected={this.state.yearCol}
-              classes={{ root: "MenuItem", selected: "selected" }}
-            >
-              Year
-            </MenuItem>
-            <MenuItem
-              onClick={this.handleVolumeClose}
-              selected={this.state.volCol}
-              classes={{ root: "MenuItem", selected: "selected" }}
-            >
-              Volume
-            </MenuItem> */}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onClick={this.handleYearClose}
-                  checked={this.state.yearCol}
-                  name="yearSelectionCheckBox"
-                />
-              }
-              label="Year"
-            />
-            <br />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onClick={this.handleVolumeClose}
-                  checked={this.state.volCol}
-                  name="volumeSelectionCheckBox"
-                />
-              }
-              label="Volume"
-            />
-          </Menu>
+          {this.state.tableRendered}
           {this.state.paperdata.length > 0}
-          {/* <table id="myTable">
-            <tr></tr>
-            <tbody></tbody>
-          </table>
-          <th>
-            <button type="button" onClick={this.ohMyGod}>
-              Name
-            </button>
-          </th>
-          <th onclick={this.ohMyGod}>maybe</th> */}
-          {/* {this.buildTable(this.state.paperdata)} */}
           {this.buildTable(this.state.paperdata)}
-          {/* {this.createTableHeaders(this.state.paperdata)} */}
-          {/* {this.sortPaperData("seType", this.state.paperdata)} */}
         </div>
       </div>
     );
