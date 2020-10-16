@@ -461,7 +461,7 @@ class Search extends React.Component {
         title: paperdataInput[i].title,
         author: paperdataInput[i].author,
         publisher: paperdataInput[i].publisher,
-        doi: parseInt(paperdataInput[i].doi),
+        doi: paperdataInput[i].doi,
         year: parseInt(paperdataInput[i].year),
         volume: parseInt(paperdataInput[i].volume),
       });
@@ -541,7 +541,7 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td className="numberCell">{data.doi}</td>
+                <td>{data.doi}</td>
                 <td className="numberCell">{data.year}</td>
                 <td className="numberCell">{data.volume}</td>
               </tr>
@@ -559,7 +559,7 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td className="numberCell">{data.doi}</td>
+                <td>{data.doi}</td>
                 <td className="numberCell">{data.volume}</td>
               </tr>
             );
@@ -576,7 +576,7 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td className="numberCell">{data.doi}</td>
+                <td>{data.doi}</td>
                 <td className="numberCell">{data.year}</td>
               </tr>
             );
@@ -593,7 +593,7 @@ class Search extends React.Component {
                 <td>{data.title}</td>
                 <td>{data.author}</td>
                 <td>{data.publisher}</td>
-                <td className="numberCell">{data.doi}</td>
+                <td>{data.doi}</td>
               </tr>
             );
           }
